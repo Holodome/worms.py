@@ -1,0 +1,14 @@
+{
+  "name": "Example World",
+
+  "width": 1024,
+  "height": 576,
+
+  "teams": [
+    2,
+    2
+  ],
+
+  "foreground": "res/images/fg_ex.png",
+  "background": "res/images/War.png"
+}
