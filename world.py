@@ -4,11 +4,68 @@ import pygame
 import os
 import json
 
-from project.team import Team
+from team import Team
 import colorsys  # hsv_to_rgb
 
 ALPHA_COLORKEY = (255, 0, 255)
-CAMERA_SPEED = 2000
+CAMERA_SPEED = 1000
+GRAVITY = 500
+
+
+class WorldRenderer:
+    """
+    Class for separating draw logic from game logic
+    It keeps information about camera, and uses world attributes such as images to draw it
+     (because images are part of the world and cannot be separated)
+    """
+    def __init__(self, world, screen_size):
+        self.screenSize = screen_size
+
+        self.world = world
+
+        # Camera
+        self.cameraPosition = numpy.zeros(2, dtype=numpy.uint16)  # Left-top corner
+        self.cameraStickToPlayer: bool = True
+
+    def update(self):
+        """
+        Update camera
+        """
+        if self.cameraStickToPlayer:
+            self._apply_camera(self.world.selected_team.selected_worm)
+
+    def draw(self, screen: pygame.Surface):
+        """
+        Draws world - main purpose of this class
+        """
+        # (-self.cameraPosition[0], -self.cameraPosition[1]) is an offset for simulating camera
+        if self.world.backgroundImage is not None:
+            screen.blit(self.world.backgroundImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
+
+        screen.blit(self.world.terrainImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
+        for entity in self.world.entities:
+            entity.draw(screen)
+
+    def move_camera(self, dt: float, x: int, y: int):
+        self.cameraStickToPlayer = False  # If camera moved manually - disable following (toggle again with R)
+        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
+        if x != 0:
+            self.cameraPosition[0] = min(  # Use round() instead of floor to achieve same movement in both directions
+                max(round(self.cameraPosition[0] + x * dt * CAMERA_SPEED), 0),
+                self.world.worldSize[0] - screen_size[0])
+        if y != 0:
+            self.cameraPosition[1] = min(
+                max(round(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
+                self.world.worldSize[1] - screen_size[1])
+
+    def _apply_camera(self, entity):
+        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
+        self.cameraPosition[0] = min(
+            max(round(entity.x - screen_size[0]), 0),
+            self.world.worldSize[0] - screen_size[0])
+        self.cameraPosition[1] = min(
+            max(round(entity.y - screen_size[1]), 0),
+            self.world.worldSize[1] - screen_size[1])
 
 
 class World:
@@ -67,42 +124,11 @@ class World:
         self.terrainImage.set_colorkey(ALPHA_COLORKEY)
         self._draw_terrain(0, 0, width, height)
 
-        # Camera
-        self.cameraPosition = numpy.zeros(2, dtype=numpy.uint16)  # Left-top corner
-        self.cameraStickToPlayer: bool = False
-
     def update(self, dt: float):
-        if self.cameraStickToPlayer:
-            self._apply_camera(self.wormsTeams[self.wormsTeamIndex].selected_worm)
-
-    def draw(self, screen: pygame.Surface):
-        if self.backgroundImage is not None:
-            screen.blit(self.backgroundImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
-
-        screen.blit(self.terrainImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
-        for entity in self.entities:
-            entity.draw(screen)
-
-    def move_camera(self, dt: float, x: int, y: int):
-        self.cameraStickToPlayer = False  # If camera moved manually - disable following (toggle again with R)
-        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
-        if x != 0:
-            self.cameraPosition[0] = min(
-                max(int(self.cameraPosition[0] + x * dt * CAMERA_SPEED), 0),
-                self.worldSize[0] - screen_size[0])
-        if y != 0:
-            self.cameraPosition[1] = min(
-                max(int(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
-                self.worldSize[1] - screen_size[1])
-
-    def _apply_camera(self, entity):
-        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
-        self.cameraPosition[0] = min(
-            max(int(entity.x - screen_size[0]), 0),
-            self.worldSize[0] - screen_size[0])
-        self.cameraPosition[1] = min(
-            max(int(entity.y - screen_size[1]), 0),
-            self.worldSize[1] - screen_size[1])
+        """
+        Update game logic here (physics etc.)
+        """
+        pass
 
     def _load_foreground_as_terrain(self, image: pygame.Surface):
         image: pygame.Surface = pygame.transform.scale(image, self.worldSize)
@@ -125,6 +151,10 @@ class World:
                 if self.terrain[x + y * self.worldSize[0]] == 1:
                     color = (0, 255, 0)
                 self.terrainImage.set_at((x, y), color)
+
+    @property
+    def selected_team(self):
+        return self.wormsTeams[self.wormsTeamIndex]
 
 
 def load_from_json(path: str) -> World:
@@ -150,9 +180,9 @@ def load_from_json(path: str) -> World:
                                                 (width, height))  # Resize Image to fit the world
         foreground = world_data.get("foreground")
         if foreground is not None:
+            # TODO use colorkey instead of alpha
             foreground = pygame.transform.scale(pygame.image.load(os.path.join(foreground)).convert_alpha(),
                                                 (width, height))
-            # foreground.set_colorkey(ALPHA_COLORKEY)
 
         wind = world_data.get("windSpeed", 0)
         explosions = world_data.get("allowExplosions", False)
@@ -162,6 +192,10 @@ def load_from_json(path: str) -> World:
                      team_data=teams,
                      background=background, foreground=foreground,
                      wind_speed=wind, allow_explosions=explosions)
+
+
+def save_as_csv(world):
+    pass
 
 
 if __name__ == "__main__":

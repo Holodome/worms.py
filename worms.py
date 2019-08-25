@@ -3,7 +3,7 @@ import pygame
 import sys
 import enum
 
-from project.world import load_from_json
+from world import load_from_json, WorldRenderer
 
 
 # Game states
@@ -18,11 +18,12 @@ class Worms:
     Game class
     """
 
-    def __init__(self):
+    def __init__(self, screen_size):
 
         self.state: State = State.GAME_ACTIVE
 
         self.world = load_from_json("res/levels/test.json")  # TEST VARIANT - TODO make loading in menu
+        self.renderer = WorldRenderer(self.world, screen_size)
 
         # Fonts
         self.debugFont = pygame.font.SysFont("Consolas", 15)
@@ -46,13 +47,13 @@ class Worms:
         pressed = pygame.key.get_pressed()
         # Move camera
         if pressed[pygame.K_w]:
-            self.world.move_camera(dt, 0, -1)
+            self.renderer.move_camera(dt, 0, -1)
         elif pressed[pygame.K_s]:
-            self.world.move_camera(dt, 0, 1)
+            self.renderer.move_camera(dt, 0, 1)
         elif pressed[pygame.K_a]:
-            self.world.move_camera(dt, -1, 0)
+            self.renderer.move_camera(dt, -1, 0)
         elif pressed[pygame.K_d]:
-            self.world.move_camera(dt, 1, 0)
+            self.renderer.move_camera(dt, 1, 0)
 
     def update(self, dt: float):
         # Update time
@@ -65,7 +66,7 @@ class Worms:
 
     def draw(self, screen: pygame.Surface):
         if self.state == State.GAME_ACTIVE:
-            self.world.draw(screen)
+            self.renderer.draw(screen)
 
         elif self.state == State.GAME_MENU:
             # TODO add play button to menu
@@ -75,7 +76,7 @@ class Worms:
         if self.showDebugInfo:
             screen.blit(self.debugFont.render(f"FPS: {'{0:.2f}'.format(self.FPS)}", False, (255, 0, 0)), (0, 0))
             screen.blit(
-                self.debugFont.render(f"Camera stick to player: {self.world.cameraStickToPlayer}", False, (255, 0, 0)),
+                self.debugFont.render(f"Camera stick to player: {self.renderer.cameraStickToPlayer}", False, (255, 0, 0)),
                 (0, 15))
-            screen.blit(self.debugFont.render(f"Camera Position: {self.world.cameraPosition}", False, (255, 0, 0)),
+            screen.blit(self.debugFont.render(f"Camera Position: {self.renderer.cameraPosition}", False, (255, 0, 0)),
                         (0, 30))

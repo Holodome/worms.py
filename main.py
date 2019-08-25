@@ -20,9 +20,9 @@ def main():
     screen = pygame.display.set_mode(SCREEN_SIZE, mode)
     pygame.display.set_caption("worms.py")
 
-    from project import worms
+    import worms
 
-    game = worms.Worms()
+    game = worms.Worms(SCREEN_SIZE)
 
     now_time = time.perf_counter()
     while True:

@@ -1,6 +1,6 @@
 import random
 
-from project.gameObjects import Worm
+from gameObjects import Worm
 import os
 
 
