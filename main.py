@@ -7,7 +7,7 @@ SCREEN_SIZE = (640, 480)
 
 
 def main():
-    os.environ['SDL_VIDEO_CENTERED'] = '1'
+    os.environ["SDL_VIDEO_CENTERED"] = "1"
 
     pygame.init()
     pygame.font.init()
@@ -16,12 +16,11 @@ def main():
     # if pygame.version.vernum >= (2, 0):  # Scale is SDL2 only
     #     mode |= pygame.SCALED
 
-    pygame.display.set_icon(pygame.image.load(os.path.join("res/icon.ico")))
+    pygame.display.set_icon(pygame.image.load(os.path.join("res", "images", "worm.png")))
     screen = pygame.display.set_mode(SCREEN_SIZE, mode)
     pygame.display.set_caption("worms.py")
 
-    import worms
-
+    import worms  # Import here so game can load and convert images properly
     game = worms.Worms(SCREEN_SIZE)
 
     now_time = time.perf_counter()

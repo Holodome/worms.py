@@ -3,13 +3,13 @@ import pygame
 
 import os
 import json
-
+import math
 from team import Team
 import colorsys  # hsv_to_rgb
 
 ALPHA_COLORKEY = (255, 0, 255)
 CAMERA_SPEED = 1000
-GRAVITY = 500
+GRAVITY = 1000
 
 
 class WorldRenderer:
@@ -18,6 +18,7 @@ class WorldRenderer:
     It keeps information about camera, and uses world attributes such as images to draw it
      (because images are part of the world and cannot be separated)
     """
+
     def __init__(self, world, screen_size):
         self.screenSize = screen_size
 
@@ -38,34 +39,33 @@ class WorldRenderer:
         """
         Draws world - main purpose of this class
         """
-        # (-self.cameraPosition[0], -self.cameraPosition[1]) is an offset for simulating camera
+        offset = (-self.cameraPosition[0], -self.cameraPosition[1])
         if self.world.backgroundImage is not None:
-            screen.blit(self.world.backgroundImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
+            screen.blit(self.world.backgroundImage, offset)
 
-        screen.blit(self.world.terrainImage, (-self.cameraPosition[0], -self.cameraPosition[1]))
+        screen.blit(self.world.terrainImage, offset)
+
         for entity in self.world.entities:
-            entity.draw(screen)
+            entity.draw(screen, offset)
 
     def move_camera(self, dt: float, x: int, y: int):
         self.cameraStickToPlayer = False  # If camera moved manually - disable following (toggle again with R)
-        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
         if x != 0:
             self.cameraPosition[0] = min(  # Use round() instead of floor to achieve same movement in both directions
                 max(round(self.cameraPosition[0] + x * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[0] - screen_size[0])
+                self.world.worldSize[0] - self.screenSize[0])
         if y != 0:
             self.cameraPosition[1] = min(
                 max(round(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[1] - screen_size[1])
+                self.world.worldSize[1] - self.screenSize[1])
 
     def _apply_camera(self, entity):
-        screen_size = pygame.display.get_window_size()  # TODO CHANGE THE WAY OF GETTING SCREEN SIZE FOR SCALED ASAP
         self.cameraPosition[0] = min(
-            max(round(entity.x - screen_size[0]), 0),
-            self.world.worldSize[0] - screen_size[0])
+            max(round(entity.x - self.screenSize[0] / 2), 0),
+            self.world.worldSize[0] - self.screenSize[0])
         self.cameraPosition[1] = min(
-            max(round(entity.y - screen_size[1]), 0),
-            self.world.worldSize[1] - screen_size[1])
+            max(round(entity.y - self.screenSize[1] / 2), 0),
+            self.world.worldSize[1] - self.screenSize[1])
 
 
 class World:
@@ -82,7 +82,7 @@ class World:
         self.name: str = name
         # Terrain is represented by one-dimensional array of integers
         # Each of which represents the state on the block with corresponding coordinate
-        self.terrain: numpy.array = numpy.zeros(width * height, numpy.uint8)
+        self.terrain: numpy.array = numpy.zeros(width * height, numpy.uint32)
         self.worldSize: tuple = (width, height)
         # All entities are located in one list
         self.entities: list = []
@@ -93,14 +93,14 @@ class World:
         # If team data is not specified make 2 teams with 5 worms
         if team_data is None:
             for i in range(2):
-                team = Team((i == 0, 0, i != 0), 5)  # 1 team is red, 2 is blue
+                team = Team(self.worldSize[0], (i == 0, 0, i != 0), 5)  # 1 team is red, 2 is blue
                 self.wormsTeams.append(team)
                 self.entities.extend(team.worms)
         else:
             n_teams = len(team_data)
             for i, n_worms in enumerate(team_data):
-                angle = i * n_teams / 360  # Not to hard-code colors use hsv values
-                team = Team(colorsys.hsv_to_rgb(angle, 1, 1), n_worms)
+                angle = i / n_teams  # using hsv allows to pick colors using simple fraction
+                team = Team(self.worldSize[0], tuple(map(lambda n: n * 255, colorsys.hsv_to_rgb(angle, 1, 1))), n_worms)
                 self.wormsTeams.append(team)
                 self.entities.extend(team.worms)
 
@@ -128,15 +128,54 @@ class World:
         """
         Update game logic here (physics etc.)
         """
-        pass
+        for _ in range(6):  # Update times - better precision
+            for entity in self.entities:
+                entity.acceleration.y += GRAVITY * dt
+                entity.velocity += entity.acceleration * dt
+                potential_position = entity.position + entity.velocity * dt
+                # Reset acceleration
+                entity.acceleration = pygame.Vector2(0, 0)
+                entity.stable = False
+                # Calculate response force
+                angle = entity.angle
+                response = pygame.Vector2(0, 0)
+                collided = False
+                # Iterate through angles on semicircle with center point in angle
+                for r in map(lambda n: (n / 8.0) * math.pi + (angle - math.pi / 2.0), range(8)):
+                    test_position = pygame.Vector2(entity.radius * math.cos(r), entity.radius * math.sin(r)) \
+                                    + potential_position
+                    if not (0 <= test_position.x < self.worldSize[0]) or not \
+                            (0 <= test_position.y < self.worldSize[1]):
+                        continue
+
+                    if self.terrain[int(test_position.x) + int(test_position.y) * self.worldSize[0]] != 0:
+                        response += potential_position - test_position
+                        collided = True
+
+                if collided:
+                    response_magnitude = response.magnitude()
+
+                    entity.stable = True
+                    reflection = entity.velocity.x * (response.x / response_magnitude) + \
+                                 entity.velocity.y * (response.y / response_magnitude)
+                    entity.velocity = (entity.velocity + (response / response_magnitude * -2.0 * reflection)) \
+                                      * entity.friction
+
+                else:
+                    if 0 <= potential_position.x < self.worldSize[0]:  # If x position is correct
+                        entity.position = potential_position
+                    else:
+                        # Add some speed to go in the opposite way
+                        entity.velocity.x += 20 * (1 if potential_position.x < 0 else -1)
 
     def _load_foreground_as_terrain(self, image: pygame.Surface):
-        image: pygame.Surface = pygame.transform.scale(image, self.worldSize)
         for x in range(self.worldSize[0]):
             for y in range(self.worldSize[1]):
-                # TODO implement using different surface types
-                if image.get_at((x, y))[3] != 0:
-                    self.terrain[x + y * self.worldSize[0]] = 1
+                pix = image.get_at((x, y))
+                if pix[3] != 0:  # Not transparent
+                    # Store color data in one integer using bitwise operators
+                    data = ((pix[0] << 16) & 0xFF0000) | ((pix[1] << 8) & 0x00FF00) | pix[2] & 0x0000FF
+                    self.terrain[x + y * self.worldSize[0]] = data
 
     def _generate_random_terrain(self):
         pass
@@ -146,14 +185,14 @@ class World:
             for y in range(sy, sy + height):
                 if not 0 <= x < self.worldSize[0] or not 0 <= y < self.worldSize[1]:
                     continue
-
                 color = (255, 0, 255)
-                if self.terrain[x + y * self.worldSize[0]] == 1:
-                    color = (0, 255, 0)
+                cell = self.terrain[x + y * self.worldSize[0]]
+                if cell != 0:
+                    color = ((cell >> 16) & 0xFF, (cell >> 8) & 0xFF, cell & 0xFF)
                 self.terrainImage.set_at((x, y), color)
 
     @property
-    def selected_team(self):
+    def selected_team(self) -> Team:
         return self.wormsTeams[self.wormsTeamIndex]
 
 
@@ -196,6 +235,10 @@ def load_from_json(path: str) -> World:
 
 def save_as_csv(world):
     pass
+
+
+def load_from_csv(path):
+    return None
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ class Team:
     with open(os.path.join("res/data/wormNames.txt"), "r") as f:
         names = f.read().split("\n")
 
-    def __init__(self, color: tuple, worms_number: int, worms_positions: tuple = None):
+    def __init__(self, world_width, color: tuple, worms_number: int, worms_positions: tuple = None):
         self.color = color
         # Team color - with which names will be drawn
 
@@ -18,19 +18,26 @@ class Team:
         # Worms info
 
         for i in range(worms_number):
-            x = y = 0
+            x = random.randrange(world_width - Worm.image.get_width())
+            y = 0
             if worms_positions is not None:
                 x, y = worms_positions[i]
             self.worms.append(Worm(self._get_name(), color, x, y))
             self.worms_number += 1
 
-        self.selectedWorm = 0
+        self.selectedWormIndex = 0
         # Index of selected worm
         self.selected_weapon: None = None
         # TODO implement weapons
 
     def select_next(self):
-        self.selectedWorm = (self.selectedWorm + 1) % self.worms_number
+        self.selectedWormIndex = (self.selectedWormIndex + 1) % self.worms_alive
+
+    def select_previous(self):
+        if self.selected_worm == 0:
+            self.selectedWormIndex = self.worms_alive
+        else:
+            self.selectedWormIndex -= 1
 
     def _get_name(self) -> str:
         """
@@ -52,4 +59,4 @@ class Team:
 
     @property
     def selected_worm(self):
-        return self.worms[self.selectedWorm]
+        return self.worms[self.selectedWormIndex]

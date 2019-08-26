@@ -1,9 +1,12 @@
 import pygame
 
 import sys
+import os
 import enum
 
 from world import load_from_json, WorldRenderer
+
+DEBUG_COLOR = (50, 50, 50)
 
 
 # Game states
@@ -17,20 +20,29 @@ class Worms:
     """
     Game class
     """
+    levels = os.listdir(os.path.join("res/levels"))
+    # Load fonts
+    titleFont = pygame.font.Font("res/fonts/title.TTF", 40)
+    worldFont = pygame.font.Font("res/fonts/worldName.TTF", 20)
+    debugFont = pygame.font.SysFont("Consolas", 15)
+    menuFont = pygame.font.SysFont("comicsans", 50)
+
+    title = titleFont.render("WORMS.PY", False, (30, 30, 30))
 
     def __init__(self, screen_size):
 
         self.state: State = State.GAME_ACTIVE
 
-        self.world = load_from_json("res/levels/test.json")  # TEST VARIANT - TODO make loading in menu
+        self.world = load_from_json("res/levels/bikini_bottom.json")  # TEST VARIANT - TODO make loading in menu
         self.renderer = WorldRenderer(self.world, screen_size)
 
-        # Fonts
-        self.debugFont = pygame.font.SysFont("Consolas", 15)
-        self.menuFont = pygame.font.SysFont("comicsans", 50)
+        self.world_name = self.worldFont.render(self.world.name, False, (100, 100, 100))
 
         self.showDebugInfo: bool = True
         self.FPS: float = 0
+
+        self.showTitleInGame = True
+        self.fullscreen = False
 
     def event(self, dt: float):
         for event in pygame.event.get():
@@ -38,11 +50,24 @@ class Worms:
                 sys.exit(0)
 
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_F3:
+                if event.key == pygame.K_F3:  # Show debug screen
                     self.showDebugInfo = not self.showDebugInfo
+                elif event.key == pygame.K_F4:  # Show nice title
+                    self.showTitleInGame = not self.showTitleInGame
+                elif event.key == pygame.K_F11:  # Toggle fullscreen
+                    self.fullscreen = not self.fullscreen
+                    if self.fullscreen:
+                        pygame.display.set_mode(flags=pygame.HWSURFACE | pygame.FULLSCREEN)
+                    else:
+                        pygame.display.set_mode(flags=0)
 
                 elif event.key == pygame.K_r:  # Reset camera sticking to player
                     self.world.cameraStickToPlayer = True
+
+                elif event.key == pygame.K_q:  # Switch worms
+                    self.world.selected_team.select_previous()
+                elif event.key == pygame.K_e:
+                    self.world.selected_team.select_next()
 
         pressed = pygame.key.get_pressed()
         # Move camera
@@ -62,11 +87,15 @@ class Worms:
         if self.showDebugInfo:
             self.FPS = 1 / dt
 
+        self.renderer.update()
         self.world.update(dt)
 
     def draw(self, screen: pygame.Surface):
         if self.state == State.GAME_ACTIVE:
             self.renderer.draw(screen)
+            if self.showTitleInGame:
+                screen.blit(self.title, (screen.get_width() - self.title.get_width(), 0))
+                screen.blit(self.world_name, (screen.get_width() - self.world_name.get_width(), 40))
 
         elif self.state == State.GAME_MENU:
             # TODO add play button to menu
@@ -74,9 +103,10 @@ class Worms:
             screen.blit(menu, ((screen.get_width() - menu.get_width()) / 2, screen.get_height() / 4))
 
         if self.showDebugInfo:
-            screen.blit(self.debugFont.render(f"FPS: {'{0:.2f}'.format(self.FPS)}", False, (255, 0, 0)), (0, 0))
+            screen.blit(self.debugFont.render(f"FPS: {'{0:.2f}'.format(self.FPS)}", False, DEBUG_COLOR), (0, 0))
             screen.blit(
-                self.debugFont.render(f"Camera stick to player: {self.renderer.cameraStickToPlayer}", False, (255, 0, 0)),
+                self.debugFont.render(f"Camera stick to player: {self.renderer.cameraStickToPlayer}", False,
+                                      DEBUG_COLOR),
                 (0, 15))
-            screen.blit(self.debugFont.render(f"Camera Position: {self.renderer.cameraPosition}", False, (255, 0, 0)),
+            screen.blit(self.debugFont.render(f"Camera Position: {self.renderer.cameraPosition}", False, DEBUG_COLOR),
                         (0, 30))
