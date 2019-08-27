@@ -1,12 +1,12 @@
+import os
 import random
 
 from gameObjects import Worm
-import os
 
 
 class Team:
     # Get worm names
-    with open(os.path.join("res/data/wormNames.txt"), "r") as f:
+    with open(os.path.join("res/data/wormNames.txt")) as f:
         names = f.read().split("\n")
 
     def __init__(self, world_width, color: tuple, worms_number: int, worms_positions: tuple = None):
@@ -44,7 +44,6 @@ class Team:
         Returns name for a worm
         First tries to find not used name
         If all names are used returns random
-        :return: Worm name
         """
         excluded_names = tuple(filter(lambda worm: worm.name, self.worms))
         possible_names = self.names
@@ -55,7 +54,7 @@ class Team:
 
     @property
     def worms_alive(self):
-        return sum(map(lambda worm: worm.alive, self.worms))
+        return len(self.worms)
 
     @property
     def selected_worm(self):

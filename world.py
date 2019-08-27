@@ -1,11 +1,14 @@
+import colorsys  # hsv_to_rgb
+import json
+import math
+import os
+import random
+
 import numpy
 import pygame
 
-import os
-import json
-import math
+from gameObjects import *
 from team import Team
-import colorsys  # hsv_to_rgb
 
 ALPHA_COLORKEY = (255, 0, 255)
 CAMERA_SPEED = 1000
@@ -18,6 +21,9 @@ class WorldRenderer:
     It keeps information about camera, and uses world attributes such as images to draw it
      (because images are part of the world and cannot be separated)
     """
+    arrow_image = pygame.image.load(os.path.join("res/images/arrow.png"))
+    arrow_image.set_colorkey(ALPHA_COLORKEY)
+    arrow_image.convert()
 
     def __init__(self, world, screen_size):
         self.screenSize = screen_size
@@ -28,12 +34,19 @@ class WorldRenderer:
         self.cameraPosition = numpy.zeros(2, dtype=numpy.uint16)  # Left-top corner
         self.cameraStickToPlayer: bool = True
 
-    def update(self):
+        self.arrowPosition: float = 5
+        self.arrowUp: bool = True
+
+    def update(self, dt):
         """
         Update camera
         """
         if self.cameraStickToPlayer:
             self._apply_camera(self.world.selected_team.selected_worm)
+
+        self.arrowPosition += (self.arrowUp or -1) * 10 * dt
+        if self.arrowPosition >= 5 or self.arrowPosition <= 0:
+            self.arrowUp = not self.arrowUp
 
     def draw(self, screen: pygame.Surface):
         """
@@ -47,6 +60,10 @@ class WorldRenderer:
 
         for entity in self.world.entities:
             entity.draw(screen, offset)
+
+        if self.cameraStickToPlayer:
+            screen.blit(self.arrow_image, self.world.selected_team.selected_worm.position -
+                        (6, 40) + offset + (0, int(self.arrowPosition ** 2) - 25))
 
     def move_camera(self, dt: float, x: int, y: int):
         self.cameraStickToPlayer = False  # If camera moved manually - disable following (toggle again with R)
@@ -108,6 +125,7 @@ class World:
         self.windSpeed: float = wind_speed
         # Can explosions damage terrain
         self.allowExplosions: bool = allow_explosions
+        self.debrisAllowed: bool = True
 
         if background is not None:
             self.backgroundImage = background.convert()
@@ -129,44 +147,112 @@ class World:
         Update game logic here (physics etc.)
         """
         for _ in range(6):  # Update times - better precision
-            for entity in self.entities:
-                entity.acceleration.y += GRAVITY * dt
-                entity.velocity += entity.acceleration * dt
+            # Number of updates could be lowered to gain better precision but loose smoothness
+            # 6 is a golden middle - everything is a bit slower than it should be, but it makes the style
+            copy = self.entities.copy()
+            self.entities.clear()
+            for entity in copy:
+                if entity.affectedByGravity:
+                    acceleration = GRAVITY * dt
+                    entity.velocity.y += acceleration * dt
                 potential_position = entity.position + entity.velocity * dt
+
                 # Reset acceleration
-                entity.acceleration = pygame.Vector2(0, 0)
                 entity.stable = False
                 # Calculate response force
                 angle = entity.angle
                 response = pygame.Vector2(0, 0)
-                collided = False
+                # CIRCLE - TERRAIN COLLISION
                 # Iterate through angles on semicircle with center point in angle
                 for r in map(lambda n: (n / 8.0) * math.pi + (angle - math.pi / 2.0), range(8)):
+                    # Calculate position on the circle
                     test_position = pygame.Vector2(entity.radius * math.cos(r), entity.radius * math.sin(r)) \
                                     + potential_position
+                    # Check if position is in bounds
                     if not (0 <= test_position.x < self.worldSize[0]) or not \
                             (0 <= test_position.y < self.worldSize[1]):
                         continue
-
+                    # Then check if this position is inside a solid block
                     if self.terrain[int(test_position.x) + int(test_position.y) * self.worldSize[0]] != 0:
                         response += potential_position - test_position
-                        collided = True
 
-                if collided:
+                if response != (0, 0):  # If collision occurred
                     response_magnitude = response.magnitude()
-
+                    # Calculate reflection and apply force in opposite direction
                     entity.stable = True
                     reflection = entity.velocity.x * (response.x / response_magnitude) + \
                                  entity.velocity.y * (response.y / response_magnitude)
                     entity.velocity = (entity.velocity + (response / response_magnitude * -2.0 * reflection)) \
-                                      * entity.friction
+                                      * entity.friction  # Velocity lowers due to friction multiplication
 
-                else:
-                    if 0 <= potential_position.x < self.worldSize[0]:  # If x position is correct
-                        entity.position = potential_position
-                    else:
-                        # Add some speed to go in the opposite way
-                        entity.velocity.x += 20 * (1 if potential_position.x < 0 else -1)
+                    if entity.bounceTimes > 0:
+                        entity.bounceTimes -= 1
+
+                    if entity.bounceTimes == 0:
+                        entity.bounce_death_action(self)
+
+                elif 0 <= potential_position.x < self.worldSize[0]:  # If x position is correct
+                    entity.position = potential_position
+                else:  # Add some speed to go in the opposite way
+                    entity.velocity.x += 20 * (potential_position.x < 0 or -1)
+
+                # Update type-specific parameters
+                if isinstance(entity, Worm):
+                    if entity.velocity != 0 and not entity.stable:  # Worm needs to know his last direction
+                        entity.direction = entity.velocity.x > 0
+                    if entity.health <= 0:  # If worm is dead set it to disappear
+                        entity.bounceTimes = 0
+                # Add entity back to list if its parameters are valid
+                if entity.bounceTimes != 0 and entity.y <= self.worldSize[1]:
+                    if entity.velocity.magnitude() < 0.1:  # Delete small movement
+                        entity.stable = True
+                    self.entities.append(entity)
+                elif isinstance(entity, Worm):  # Worms also have to be removed from team
+                    for team in self.wormsTeams:
+                        if entity in team.worms:
+                            team.worms.remove(entity)
+                            team.select_next()
+                            break
+
+    def explosion(self, x, y, radius):
+        if self.allowExplosions:
+            self._midpoint_circle(x, y, radius)
+            self._draw_terrain(x - radius, y - radius, 2 * radius + 1, 2 * radius + 1)
+        for entity in self.entities:  # Apply forces to other entities
+            distance = entity.position.distance_to((x, y))
+            if distance < radius:
+                entity.stable = False
+                angle = math.atan2(entity.y - y, entity.x - x)
+                entity.velocity += pygame.Vector2(math.cos(angle), math.sin(angle)) * 3 * radius \
+                                   * ((radius - distance) / radius)
+
+        if self.debrisAllowed:
+            for _ in range(radius // 2):
+                angle = random.random() * math.pi * 2
+                self.entities.append(Debris(x, y, math.cos(angle) * radius * 1.5, math.sin(angle) * radius * 1.5))
+
+    def _midpoint_circle(self, x0, y0, radius):
+        def set_line(x1, x2, y_):
+            for x_ in range(x1, x2 + 1):
+                if 0 <= x_ < self.worldSize[0] and 0 <= y_ < self.worldSize[1]:
+                    self.terrain[x_ + y_ * self.worldSize[0]] = 0
+
+        f = 1 - radius
+        ddf_x, ddf_y = 1, -2 * radius
+        x, y = 0, radius
+        set_line(x0 - radius, x0 + radius, y0)
+        while x < y:
+            if f >= 0:
+                y -= 1
+                ddf_y += 2
+                f += ddf_y
+            x += 1
+            ddf_x += 2
+            f += ddf_x
+            set_line(x0 - x, x0 + x, y0 + y)
+            set_line(x0 - x, x0 + x, y0 - y)
+            set_line(x0 - y, x0 + y, y0 + x)
+            set_line(x0 - y, x0 + y, y0 - x)
 
     def _load_foreground_as_terrain(self, image: pygame.Surface):
         for x in range(self.worldSize[0]):
@@ -203,7 +289,7 @@ def load_from_json(path: str) -> World:
     :param path: path to .json file
     :return: World as specified
     """
-    with open(os.path.join(path), "r") as file:
+    with open(os.path.join(path)) as file:
         world_data: dict = json.load(file)
 
         name = world_data["name"]
@@ -219,12 +305,11 @@ def load_from_json(path: str) -> World:
                                                 (width, height))  # Resize Image to fit the world
         foreground = world_data.get("foreground")
         if foreground is not None:
-            # TODO use colorkey instead of alpha
             foreground = pygame.transform.scale(pygame.image.load(os.path.join(foreground)).convert_alpha(),
                                                 (width, height))
 
         wind = world_data.get("windSpeed", 0)
-        explosions = world_data.get("allowExplosions", False)
+        explosions = world_data.get("allowExplosions", True)
 
         return World(name,
                      width, height,

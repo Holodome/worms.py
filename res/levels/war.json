@@ -1,14 +1,11 @@
 {
   "name": "Desert Apocalypse",
-
   "width": 1024,
   "height": 576,
-
   "teams": [
-    3,
-    3
+    5,
+    5
   ],
-
   "foreground": "res/images/war_fg.png",
   "background": "res/images/war_bg.png"
 }

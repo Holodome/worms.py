@@ -1,7 +1,6 @@
-import pygame
-
 import os
-import time
+
+import pygame
 
 SCREEN_SIZE = (640, 480)
 
@@ -23,10 +22,13 @@ def main():
     import worms  # Import here so game can load and convert images properly
     game = worms.Worms(SCREEN_SIZE)
 
-    now_time = time.perf_counter()
+    now_time = pygame.time.get_ticks()
+    clock = pygame.time.Clock()
+    clock.tick_busy_loop()
     while True:
-        dt = time.perf_counter() - now_time
-        now_time += dt
+        dt = min(0.05, clock.tick_busy_loop() / 1000)
+        # Limit low fps (otherwise game wil compute physics on big time
+        #  and worms will jump even if the were still)
         screen.fill((0, 0, 0))  # Clear screen (better not do it)
 
         game.event(dt)

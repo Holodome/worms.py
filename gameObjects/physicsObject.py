@@ -1,6 +1,6 @@
-import pygame
-from pygame import Vector2
 import math
+
+import pygame
 
 
 class PhysicsObject:
@@ -10,12 +10,15 @@ class PhysicsObject:
 
     """
     COLORKEY = (255, 0, 255)
+    font = pygame.font.SysFont("consolas", 10)  # Make font common for all inheritors
 
-    def __init__(self, x: float, y: float, radius: float, friction: float, bounce_times: int = -1):
+    def __init__(self, x: float, y: float, radius: float,
+                 friction: float, bounce_times: int = -1, gravity: bool = True):
         # Linear attributes
-        self.position: Vector2 = Vector2(x, y)
-        self.velocity: Vector2 = Vector2()
-        self.acceleration: Vector2 = Vector2()
+        self.position: pygame.Vector2 = pygame.Vector2(x, y)
+        self.velocity: pygame.Vector2 = pygame.Vector2(0)
+
+        self.affectedByGravity = gravity
 
         self.stable: bool = False
         # Radius of the representing circle
@@ -25,8 +28,14 @@ class PhysicsObject:
         # How many times ball can bounce before some death action
         self.bounceTimes: int = bounce_times
 
-    def bounce_death_action(self):
+    def draw(self, screen: pygame.Surface, offset: tuple):
         raise NotImplementedError()
+
+    def bounce_death_action(self, world):
+        """
+        Override this function to add death action
+        """
+        pass
 
     @property
     def x(self):

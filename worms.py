@@ -1,10 +1,10 @@
+import enum
+import os
+import sys
+
 import pygame
 
-import sys
-import os
-import enum
-
-from world import load_from_json, WorldRenderer
+from world import WorldRenderer, load_from_json
 
 DEBUG_COLOR = (50, 50, 50)
 
@@ -33,24 +33,27 @@ class Worms:
 
         self.state: State = State.GAME_ACTIVE
 
-        self.world = load_from_json("res/levels/bikini_bottom.json")  # TEST VARIANT - TODO make loading in menu
+        self.world = load_from_json("res/levels/bikini_bottom.json")  # TODO make loading in menu
         self.renderer = WorldRenderer(self.world, screen_size)
 
         self.world_name = self.worldFont.render(self.world.name, False, (100, 100, 100))
 
-        self.showDebugInfo: bool = True
+        self.showDebugInfo: bool = False
         self.FPS: float = 0
 
         self.showTitleInGame = True
         self.fullscreen = False
 
     def event(self, dt: float):
+        mouse_pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
 
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_F3:  # Show debug screen
+                if event.key == pygame.K_F2:
+                    self.world.debrisAllowed = not self.world.debrisAllowed
+                elif event.key == pygame.K_F3:  # Show debug screen
                     self.showDebugInfo = not self.showDebugInfo
                 elif event.key == pygame.K_F4:  # Show nice title
                     self.showTitleInGame = not self.showTitleInGame
@@ -59,15 +62,21 @@ class Worms:
                     if self.fullscreen:
                         pygame.display.set_mode(flags=pygame.HWSURFACE | pygame.FULLSCREEN)
                     else:
-                        pygame.display.set_mode(flags=0)
+                        pygame.display.set_mode()
 
                 elif event.key == pygame.K_r:  # Reset camera sticking to player
-                    self.world.cameraStickToPlayer = True
+                    self.renderer.cameraStickToPlayer = True
 
                 elif event.key == pygame.K_q:  # Switch worms
                     self.world.selected_team.select_previous()
                 elif event.key == pygame.K_e:
                     self.world.selected_team.select_next()
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    from gameObjects import ClusterBomb
+                    # self.world.explosion(*(self.renderer.cameraPosition + mouse_pos), 15)
+                    self.world.entities.append(ClusterBomb(*(self.renderer.cameraPosition + mouse_pos), 0, 0))
 
         pressed = pygame.key.get_pressed()
         # Move camera
@@ -87,7 +96,7 @@ class Worms:
         if self.showDebugInfo:
             self.FPS = 1 / dt
 
-        self.renderer.update()
+        self.renderer.update(dt)
         self.world.update(dt)
 
     def draw(self, screen: pygame.Surface):
@@ -110,3 +119,6 @@ class Worms:
                 (0, 15))
             screen.blit(self.debugFont.render(f"Camera Position: {self.renderer.cameraPosition}", False, DEBUG_COLOR),
                         (0, 30))
+            screen.blit(
+                self.debugFont.render(f"Worms alive: {list(map(lambda t: t.worms_alive, self.world.wormsTeams))}",
+                                      False, DEBUG_COLOR), (0, 45))

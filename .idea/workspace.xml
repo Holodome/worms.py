@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="Added physics, fullscreen, new game level">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/holod.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsonSchemas.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/bikini_bottom_bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/bikini_bottom_fg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/war_bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/war_fg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/levels/bikini_bottom.json" afterDir="false" />
+    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gameObjects/debris.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameObjects/grenades.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/fonts/title.TTF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/fonts/worldName.TTF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/arrow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/cluster.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/cluster_bomb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/dynamite.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/grenade.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/minigun.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/missile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/uzi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/holod.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/holod.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/physicsObject.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/worm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/icon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/War.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/fg_ex.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/worm.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/worm.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/levels/test.json" beforeDir="false" afterPath="$PROJECT_DIR$/res/levels/war.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/levels/bikini_bottom.json" beforeDir="false" afterPath="$PROJECT_DIR$/res/levels/bikini_bottom.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/levels/war.json" beforeDir="false" afterPath="$PROJECT_DIR$/res/levels/war.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/team.py" beforeDir="false" afterPath="$PROJECT_DIR$/team.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/world.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms.py" afterDir="false" />
@@ -28,6 +33,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -40,9 +52,11 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Conqueror-of-Empires-master" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -107,7 +121,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566734329951</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added physics, fullscreen, new game level">
+      <created>1566810632119</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1566810632119</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -124,6 +145,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Separated draw logic from game logic" />
     <MESSAGE value="Added physics, fullscreen, new game level" />
     <option name="LAST_COMMIT_MESSAGE" value="Added physics, fullscreen, new game level" />
