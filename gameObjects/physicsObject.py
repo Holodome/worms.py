@@ -9,11 +9,10 @@ class PhysicsObject:
     with certain radius and position
 
     """
-    COLORKEY = (255, 0, 255)
-    font = pygame.font.SysFont("consolas", 10)  # Make font common for all inheritors
+    center_dist = 0  # For calculating distance to object
 
     def __init__(self, x: float, y: float, radius: float,
-                 friction: float, bounce_times: int = -1, gravity: bool = True):
+                 friction: float, bounce_times: int = -1, time_to_death: float = -1, gravity: bool = True, ):
         # Linear attributes
         self.position: pygame.Vector2 = pygame.Vector2(x, y)
         self.velocity: pygame.Vector2 = pygame.Vector2(0)
@@ -27,11 +26,14 @@ class PhysicsObject:
         self.friction: float = friction
         # How many times ball can bounce before some death action
         self.bounceTimes: int = bounce_times
+        self.timeToDeath: float = time_to_death
+
+        self.alive = True
 
     def draw(self, screen: pygame.Surface, offset: tuple):
         raise NotImplementedError()
 
-    def bounce_death_action(self, world):
+    def death_action(self, world):
         """
         Override this function to add death action
         """
@@ -48,3 +50,6 @@ class PhysicsObject:
     @property
     def angle(self):
         return math.atan2(self.velocity.y, self.velocity.x)
+
+    def valid(self, world_size):
+        self.alive =  self.bounceTimes != 0 and 0 <= self.x < world_size[0] and self.y < world_size[1]

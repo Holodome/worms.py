@@ -2,6 +2,8 @@ import os
 
 import pygame
 
+import loader
+
 SCREEN_SIZE = (640, 480)
 
 
@@ -18,7 +20,9 @@ def main():
     pygame.display.set_icon(pygame.image.load(os.path.join("res", "images", "worm.png")))
     screen = pygame.display.set_mode(SCREEN_SIZE, mode)
     pygame.display.set_caption("worms.py")
+    pygame.mouse.set_visible(False)
 
+    loader.init()
     import worms  # Import here so game can load and convert images properly
     game = worms.Worms(SCREEN_SIZE)
 
