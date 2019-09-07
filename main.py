@@ -4,8 +4,6 @@ import pygame
 
 import loader
 
-SCREEN_SIZE = (640, 480)
-
 
 def main():
     os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -18,13 +16,13 @@ def main():
     #     mode |= pygame.SCALED
 
     pygame.display.set_icon(pygame.image.load(os.path.join("res", "images", "worm.png")))
-    screen = pygame.display.set_mode(SCREEN_SIZE, mode)
+    screen = pygame.display.set_mode((640, 480), mode)
     pygame.display.set_caption("worms.py")
-    pygame.mouse.set_visible(False)
+    # pygame.mouse.set_visible(False)
 
     loader.init()
     import worms  # Import here so game can load and convert images properly
-    game = worms.Worms(SCREEN_SIZE)
+    game = worms.Worms([640, 480])
 
     now_time = pygame.time.get_ticks()
     clock = pygame.time.Clock()

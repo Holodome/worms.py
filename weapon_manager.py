@@ -1,5 +1,7 @@
-import pygame
 import math
+
+import pygame
+
 import loader
 from gameObjects import *
 
@@ -21,26 +23,28 @@ class Weapon:
         return self.bullet(_, x, y, vel_x, vel_y)
 
 
-weapons = [Weapon(Grenade, loader.get_image("grenade")), Weapon(CLUSTER_BOMB, loader.get_image("cluster_bomb"))]
+weapons = [Weapon(Grenade, loader.get_image("grenade")), Weapon(ClusterBomb, loader.get_image("cluster_bomb"))]
 
 
 class WeaponManager:
     def __init__(self):
         self.weapons_quantity: dict = {w_id: -1 for w_id in weapon_ids}
-        self.selected_weapon: int = 0
+        self.selected_weapon: int = 1
 
         self.shootingAngle = -math.pi / 4
         self.time = 3
 
-    def fire(self, world, throw_force) -> list:
-        print(throw_force)
+    def fire(self, x, y, throw_force) -> list:
+        assert throw_force != -1
         weapon = weapons[self.selected_weapon]
         weapon_id = weapon_ids[self.selected_weapon]
         if weapon_id == GRENADE or weapon_id == CLUSTER_BOMB:
-            b = weapon.fire(self.time, *world.selected_team.selected_worm.position,
-                                              math.cos(self.shootingAngle) * throw_force * 50,
-                                              math.sin(self.shootingAngle) * throw_force * 50)
+            b = weapon.fire(self.time, x, y,
+                            math.cos(self.shootingAngle) * throw_force * 50,
+                            math.sin(self.shootingAngle) * throw_force * 50)
             return [b]
 
-    def draw_menu(self, screen: pygame.Surface):
-        pass
+    def draw_menu(self, screen: pygame.Surface, screen_width: int, screen_height: int):
+        image = pygame.Surface((screen_width, screen_height * 2 // 5 + 1), pygame.SRCALPHA)
+        image.fill((40, 40, 40, 230))
+        screen.blit(image, (0, screen_height * 3 // 5))

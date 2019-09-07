@@ -1,4 +1,3 @@
-import math
 import os
 import random
 
@@ -37,7 +36,7 @@ class Team:
 
     def select_previous(self):
         if self.selected_worm == 0:
-            self.selectedWormIndex = self.worms_alive
+            self.selectedWormIndex = self.worms_alive - 1
         else:
             self.selectedWormIndex -= 1
         return self.worms[self.selectedWormIndex]

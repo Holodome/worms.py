@@ -41,6 +41,7 @@ class WorldRenderer:
         self.arrowUp: bool = True
 
         self.notInAnimation: bool = True
+        self.aimState: bool = True
 
     def update(self, dt):
         if self.cameraStickToPlayer:
@@ -51,7 +52,7 @@ class WorldRenderer:
             if self.arrowPosition >= 5 or self.arrowPosition <= 0:
                 self.arrowUp = not self.arrowUp
         else:
-            if not any(map(lambda e: not isinstance(e, Worm) and not isinstance(e, Debris), self.world.entities)):
+            if not any(map(lambda e: not isinstance(e, Worm), self.world.entities)):
                 self.notInAnimation = True
                 self.cameraTrackingEntity = self.world.selected_team.selected_worm
 
@@ -68,10 +69,12 @@ class WorldRenderer:
         if self.notInAnimation:
             screen.blit(arrow_image, self.cameraTrackingEntity.position -
                         (6, 40) + offset + (0, int(self.arrowPosition ** 2) - 25))
-            screen.blit(crosshair_image,
-                        self.cameraTrackingEntity.position + (-5, -5) +
-                        self.offset + (math.cos(self.world.selected_team.weapon_manager.shootingAngle) * 40,
-                                       math.sin(self.world.selected_team.weapon_manager.shootingAngle) * 40))
+            if self.aimState:
+                screen.blit(crosshair_image,
+                            self.cameraTrackingEntity.position + (-5, -5) +
+                            self.offset + (math.cos(self.world.selected_team.weapon_manager.shootingAngle) * 40,
+                                           math.sin(self.world.selected_team.weapon_manager.shootingAngle) * 40))
+                self.world.selected_team.weapon_manager.draw_menu(screen, *self.screenSize)
 
     def draw_force_bar(self, screen: pygame.Surface, force: float):
         position = self.cameraTrackingEntity.position + (-10, 25) + self.offset
@@ -90,13 +93,9 @@ class WorldRenderer:
                 max(round(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
                 self.world.worldSize[1] - self.screenSize[1])
 
-    def set_weapon_fired(self, ent):
+    def set_weapon_fired(self, entity):
         self.notInAnimation = False
-        self.cameraTrackingEntity = ent
-
-    # def set_normal_mode(self):
-    #     self.notInAnimation = True
-    #     self.cameraTrackingEntity = self.world.selected_team.selected_worm
+        self.cameraTrackingEntity = entity
 
     def _apply_camera(self, entity):
         self.cameraPosition[0] = min(
@@ -112,9 +111,6 @@ class WorldRenderer:
 
 
 class World:
-    """
-    Class representing the single world (or level) in game
-    """
 
     def __init__(self, name: str,
                  width: int, height: int,
@@ -224,9 +220,8 @@ class World:
                             entity.death_action(self)
 
                 entity.position = potential_position
-                entity.valid(self.worldSize)
                 # Add entity back to list if its parameters are valid
-                if entity.alive:
+                if entity.valid(self.worldSize):
                     if entity.velocity.magnitude() < 0.1:  # Delete small movement
                         entity.stable = True
                     if isinstance(entity, Worm) and entity.velocity != 0 and not entity.stable:
@@ -240,12 +235,6 @@ class World:
                             break
 
     def explosion(self, x: int, y: int, radius: int, damage: int, force_coefficient: float):
-        """
-        Makes circle explosion at given position:
-         removes terrain if allowed
-         adds debris     if allowed
-         adds force to all entities in explosion radius
-        """
         if self.allowExplosions:
             self._midpoint_circle(x, y, radius)
             self._draw_terrain(x - radius, y - radius, 2 * radius + 1, 2 * radius + 1)
@@ -266,9 +255,6 @@ class World:
                 self.entities.append(Debris(x, y, math.cos(angle) * radius * 1.5, math.sin(angle) * radius * 1.5))
 
     def pass_turn(self):
-        """
-        Sets next team active - call after worm used weapon
-        """
         self.wormsTeamIndex = (self.wormsTeamIndex + 1) % self.numberOfTeams
 
     def _midpoint_circle(self, x0, y0, radius):
@@ -295,9 +281,6 @@ class World:
             set_line(x0 - y, x0 + y, y0 - x)
 
     def _load_foreground_as_terrain(self, image: pygame.Surface):
-        """
-        Stores pixel data in terrain
-        """
         for x in range(self.worldSize[0]):
             for y in range(self.worldSize[1]):
                 pix = image.get_at((x, y))
@@ -310,10 +293,6 @@ class World:
         pass
 
     def _draw_terrain(self, sx: int, sy: int, width: int, height: int):
-        """
-        Redraws given rect of terrainImage using terrain
-        Call after terrain destruction
-        """
         for x in range(sx, sx + width):
             for y in range(sy, sy + height):
                 if not 0 <= x < self.worldSize[0] or not 0 <= y < self.worldSize[1]:

@@ -28,8 +28,6 @@ class PhysicsObject:
         self.bounceTimes: int = bounce_times
         self.timeToDeath: float = time_to_death
 
-        self.alive = True
-
     def draw(self, screen: pygame.Surface, offset: tuple):
         raise NotImplementedError()
 
@@ -52,4 +50,4 @@ class PhysicsObject:
         return math.atan2(self.velocity.y, self.velocity.x)
 
     def valid(self, world_size):
-        self.alive =  self.bounceTimes != 0 and 0 <= self.x < world_size[0] and self.y < world_size[1]
+        return self.bounceTimes != 0 and 0 <= self.x < world_size[0] and self.y < world_size[1]
