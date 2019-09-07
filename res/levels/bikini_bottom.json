@@ -3,8 +3,8 @@
   "width": 1024,
   "height": 576,
   "teams": [
-    3,
-    3
+    1,
+    0
   ],
   "foreground": "res/images/bikini_bottom_fg.png",
   "background": "res/images/bikini_bottom_bg.png"

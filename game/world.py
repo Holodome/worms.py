@@ -7,107 +7,11 @@ import random
 import numpy
 import pygame
 
-import loader
+from game.team import Team
 from gameObjects import *
-from team import Team
 
 ALPHA_COLORKEY = (255, 0, 255)
-CAMERA_SPEED = 1000
 GRAVITY = 1000
-
-arrow_image = loader.get_image("arrow")
-crosshair_image = loader.get_image("crosshair")
-
-
-class WorldRenderer:
-    """
-    Class for separating draw logic from game logic
-    It keeps information about camera, and uses world attributes such as images to draw it
-     (because images are part of the world and cannot be separated)
-    """
-
-    def __init__(self, world, screen_size):
-        self.screenSize = screen_size
-
-        self.world = world
-
-        # Camera
-        self.cameraPosition = numpy.zeros(2, dtype=numpy.uint16)  # Left-top corner
-        self.cameraStickToPlayer: bool = True
-
-        self.cameraTrackingEntity = self.world.selected_team.selected_worm
-        # Arrow movement
-        self.arrowPosition: float = 5
-        self.arrowUp: bool = True
-
-        self.notInAnimation: bool = True
-        self.aimState: bool = True
-
-    def update(self, dt):
-        if self.cameraStickToPlayer:
-            self._apply_camera(self.cameraTrackingEntity)
-
-        if self.notInAnimation:
-            self.arrowPosition += (self.arrowUp or -1) * 10 * dt
-            if self.arrowPosition >= 5 or self.arrowPosition <= 0:
-                self.arrowUp = not self.arrowUp
-        else:
-            if not any(map(lambda e: not isinstance(e, Worm), self.world.entities)):
-                self.notInAnimation = True
-                self.cameraTrackingEntity = self.world.selected_team.selected_worm
-
-    def draw(self, screen: pygame.Surface):
-        offset = self.offset
-        if self.world.backgroundImage is not None:
-            screen.blit(self.world.backgroundImage, offset)
-
-        screen.blit(self.world.terrainImage, offset)
-
-        for entity in self.world.entities:
-            entity.draw(screen, offset)
-
-        if self.notInAnimation:
-            screen.blit(arrow_image, self.cameraTrackingEntity.position -
-                        (6, 40) + offset + (0, int(self.arrowPosition ** 2) - 25))
-            if self.aimState:
-                screen.blit(crosshair_image,
-                            self.cameraTrackingEntity.position + (-5, -5) +
-                            self.offset + (math.cos(self.world.selected_team.weapon_manager.shootingAngle) * 40,
-                                           math.sin(self.world.selected_team.weapon_manager.shootingAngle) * 40))
-                self.world.selected_team.weapon_manager.draw_menu(screen, *self.screenSize)
-
-    def draw_force_bar(self, screen: pygame.Surface, force: float):
-        position = self.cameraTrackingEntity.position + (-10, 25) + self.offset
-        green_length = int(force * 20)
-        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(*position, green_length, 2))
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(*(position + (green_length, 0)), 20 - green_length, 2))
-
-    def move_camera(self, dt: float, x: int, y: int):
-        self.cameraStickToPlayer = False  # If camera moved manually - disable following (toggle again with R)
-        if x != 0:
-            self.cameraPosition[0] = min(  # Use round() instead of floor to achieve same movement in both directions
-                max(round(self.cameraPosition[0] + x * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[0] - self.screenSize[0])
-        if y != 0:
-            self.cameraPosition[1] = min(
-                max(round(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[1] - self.screenSize[1])
-
-    def set_weapon_fired(self, entity):
-        self.notInAnimation = False
-        self.cameraTrackingEntity = entity
-
-    def _apply_camera(self, entity):
-        self.cameraPosition[0] = min(
-            max(round(entity.x - self.screenSize[0] / 2), 0),
-            self.world.worldSize[0] - self.screenSize[0])
-        self.cameraPosition[1] = min(
-            max(round(entity.y - self.screenSize[1] / 2), 0),
-            self.world.worldSize[1] - self.screenSize[1])
-
-    @property
-    def offset(self):
-        return -int(self.cameraPosition[0]), -int(self.cameraPosition[1])
 
 
 class World:
@@ -187,7 +91,6 @@ class World:
                     acceleration = GRAVITY * dt
                     entity.velocity.y += acceleration * dt
                 potential_position = entity.position + entity.velocity * dt
-
                 entity.stable = False
                 # Calculate response force
                 response = pygame.Vector2(0, 0)
@@ -222,8 +125,9 @@ class World:
                 entity.position = potential_position
                 # Add entity back to list if its parameters are valid
                 if entity.valid(self.worldSize):
-                    if entity.velocity.magnitude() < 0.1:  # Delete small movement
+                    if entity.velocity.magnitude() < 0.001:  # Delete small movement
                         entity.stable = True
+                        entity.velocity -= entity.velocity
                     if isinstance(entity, Worm) and entity.velocity != 0 and not entity.stable:
                         entity.direction = entity.velocity.x > 0
                     self.entities.append(entity)
@@ -329,6 +233,7 @@ def load_from_json(path: str) -> World:
         if background is not None:
             background = pygame.transform.scale(pygame.image.load(os.path.join(background)).convert(),
                                                 (width, height))  # Resize Image to fit the world
+
         foreground = world_data.get("foreground")
         if foreground is not None:
             foreground = pygame.transform.scale(pygame.image.load(os.path.join(foreground)).convert_alpha(),

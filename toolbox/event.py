@@ -4,7 +4,9 @@ import pygame
 
 
 class Keyboard:
-
+    """
+    Class for storing keyboard input
+    """
     def __init__(self):
         self.heldKeys: set = set()
         self.keysPressedThisFrame: set = set()
@@ -33,7 +35,10 @@ class Keyboard:
 
 
 class Mouse:
-
+    """
+    Class for storing mouse input,
+    movement and wheel scrolling
+    """
     def __init__(self, screen_size: list):
         self.screenSize: list = screen_size
 

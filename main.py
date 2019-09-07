@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-import loader
+from toolbox import loader
 
 
 def main():
@@ -18,17 +18,17 @@ def main():
     pygame.display.set_icon(pygame.image.load(os.path.join("res", "images", "worm.png")))
     screen = pygame.display.set_mode((640, 480), mode)
     pygame.display.set_caption("worms.py")
-    # pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(False)
 
     loader.init()
-    import worms  # Import here so game can load and convert images properly
+    from game import worms
     game = worms.Worms([640, 480])
 
     now_time = pygame.time.get_ticks()
     clock = pygame.time.Clock()
     clock.tick_busy_loop()
     while True:
-        dt = min(0.05, clock.tick_busy_loop() / 1000)
+        dt = clock.tick_busy_loop() / 1000
         # Limit low fps (otherwise game wil compute physics on big time
         #  and worms will jump even if the were still)
         screen.fill((0, 0, 0))  # Clear screen (better not do it)

@@ -22,7 +22,7 @@ def init():
     load_font(True, "consolas", 15)
 
 
-def load_font(sys_font: bool, font_name: str, font_size: int, *args, **kwargs):
+def load_font(sys_font: bool, font_name: str, font_size: int, *args, **kwargs) -> pygame.font.FontType:
     key = font_name.lower() + " " + str(font_size)
     if loaded_fonts.get(font_name) is None:
         if sys_font:
@@ -32,7 +32,7 @@ def load_font(sys_font: bool, font_name: str, font_size: int, *args, **kwargs):
     return loaded_fonts[key]
 
 
-def load_image(name: str, convert=False, convert_alpha=False, set_colorkey=False):
+def load_image(name: str, convert=False, convert_alpha=False, set_colorkey=False) -> pygame.Surface:
     assert not (convert and convert_alpha) or not (convert_alpha and set_colorkey)
 
     if loaded_images.get(name) is None:
@@ -47,9 +47,9 @@ def load_image(name: str, convert=False, convert_alpha=False, set_colorkey=False
     return loaded_images[name]
 
 
-def get_image(name: str):
+def get_image(name: str) -> pygame.Surface:
     return loaded_images[name.lower()]
 
 
-def get_font(name: str, size: int):
+def get_font(name: str, size: int) -> pygame.font.FontType:
     return loaded_fonts[(name + " " + str(size)).lower()]

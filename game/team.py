@@ -1,9 +1,9 @@
 import os
 import random
 
-import loader
+from toolbox import loader
 from gameObjects import *
-from weapon_manager import WeaponManager
+from game.weapon_manager import WeaponManager
 
 worm_image_width = loader.get_image("worm").get_width()
 

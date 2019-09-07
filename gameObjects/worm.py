@@ -1,4 +1,4 @@
-import loader
+from toolbox import loader
 from .physicsObject import *
 
 font = loader.get_font("consolas", 10)

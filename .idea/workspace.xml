@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="Add weapon fire">
-      <change afterPath="$PROJECT_DIR$/event.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/menu.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/text.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/game/world_renderer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/sound.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/debris.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/debris.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/physicsObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/event.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/grenades.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/grenades.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/worm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/team.py" beforeDir="false" afterPath="$PROJECT_DIR$/team.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weapon_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/weapon_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/world.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/levels/bikini_bottom.json" beforeDir="false" afterPath="$PROJECT_DIR$/res/levels/bikini_bottom.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/team.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/team.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weapon_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/weapon_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/world.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/worms.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +49,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\dev\worms.py\game" />
+      <recent name="E:\dev\worms.py\toolbox" />
       <recent name="E:\dev\worms.py" />
     </key>
   </component>
@@ -132,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567617862908</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Started adding gui and reworked events">
+      <created>1567871992997</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1567871992997</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,6 +162,7 @@
     <MESSAGE value="Added physics, fullscreen, new game level" />
     <MESSAGE value="Implemented weapons and made terrain destructible" />
     <MESSAGE value="Add weapon fire" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add weapon fire" />
+    <MESSAGE value="Started adding gui and reworked events" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started adding gui and reworked events" />
   </component>
 </project>

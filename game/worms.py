@@ -1,12 +1,11 @@
 import math
-import os
-import sys
 
 import pygame
 
-import loader
-from event import Input
-from world import WorldRenderer, load_from_json
+from toolbox import loader
+from toolbox.event import Input
+from game.world import load_from_json
+from game.world_renderer import WorldRenderer
 
 DEBUG_COLOR = (50, 50, 50)
 titleFont = loader.get_font("title.TTF", 40)
@@ -21,8 +20,6 @@ GAME_PAUSED = 0b0010
 GAME_MENU = 0b0100
 
 title = titleFont.render("WORMS.PY", False, (200, 200, 200))
-
-levels = os.listdir(os.path.join("res/levels"))
 
 
 class Worms:
@@ -67,6 +64,18 @@ class Worms:
                     pygame.display.set_mode(flags=pygame.HWSURFACE | pygame.FULLSCREEN)
                 else:
                     pygame.display.set_mode()
+            # Switch time to detonation
+            elif self.input.key_is_released(pygame.K_1):
+                self.world.selected_team.weapon_manager.time = 1
+            elif self.input.key_is_released(pygame.K_2):
+                self.world.selected_team.weapon_manager.time = 2
+            elif self.input.key_is_released(pygame.K_3):
+                self.world.selected_team.weapon_manager.time = 3
+            elif self.input.key_is_released(pygame.K_4):
+                self.world.selected_team.weapon_manager.time = 4
+            elif self.input.key_is_released(pygame.K_5):
+                self.world.selected_team.weapon_manager.time = 5
+
             elif self.input.key_is_released(pygame.K_TAB):
                 self.inWeaponMenu = not self.inWeaponMenu
                 if self.inWeaponMenu:
@@ -82,7 +91,7 @@ class Worms:
             elif self.input.key_is_released(pygame.K_e):
                 self.renderer.cameraTrackingEntity = self.world.selected_team.select_next()
 
-            if self.input.key_is_held(pygame.K_s):
+            if self.input.key_is_held(pygame.K_w):
                 self.renderer.move_camera(dt, 0, -1)
             elif self.input.key_is_held(pygame.K_s):
                 self.renderer.move_camera(dt, 0, 1)
@@ -101,6 +110,12 @@ class Worms:
                 if self.throwForce > 1:
                     self.throwForce = 1
                     self.fireWeapon = True
+
+            if self.input.button_is_released(1):  # LMC
+                if self.inWeaponMenu:
+                    self.world.selected_team.weapon_manager.select_weapon(self.input.x * self.screenSize[0],
+                                                                          self.input.y * self.screenSize[1],
+                                                                          self.screenSize[1])
 
         elif self.state == GAME_MENU:
             pass
@@ -121,14 +136,16 @@ class Worms:
             self.renderer.update(dt)
             self.world.update(dt)
 
-        elif self.state & GAME_MENU:
+        elif self.state == GAME_MENU:
             pass
 
     def draw(self, screen: pygame.Surface):
-        if self.state & GAME_ACTIVE:
+        if self.state == GAME_ACTIVE:
             self.renderer.draw(screen)
             if self.throwForce != -1:
                 self.renderer.draw_force_bar(screen, self.throwForce)
+            if self.inWeaponMenu:
+                self.world.selected_team.weapon_manager.draw_menu(screen, *self.screenSize)
 
             if self.showTitleInGame:
                 screen.blit(title, (screen.get_width() - title.get_width(), 0))

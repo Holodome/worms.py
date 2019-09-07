@@ -1,6 +1,6 @@
 import random
 
-import loader
+from toolbox import loader
 from .physicsObject import *
 
 grenade_image = loader.get_image("grenade")
