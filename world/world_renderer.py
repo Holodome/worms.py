@@ -15,17 +15,18 @@ class Arrow:
     """
     Red arrow jumping above selected worm
     """
+
     def __init__(self):
         self.position: float = 5
         self.isUp: bool = True
 
     def update(self, dt):
-        self.position += (self.isUp or -1) * 10 * dt
-        if self.position >= 5 or self.position <= 0:
+        self.position = max(min(self.position + (self.isUp or -1) * 10 * dt, 5), 0)
+        if self.position == 5 or self.position == 0:
             self.isUp = not self.isUp
 
     def draw(self, screen, position):
-        screen.blit(arrow_image, list(map(int, position + (0, int(self.position ** 2) - 25))))
+        screen.blit(arrow_image, tuple(map(int, position + (0, int(self.position ** 2) - 25))))
 
 
 class WorldRenderer:
@@ -44,7 +45,7 @@ class WorldRenderer:
         self.cameraPosition = numpy.zeros(2, dtype=numpy.uint16)
         self.cameraStickToPlayer: bool = True
 
-        self.cameraTrackingEntity = self.world.selected_team.selected_worm
+        self.cameraTrackingEntity = self.world.team_manager.selected_team.selected_worm
         # Arrow
         self.arrow = Arrow()
 
@@ -61,14 +62,14 @@ class WorldRenderer:
             if not any(map(lambda e: not isinstance(e, Worm), self.world.entities)):
                 # Simple check if all existing entities are not worms - possibly add other in whitelist
                 self.notInAnimation = True
-                self.cameraTrackingEntity = self.world.selected_team.selected_worm
+                self.cameraTrackingEntity = self.world.team_manager.selected_team.selected_worm
 
     def draw(self, screen: pygame.Surface):
         offset = self.offset
         if self.world.backgroundImage is not None:
             screen.blit(self.world.backgroundImage, offset)
 
-        screen.blit(self.world.terrainImage, offset)
+        screen.blit(self.world.terrain.terrainImage, offset)
 
         for entity in self.world.entities:
             entity.draw(screen, offset)
@@ -78,8 +79,9 @@ class WorldRenderer:
             if self.aimState:
                 screen.blit(crosshair_image,
                             self.cameraTrackingEntity.position + (-5, -5) +
-                            self.offset + (math.cos(self.world.selected_team.weapon_manager.shootingAngle) * 40,
-                                           math.sin(self.world.selected_team.weapon_manager.shootingAngle) * 40))
+                            self.offset + (
+                            math.cos(self.world.team_manager.selected_weapon_manager.shootingAngle) * 40,
+                            math.sin(self.world.team_manager.selected_weapon_manager.shootingAngle) * 40))
 
     def draw_force_bar(self, screen: pygame.Surface, force: float):
         position = self.cameraTrackingEntity.position + (-10, 25) + self.offset
@@ -92,11 +94,11 @@ class WorldRenderer:
         if x != 0:
             self.cameraPosition[0] = min(  # Use round() instead of floor to achieve same movement in both directions
                 max(round(self.cameraPosition[0] + x * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[0] - self.screenSize[0])
+                self.world.terrain.width - self.screenSize[0])
         if y != 0:
             self.cameraPosition[1] = min(
                 max(round(self.cameraPosition[1] + y * dt * CAMERA_SPEED), 0),
-                self.world.worldSize[1] - self.screenSize[1])
+                self.world.terrain.height - self.screenSize[1])
 
     def set_weapon_fired(self, entity):
         self.notInAnimation = False
@@ -105,10 +107,10 @@ class WorldRenderer:
     def _apply_camera(self, entity):
         self.cameraPosition[0] = min(
             max(round(entity.x - self.screenSize[0] / 2), 0),
-            self.world.worldSize[0] - self.screenSize[0])
+            self.world.terrain.width - self.screenSize[0])
         self.cameraPosition[1] = min(
             max(round(entity.y - self.screenSize[1] / 2), 0),
-            self.world.worldSize[1] - self.screenSize[1])
+            self.world.terrain.height - self.screenSize[1])
 
     @property
     def offset(self):

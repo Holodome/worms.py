@@ -8,7 +8,6 @@ COLORKEY = (255, 0, 255)
 
 
 def init():
-    # Load all fonts and images needed
     load_image("arrow", set_colorkey=True)
     load_image("crosshair", set_colorkey=True)
     load_image("worm", set_colorkey=True)
@@ -17,9 +16,10 @@ def init():
     load_image("cluster", convert=True)
 
     load_font(True, "consolas", 10)
-    load_font(False, "title.TTF", 40)
-    load_font(False, "worldName.TTF", 20)
+    load_font(False, "RubberBiscuitItalic.TTF", 40)
+    load_font(False, "RubberBiscuitBold.TTF", 20)
     load_font(True, "consolas", 15)
+    load_font(False, "ALoveOfThunder.ttf", 80)
 
 
 def load_font(sys_font: bool, font_name: str, font_size: int, *args, **kwargs) -> pygame.font.FontType:

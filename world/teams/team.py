@@ -1,9 +1,9 @@
 import os
 import random
 
-from toolbox import loader
 from gameObjects import *
-from game.weapon_manager import WeaponManager
+from toolbox import loader
+from world.teams.weapon_manager import WeaponManager
 
 worm_image_width = loader.get_image("worm").get_width()
 
@@ -21,14 +21,13 @@ class Team:
         # Worms info
 
         for i in range(worms_number):
-            x = random.randrange(world_width - worm_image_width)
+            x = random.randrange(world_width // 10, world_width * 9 // 10)
             y = 0
             if worms_positions is not None:
                 x, y = worms_positions[i]
             self.worms.append(Worm(self._get_name(worms_number), color, x, y))
 
         self.selectedWormIndex = 0
-        self.weapon_manager: WeaponManager = WeaponManager()
 
     def select_next(self):
         self.selectedWormIndex = (self.selectedWormIndex + 1) % self.worms_alive

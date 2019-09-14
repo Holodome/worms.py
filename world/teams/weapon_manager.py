@@ -51,7 +51,7 @@ class WeaponManager:
         image.fill((40, 40, 40, 230))
         # 45 - square length, 10 on each side is padding
         # Draw selected time to detonation
-        time_img = loader.get_font("worldName.TTF", 20).render(str(self.time), False, (0, 150, 0, 245))
+        time_img = loader.get_font("RubberBiscuitBold.TTF", 20).render(str(self.time), False, (0, 150, 0, 245))
         image.blit(time_img, ((45 - time_img.get_width()) // 2 + 10, (45 - time_img.get_height()) // 2 + 10))
         # Draw selected weapon
         pygame.draw.rect(image, (100, 28, 52, 245), (10, 65, 45, 45))

@@ -7,6 +7,7 @@ class Keyboard:
     """
     Class for storing keyboard input
     """
+
     def __init__(self):
         self.heldKeys: set = set()
         self.keysPressedThisFrame: set = set()
@@ -39,6 +40,7 @@ class Mouse:
     Class for storing mouse input,
     movement and wheel scrolling
     """
+
     def __init__(self, screen_size: list):
         self.screenSize: list = screen_size
 
@@ -109,3 +111,7 @@ class Input(Keyboard, Mouse):
                 mx, my = event.pos
                 self.x = mx / self.screenSize[0]
                 self.y = my / self.screenSize[1]
+
+            elif event.type == pygame.VIDEOEXPOSE:
+                return True
+        return False
