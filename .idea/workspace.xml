@@ -2,29 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/res/fonts/ALoveOfThunder.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/teams/team_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/terrain.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/world.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/world_loader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/events.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/input.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/layers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/loader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/renderer/camera.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/renderer/entity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/renderer/renderer2D.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/renderer/scene2D.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/window.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/button.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/constraint.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/container.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/element.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/label.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/fonts/BerlinSans.TTF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/bbpreview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsCircleObject.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/terrain.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/worldLoader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/worldRenderer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/holod.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/holod.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/team.py" beforeDir="false" afterPath="$PROJECT_DIR$/world/teams/team.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/weapon_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/world/teams/weapon_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/world.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/world_renderer.py" beforeDir="false" afterPath="$PROJECT_DIR$/world/world_renderer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/worms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/debris.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/debris.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/grenades.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/grenades.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/gameObjects/physicsObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/text.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/worms.py.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/worms.py.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/worms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/debris.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/grenades.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/physicsObject.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameObjects/worm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/button.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/menu.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/text.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/fonts/title.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/res/fonts/RubberBiscuitItalic.TTF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/fonts/worldName.TTF" beforeDir="false" afterPath="$PROJECT_DIR$/res/fonts/RubberBiscuitBold.TTF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/levels/bikini_bottom.json" beforeDir="false" afterPath="$PROJECT_DIR$/res/levels/bikini_bottom.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/event.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/event.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/data/wormNames.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/wormNames.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/images/bikini_bottom_bg.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/bikini_bottom_bg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/images/bikini_bottom_fg.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/bikini_bottom_fg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/images/worm.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/worm.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/levels/bikini_bottom.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/levels/bikini_bottom.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/levels/war.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/levels/war.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/event.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/sound.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/application.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/teams/team.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/teams/team_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/teams/weapon_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/terrain.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/world.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/world_loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world/world_renderer.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,15 +87,15 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\dev\worms.py\worms\gameLogic" />
+      <recent name="E:\dev\worms.py\data" />
+      <recent name="E:\dev\worms.py\res\fonts" />
+      <recent name="E:\dev\worms.py\worms" />
       <recent name="E:\dev\worms.py\world\teams" />
-      <recent name="E:\dev\worms.py\world" />
-      <recent name="E:\dev\worms.py" />
-      <recent name="E:\dev\worms.py\game" />
-      <recent name="E:\dev\worms.py\toolbox" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -158,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567879368520</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Put world in classes">
+      <created>1568483735502</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1568483735502</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -182,6 +222,7 @@
     <MESSAGE value="Add weapon fire" />
     <MESSAGE value="Started adding gui and reworked events" />
     <MESSAGE value="Add weapon selection" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add weapon selection" />
+    <MESSAGE value="Put world in classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Put world in classes" />
   </component>
 </project>

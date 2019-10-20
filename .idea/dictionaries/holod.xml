@@ -4,7 +4,10 @@
       <w>colorkey</w>
       <w>consolas</w>
       <w>crosshair</w>
+      <w>filepath</w>
       <w>fullscreen</w>
+      <w>mult</w>
+      <w>timestep</w>
     </words>
   </dictionary>
 </component>
