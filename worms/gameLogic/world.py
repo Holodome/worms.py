@@ -7,6 +7,7 @@ import pygame
 from worms.gameLogic.gameObjects.debris import Debris
 from .gameObjects.physicsObject import PhysicsCircleObject, PhysicsObject
 from .terrain import Terrain
+from .wormsTeam import TeamManager
 
 
 class World:
@@ -21,6 +22,11 @@ class World:
 
         self.backgroundImage: pygame.Surface = background
 
+        self.teamManager = TeamManager()
+        self.teamManager.set_team_positions(world_width=width)
+        for team in self.teamManager.teams:
+            self.physicsObjects.extend(team.wormList)
+
     def on_update(self, timestep):
         for _ in range(6):
             for pho in self.physicsObjects:
@@ -31,7 +37,7 @@ class World:
                     acc = World.GRAVITY * float(timestep)
                     pho.vel_y += acc * float(timestep)
                     # Позиция после гравитации
-                    potential_pos = pho.position + pho.vel * float(timestep)
+                    potential_pos = pho._pos + pho.vel * float(timestep)
                     pho.stable = False
                     # Высчитывание вектора отражения
                     response = pygame.Vector2(0)
@@ -55,7 +61,7 @@ class World:
                             pho.bounceTimes -= 1
                     else:
                         # Если столкновения не произошло - продолжить движение
-                        pho.position = potential_pos
+                        pho._pos = potential_pos
 
                     if not pho.is_valid():
                         # remove entity
@@ -65,12 +71,14 @@ class World:
                             pho.stable = True
                             pho.vel -= pho.vel
 
-            self.physicsObjects = list(filter(lambda p: p.Alive, self.physicsObjects))
+            self.physicsObjects = list(filter(lambda p: p.Alive
+                                                        and 0 <= p.x <self.terrain.width
+                                                        and 0 <= p.y < self.terrain.height,  self.physicsObjects))
 
     def explosion(self, x: int, y: int, radius: int, damage: int, force_coef: float):
         self.terrain.explode_circle(x, y, radius)
         for pho in self.physicsObjects:
-            distance = pho.position.distance_to((x, y))
+            distance = pho._pos.distance_to((x, y))
             if distance < radius:
                 pho.stable = False
                 angle = math.atan2(pho.y - y, pho.x - x)

@@ -10,7 +10,6 @@ class Element:
 
     def __init__(self):
         self._visible: bool = False
-        # self.constraintManager = ConstraintManager()
         self.constraintManager = ConstraintManager()
 
     @abc.abstractmethod
@@ -18,7 +17,7 @@ class Element:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def on_render(self, surface: pygame.Surface):
+    def on_render(self):
         raise NotImplementedError
 
     @abc.abstractmethod

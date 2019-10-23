@@ -42,7 +42,7 @@ class Worms(Application):
     def __init__(self):
         Application.__init__(self, "Worms", 640, 480)
 
-        self.currentMainLayer = MainMenuLayer(self.surface)
+        self.currentMainLayer = MainMenuLayer()
         self.push_layer(self.currentMainLayer)
         self.push_overlay(DebugScreenOverlay())
 
@@ -54,5 +54,5 @@ class Worms(Application):
     def start_level(self, filepath):
         self.pop_layer(self.currentMainLayer)
         world = WorldLoader.load_world_from_json(filepath)
-        self.currentMainLayer = GameLayer(self.surface, world)
+        self.currentMainLayer = GameLayer(world)
         self.push_layer(self.currentMainLayer)

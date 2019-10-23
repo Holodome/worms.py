@@ -4,6 +4,8 @@ import pygame
 
 from engine.layers import Layer
 from engine.loader import Loader
+from engine.renderer.renderer2D import Renderer2D
+from engine.window import Window
 from interface import *
 
 
@@ -14,12 +16,11 @@ class MenuState(enum.Enum):
 
 
 class MainMenuLayer(Layer):
-    def __init__(self, surface: pygame.Surface):
+    def __init__(self):
         self.menuState: MenuState = MenuState.MainState
 
-        self.surface: pygame.Surface = surface
 
-        self.mainInterfaceContainer = Container(surface.get_rect())
+        self.mainInterfaceContainer = Container(pygame.Rect(0, 0, Window.Instance.width, Window.Instance.height))
 
         font = Loader.get_font("ALoveOfThunder.ttf", 200)
 
@@ -57,7 +58,7 @@ class MainMenuLayer(Layer):
         exit_button.set_click_function(self.exit_game)
         self.mainInterfaceContainer.add_element(exit_button)
 
-        self.startGameContainer: Container = Container(surface.get_rect())
+        self.startGameContainer: Container = Container(self.mainInterfaceContainer._rect)
         self.startGameContainer.set_color(pygame.Color(255, 255, 255))
 
         title_label = Label(font.render("Start Game", True, (50, 30, 20)))
@@ -94,12 +95,16 @@ class MainMenuLayer(Layer):
         self._get_selected_container().on_update()
 
     def on_render(self):
-        self.surface.fill((255, 0, 255))
-
-        self._get_selected_container().on_render(self.surface)
+        Renderer2D.begin_scene()
+        Renderer2D.RendererCommand.clear_screen(255, 255, 255)
+        self._get_selected_container().on_render()
 
     def on_event(self, dispatcher):
         self._get_selected_container().on_event(dispatcher)
+
+        dispatcher.dispatch(pygame.VIDEORESIZE, lambda e: [
+            self.mainInterfaceContainer.set_rect(pygame.Rect(0, 0, e.w, e.h))
+        ])
 
     def change_state(self, state):
         self.menuState = state

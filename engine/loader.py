@@ -9,6 +9,9 @@ class Loader:
 
     @staticmethod
     def load_font(font_name: str, font_size: int, *args, **kwargs) -> pygame.font.FontType:
+        if not pygame.font.get_init():
+            pygame.font.init()
+
         key = font_name.lower() + str(font_size)
         item = pygame.font.Font("res/fonts/" + font_name, font_size, *args, **kwargs)
         Loader.loadedFonts[key] = item

@@ -3,6 +3,8 @@ from typing import Callable
 import pygame
 
 from engine.input import Input
+from engine.renderer.entity import Entity
+from engine.renderer.renderer2D import Renderer2D
 from .element import Element
 
 
@@ -25,11 +27,11 @@ class Button(Element):
     def on_update(self):
         self._hovered = self._rect.collidepoint(*Input.get_mouse_pos())
 
-    def on_render(self, surface: pygame.Surface):
+    def on_render(self):
         if self._hovered:
-            surface.blit(self._hoveredImage, self._rect)
+            Renderer2D.submit_one(Entity(self._hoveredImage, self._rect.topleft))
         else:
-            surface.blit(self._staticImage, self._rect)
+            Renderer2D.submit_one(Entity(self._staticImage, self._rect.topleft))
 
     def on_event(self, dispatcher):
         if self._hovered:

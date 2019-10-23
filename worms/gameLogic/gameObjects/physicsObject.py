@@ -48,8 +48,8 @@ class PhysicsObject(Entity):
 class PhysicsCircleObject(PhysicsObject):
     IMAGE = None
 
-    INFINITE_BOUNCE = -1 << 32
-    INFINITE_TIME = -1 << 32
+    INFINITE_BOUNCE = -1 << 30
+    INFINITE_TIME = -1 << 30
 
     def __init__(self, x: float, y: float, radius: float,
                  friction: float,

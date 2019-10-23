@@ -35,8 +35,6 @@ class Application:
 
         self.running: bool = True
 
-        self.surface = pygame.display.get_surface()
-
     def push_layer(self, layer: Layer):
         self.layerStack.push_layer(layer)
 

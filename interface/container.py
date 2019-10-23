@@ -2,17 +2,19 @@ from typing import List
 
 import pygame
 
+from engine.renderer.entity import Entity
+from engine.renderer.renderer2D import Renderer2D
 from .element import Element
 
 
 class Container(Element):
     def __init__(self, rect=None):
         Element.__init__(self)
-        self._color = pygame.Color(255, 255, 255, 255)
+        self._color = pygame.Color(255, 255, 255, 0)
         if rect is not None:
             self._rect = rect
 
-        self._image = None
+        self._image: pygame.Surface = None
         self.apply_rect()
 
         self._elements: List[Element] = []
@@ -21,14 +23,14 @@ class Container(Element):
         for element in self._elements:
             element.on_update()
 
-    def on_render(self, surface: pygame.Surface):
+    def on_render(self):
         assert self._image is not None, "Image not initialized"
         if not self._visible:
             return
 
-        surface.blit(self._image, (0, 0))
+        Renderer2D.submit_one(Entity(self._image, self._rect.topleft))
         for element in self._elements:
-            element.on_render(surface)
+            element.on_render()
 
     def on_event(self, event):
         for element in self._elements:
@@ -53,3 +55,10 @@ class Container(Element):
                 element.set_all_visible()
             else:
                 element.set_visible(True)
+
+    def set_rect(self, rect: pygame.Rect):
+        self._rect = rect
+        self.apply_rect()
+        for element in self._elements:
+            element.constraintManager.update_rect(self._rect, element._rect)
+            element.apply_rect()

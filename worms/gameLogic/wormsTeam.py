@@ -6,7 +6,7 @@ from .gameObjects.worm import Worm
 
 
 class Team:
-    with open("res/data/wormNames.txt") as f:
+    with open("data/wormNames.txt") as f:
         Names: List[str] = f.read().split("\n")
 
     def __init__(self, color: Tuple[int, int, int], worms_number: int):
@@ -14,7 +14,7 @@ class Team:
 
         self.wormList: List[Worm] = []
         for _ in range(worms_number):
-            self.wormList.append(Worm(self.get_name()))
+            self.wormList.append(Worm(self.get_name(), self.color))
 
         self.selectedWormIndex: int = 0
 
@@ -67,6 +67,15 @@ class TeamManager:
                 angle = i / self.numberOfTeams
                 team = Team(tuple(map(lambda n: n * 255, colorsys.hsv_to_rgb(angle, 1, 1))), n_worms)
                 self.teams.append(team)
+
+    def set_team_positions(self, positions: List[List[Tuple[int, int]]] = None, world_width: int = None):
+        assert positions is not None or world_width is not None
+        if positions is not None:
+            for i, team in enumerate(self.teams):
+                team.set_worm_positions(positions[i])
+        else:
+            for team in self.teams:
+                team.set_worm_random_positions(world_width)
 
     @property
     def sel_team(self):

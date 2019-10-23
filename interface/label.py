@@ -1,5 +1,7 @@
 import pygame
 
+from engine.renderer.entity import Entity
+from engine.renderer.renderer2D import Renderer2D
 from .element import Element
 
 
@@ -13,8 +15,8 @@ class Label(Element):
     def on_update(self):
         pass
 
-    def on_render(self, surface: pygame.Surface):
-        surface.blit(self._image, self._rect)
+    def on_render(self):
+        Renderer2D.submit_one(Entity(self._image, self._rect.topleft))
 
     def on_event(self, event):
         pass
