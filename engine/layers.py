@@ -1,6 +1,8 @@
 import abc
 from typing import *
 
+from engine.events import EventDispatcher
+
 
 class Layer:
     @abc.abstractmethod
@@ -20,7 +22,7 @@ class Layer:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def on_event(self, event):
+    def on_event(self, dispatcher: EventDispatcher):
         raise NotImplementedError
 
 
@@ -31,7 +33,10 @@ class LayerStack:
         self.layerInsertIndex = 0
 
     def __iter__(self) -> Iterable[Layer]:
-        return iter(reversed(self.layers))
+        return iter(self.layers)
+
+    def __reversed__(self) -> Iterable[Layer]:
+        return reversed(self.layers)
 
     def push_layer(self, layer: Layer):
         self.layers.insert(self.layerInsertIndex, layer)

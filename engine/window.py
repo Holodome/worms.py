@@ -5,7 +5,7 @@ import pygame
 
 from engine.events import EventDispatcher
 
-_MODE = pygame.HWSURFACE | pygame.DOUBLEBUF  # | pygame.RESIZABLE  !!! Not Working Properly
+_MODE = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE  # !!! Not Working Properly
 
 
 class Window:
@@ -28,6 +28,8 @@ class Window:
         pygame.display.set_mode((width, height), _MODE)
         pygame.display.set_caption(title)
 
+        # pygame.mouse.set_visible(False)
+
     def on_update(self):
         pygame.display.flip()
         self._poll_events()
@@ -36,8 +38,9 @@ class Window:
         for event in pygame.event.get():
             setattr(event, "Handled", False)
             dispatcher = EventDispatcher(event)
-            # dispatcher.dispatch(pygame.VIDEORESIZE, lambda e: pygame.display.set_mode(e.size, _MODE))
+            dispatcher.dispatch(pygame.VIDEORESIZE, lambda e: pygame.display.set_mode(e.size, _MODE))
             self.eventCallback(dispatcher)
 
-    def get_surface(self):
+    @staticmethod
+    def get_surface():
         return pygame.display.get_surface()

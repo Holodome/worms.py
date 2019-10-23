@@ -1,6 +1,7 @@
-from .constraint import (Constraint, RelativeMultConstraint, AspectConstraint, CenterConstraint, RelativeAddConstraint)
+from .button import Button
+from .constraint import (AspectConstraint, CenterConstraint, Constraint, RelativeAddConstraint, RelativeMultConstraint)
 from .container import Container
 from .label import Label
-from .button import Button
 
-__all__ = ["RelativeMultConstraint", "AspectConstraint", "CenterConstraint", "RelativeAddConstraint", "Container", "Label", "Button"]
+__all__ = ["RelativeMultConstraint", "AspectConstraint", "CenterConstraint", "RelativeAddConstraint", "Container",
+           "Label", "Button"]

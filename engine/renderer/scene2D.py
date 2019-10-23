@@ -10,14 +10,14 @@ class Scene2D:
         self.entities: List[Entity] = []
         self.camera: Camera = camera
 
-    def on_update(self):
-        pass
+    def on_update(self) -> None:
+        self.entities = list(filter(lambda e: e.Alive, self.entities))
 
-    def add_entity(self, entity):
+    def add(self, entity: Entity) -> None:
         self.entities.append(entity)
 
-    def on_render(self):
-        Renderer2D.begin_scene(self.camera)
+    def on_render(self) -> None:
+        Renderer2D.begin_scene(self.camera.negative_translation)
         for entity in self.entities:
             Renderer2D.submit(entity)
         Renderer2D.present()

@@ -1,9 +1,11 @@
 import numpy
 import pygame
 
+import engine.utils as utils
+
 
 class Terrain:
-    IMAGE_COLORKEY = (255, 0, 255)
+    IMAGE_COLORKEY = 0xFF00FF
 
     def __init__(self, width: int, height: int, foreground_image: pygame.Surface):
         self.width: int = width
@@ -15,19 +17,20 @@ class Terrain:
         self.terrainImage.set_colorkey(Terrain.IMAGE_COLORKEY)
         self.load_foreground_as_terrain(foreground_image)
 
-    def explode_circle(self, x, y, radius):
+        print(sum(map(lambda e: e, self.cells)), width * height)
+
+    def explode_circle(self, x: int, y: int, radius: int):
         self.midpoint_circle(x, y, radius)
         self.draw_terrain(x - radius, y - radius, 2 * radius + 1, 2 * radius + 1)
 
     def draw_terrain(self, sx: int, sy: int, width: int, height: int):
         terrain_array = pygame.PixelArray(self.terrainImage)
+        sx = utils.clamp(sx, 0, self.width - width)
+        sy = utils.clamp(sy, 0, self.height - height)
         for x in range(sx, sx + width):
             for y in range(sy, sy + height):
-                if not self.valid_position(x, y):
-                    continue
                 if not self.cells[x + y * self.width]:
-                    color = Terrain.IMAGE_COLORKEY
-                    terrain_array[x, y] = color
+                    terrain_array[x, y] = Terrain.IMAGE_COLORKEY
         terrain_array.close()
 
     def midpoint_circle(self, x0, y0, radius):

@@ -1,9 +1,10 @@
+import enum
+
 import pygame
 
 from engine.layers import Layer
 from engine.loader import Loader
 from interface import *
-import enum
 
 
 class MenuState(enum.Enum):
@@ -82,7 +83,6 @@ class MainMenuLayer(Layer):
         self.startGameContainer.add_element(bb_label)
         self.startGameContainer.add_element(title_label)
 
-
     def on_attach(self):
         self.mainInterfaceContainer.set_all_visible()
         self.startGameContainer.set_all_visible()
@@ -98,8 +98,8 @@ class MainMenuLayer(Layer):
 
         self._get_selected_container().on_render(self.surface)
 
-    def on_event(self, event):
-        self._get_selected_container().on_event(event)
+    def on_event(self, dispatcher):
+        self._get_selected_container().on_event(dispatcher)
 
     def change_state(self, state):
         self.menuState = state

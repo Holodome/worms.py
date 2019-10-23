@@ -1,5 +1,4 @@
 import abc
-from typing import *
 
 import pygame
 
@@ -32,4 +31,3 @@ class Element:
 
     def set_visible(self, visible: bool):
         self._visible = visible
-

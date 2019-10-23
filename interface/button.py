@@ -2,7 +2,6 @@ from typing import Callable
 
 import pygame
 
-from engine.events import EventDispatcher
 from engine.input import Input
 from .element import Element
 

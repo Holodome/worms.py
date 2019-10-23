@@ -5,22 +5,22 @@ import pygame
 
 class Input:
     mouse_position = (0, 0)
-    pressed_buttons = {}
-    pressed_keys = {}
+    _pressed_buttons: Tuple[bool, bool, bool] = (0, 0, 0)
+    _pressed_keys: pygame.key.ScancodeWrapper = None
 
     @staticmethod
     def update() -> None:
         Input.mouse_position = pygame.mouse.get_pos()
-        Input.pressed_buttons = pygame.mouse.get_pressed()
-        Input.pressed_keys = pygame.key.get_pressed()
+        Input._pressed_buttons = pygame.mouse.get_pressed()
+        Input._pressed_keys = pygame.key.get_pressed()
 
     @staticmethod
-    def is_key_pressed(key) -> bool:
-        return Input.pressed_keys.get(key, False)
+    def is_key_pressed(key: int) -> bool:
+        return Input._pressed_keys[key]
 
     @staticmethod
-    def is_button_pressed(btn) -> bool:
-        return Input.pressed_buttons.get(btn, False)
+    def is_button_pressed(btn: int) -> bool:
+        return Input._pressed_buttons[btn]
 
     @staticmethod
     def get_mouse_pos() -> Tuple[int, int]:
