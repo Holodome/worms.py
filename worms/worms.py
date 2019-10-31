@@ -12,7 +12,6 @@ class GameState(enum.Enum):
 
 
 class DebugScreenOverlay(Layer):
-    lastTime = 0
 
     def on_attach(self):
         pass
@@ -26,7 +25,7 @@ class DebugScreenOverlay(Layer):
     def on_render(self):
         if self.lastTime != 0:
             fnt = Loader.get_font("BerlinSans.TTF", 20)
-            img = fnt.render("FPS: " + str(int(1000 / self.lastTime)), False, (255, 0, 0))
+            img = fnt.render("FPS: " + str(Application.Instance.fps), False, (255, 0, 0))
             Renderer2D.submit_one((img, (0, 0)))
 
     def on_event(self, dispatcher: EventDispatcher):

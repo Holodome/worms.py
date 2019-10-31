@@ -35,6 +35,9 @@ class Application:
 
         self.running: bool = True
 
+        self.fpsQueue = [0 for _ in range(60)]
+        self.fps = 0
+
     def push_layer(self, layer: Layer):
         self.layerStack.push_layer(layer)
 
@@ -55,6 +58,11 @@ class Application:
         time = pygame.time.get_ticks()
         timestep = Timestep(int(time) - self.lastFrameTimeMillis)
         self.lastFrameTimeMillis = time
+
+        if int(timestep) != 0:
+            self.fpsQueue.pop(0)
+            self.fpsQueue.append(1000 // int(timestep))
+            self.fps = sum(self.fpsQueue) // 60
 
         Input.update()
         for ly in reversed(self.layerStack):

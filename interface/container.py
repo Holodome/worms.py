@@ -27,7 +27,7 @@ class Container(Element):
         if not self._visible:
             return
 
-        Renderer2D.submit_one(Entity(self._image, self._rect.topleft))
+        Renderer2D.submit((self._image, self._rect.topleft), False)
         for element in self._elements:
             element.on_render()
 
@@ -37,11 +37,17 @@ class Container(Element):
 
     def add_element(self, element: Element):
         self._elements.append(element)
-        element.constraintManager.update_rect(self._rect, element._rect)
+        element.constraints.update_rect(self._rect, element._rect)
         element.apply_rect()
+
+        if isinstance(element, Container):
+            for el in element._elements:
+                el.constraints.update_rect(element._rect, el._rect)
+                el.apply_rect()
 
     def set_color(self, color: Color):
         self._color = color
+        self._image.fill(self._color)
 
     def apply_rect(self):
         self._image = pygame.Surface(self._rect.size, pygame.SRCALPHA)
@@ -59,5 +65,5 @@ class Container(Element):
         self._rect = rect
         self.apply_rect()
         for element in self._elements:
-            element.constraintManager.update_rect(self._rect, element._rect)
+            element.constraints.update_rect(self._rect, element._rect)
             element.apply_rect()

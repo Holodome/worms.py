@@ -17,34 +17,34 @@ class _MainInterfaceContainer(Container):
         font = Loader.get_font("ALoveOfThunder.ttf", 200)
 
         self.title_label = Label(font.render("worms.py", True, (50, 30, 20)))
-        self.title_label.constraintManager.add_width_constraint(RelativeMultConstraint(0.7))
-        self.title_label.constraintManager.add_height_constraint(AspectConstraint())
-        self.title_label.constraintManager.add_x_constraint(CenterConstraint())
-        self.title_label.constraintManager.add_y_constraint(RelativeMultConstraint(0.0))
+        self.title_label.constraints.add_width_constraint(RelativeMultConstraint(0.7))
+        self.title_label.constraints.add_height_constraint(AspectConstraint())
+        self.title_label.constraints.add_x_constraint(CenterConstraint())
+        self.title_label.constraints.add_y_constraint(RelativeMultConstraint(0.0))
         self.add_element(self.title_label)
 
         self.start_game_button = Button(font.render("Start Game", True, (255, 0, 0)),
                                         font.render("Start Game", True, (255, 127, 0)))
-        self.start_game_button.constraintManager.add_width_constraint(RelativeMultConstraint(0.5))
-        self.start_game_button.constraintManager.add_height_constraint(AspectConstraint())
-        self.start_game_button.constraintManager.add_x_constraint(CenterConstraint())
-        self.start_game_button.constraintManager.add_y_constraint(RelativeAddConstraint(0.3))
+        self.start_game_button.constraints.add_width_constraint(RelativeMultConstraint(0.5))
+        self.start_game_button.constraints.add_height_constraint(AspectConstraint())
+        self.start_game_button.constraints.add_x_constraint(CenterConstraint())
+        self.start_game_button.constraints.add_y_constraint(RelativeAddConstraint(0.3))
         self.add_element(self.start_game_button)
 
         self.load_game_button = Button(font.render("Load Game", True, (255, 0, 0)),
                                        font.render("Load Game", True, (255, 127, 0)))
-        self.load_game_button.constraintManager.add_width_constraint(RelativeMultConstraint(0.5))
-        self.load_game_button.constraintManager.add_height_constraint(AspectConstraint())
-        self.load_game_button.constraintManager.add_x_constraint(CenterConstraint())
-        self.load_game_button.constraintManager.add_y_constraint(RelativeAddConstraint(0.5))
+        self.load_game_button.constraints.add_width_constraint(RelativeMultConstraint(0.5))
+        self.load_game_button.constraints.add_height_constraint(AspectConstraint())
+        self.load_game_button.constraints.add_x_constraint(CenterConstraint())
+        self.load_game_button.constraints.add_y_constraint(RelativeAddConstraint(0.5))
         self.add_element(self.load_game_button)
 
         self.exit_button = Button(font.render("Exit", True, (0, 255, 0)),
                                   font.render("Exit", True, (0, 255, 127)))
-        self.exit_button.constraintManager.add_width_constraint(RelativeMultConstraint(0.2))
-        self.exit_button.constraintManager.add_height_constraint(AspectConstraint())
-        self.constraint = self.exit_button.constraintManager.add_x_constraint(CenterConstraint())
-        self.exit_button.constraintManager.add_y_constraint(RelativeAddConstraint(0.7))
+        self.exit_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.exit_button.constraints.add_height_constraint(AspectConstraint())
+        self.constraint = self.exit_button.constraints.add_x_constraint(CenterConstraint())
+        self.exit_button.constraints.add_y_constraint(RelativeAddConstraint(0.7))
         self.add_element(self.exit_button)
 
 
@@ -56,24 +56,24 @@ class _StartGameContainer(Container):
         font = Loader.get_font("ALoveOfThunder.ttf", 200)
 
         self.title_label = Label(font.render("Start Game", True, (50, 30, 20)))
-        self.title_label.constraintManager.add_width_constraint(RelativeMultConstraint(0.7))
-        self.title_label.constraintManager.add_height_constraint(AspectConstraint())
-        self.title_label.constraintManager.add_x_constraint(CenterConstraint())
-        self.title_label.constraintManager.add_y_constraint(RelativeMultConstraint(0.0))
+        self.title_label.constraints.add_width_constraint(RelativeMultConstraint(0.7))
+        self.title_label.constraints.add_height_constraint(AspectConstraint())
+        self.title_label.constraints.add_x_constraint(CenterConstraint())
+        self.title_label.constraints.add_y_constraint(RelativeMultConstraint(0.0))
         self.add_element(self.title_label)
 
         self.first_level_button = Button(Loader.load_image("bbpreview"))
-        self.first_level_button.constraintManager.add_x_constraint(RelativeAddConstraint(0.2))
-        self.first_level_button.constraintManager.add_y_constraint(RelativeAddConstraint(0.4))
-        self.first_level_button.constraintManager.add_width_constraint(RelativeMultConstraint(0.2))
-        self.first_level_button.constraintManager.add_height_constraint(AspectConstraint())
+        self.first_level_button.constraints.add_x_constraint(RelativeAddConstraint(0.2))
+        self.first_level_button.constraints.add_y_constraint(RelativeAddConstraint(0.4))
+        self.first_level_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.first_level_button.constraints.add_height_constraint(AspectConstraint())
         self.add_element(self.first_level_button)
 
         self.bb_label = Label(font.render("Bikini Bottom", True, (50, 30, 20)))
-        self.bb_label.constraintManager.add_x_constraint(RelativeAddConstraint(0.2))
-        self.bb_label.constraintManager.add_y_constraint(RelativeAddConstraint(0.6))
-        self.bb_label.constraintManager.add_width_constraint(RelativeMultConstraint(0.2))
-        self.bb_label.constraintManager.add_height_constraint(AspectConstraint())
+        self.bb_label.constraints.add_x_constraint(RelativeAddConstraint(0.2))
+        self.bb_label.constraints.add_y_constraint(RelativeAddConstraint(0.6))
+        self.bb_label.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.bb_label.constraints.add_height_constraint(AspectConstraint())
         self.add_element(self.bb_label)
         self.add_element(self.title_label)
 
@@ -91,7 +91,7 @@ class MainMenuLayer(Layer):
         self.mainInterfaceContainer.exit_button.set_click_function(self.exit_game)
 
         self.startGameContainer.first_level_button.set_click_function(
-            lambda _: self.start_game("data/levels/bikini_bottom.json"))
+            lambda _: self.start_game("data/levels/war.json"))
 
     def on_attach(self):
         self.mainInterfaceContainer.set_all_visible()
@@ -107,6 +107,7 @@ class MainMenuLayer(Layer):
         Renderer2D.begin_scene()
         Renderer2D.RendererCommand.clear_screen(255, 255, 255)
         self._get_selected_container().on_render()
+        Renderer2D.present()
 
     def on_event(self, dispatcher):
         self._get_selected_container().on_event(dispatcher)

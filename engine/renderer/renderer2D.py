@@ -52,13 +52,14 @@ class Renderer2D:
         if camera_affect:
             tp = (int(ent_pos[0] + Renderer2D.cameraTranslation[0]),
                   int(ent_pos[1] + Renderer2D.cameraTranslation[1]))
-            tr = Rect(tp, ent_img.get_size())
-            if Renderer2D.windowRect.colliderect(tr):
-                Renderer2D.entities.append((ent_img, tp))
+            # Проверки на пересечение с экраном замедляют
+            # tr = Rect(tp, ent_img.get_size())
+            # if Renderer2D.windowRect.colliderect(tr):
+            Renderer2D.entities.append((ent_img, tp))
         else:
             tr = Rect(ent_pos, ent_img.get_size())
-            if Renderer2D.windowRect.colliderect(tr):
-                Renderer2D.entities.append((ent_img, ent_pos))
+            # if Renderer2D.windowRect.colliderect(tr):
+            Renderer2D.entities.append((ent_img, ent_pos))
 
     @staticmethod
     def present():

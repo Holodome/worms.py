@@ -9,7 +9,7 @@ class Element:
 
     def __init__(self):
         self._visible: bool = False
-        self.constraintManager = ConstraintManager()
+        self.constraints = ConstraintManager()
 
     @abc.abstractmethod
     def on_update(self):

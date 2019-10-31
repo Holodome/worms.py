@@ -4,7 +4,7 @@ from typing import *
 
 import pygame
 
-from engine import Vector2
+from engine import Renderer2D, Vector2
 from worms.gameLogic.gameObjects.debris import Debris
 from worms.gameLogic.gameObjects.worm import Worm
 from .gameObjects.physicsObject import PhysicsCircleObject, PhysicsObject
@@ -100,6 +100,8 @@ class World:
             self.physicsObjects.append(debris)
 
     def draw(self):
+        Renderer2D.submit((self.backgroundImage, (0, 0)))
+        Renderer2D.submit((self.terrain.terrainImage, (0, 0)))
         for obj in self.physicsObjects:
             obj.simple_draw()
 

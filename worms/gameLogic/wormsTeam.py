@@ -3,13 +3,7 @@ import random
 from typing import *
 
 from .gameObjects.worm import Worm
-from .weapons import Weapon
-
-
-class WeaponManager:
-    def __init__(self):
-        self.weaponCounts: Dict[Weapon, int] = {}
-        self.selectedWeapon: Weapon = Weapon
+from .weapons import WeaponManager
 
 
 class Team:
@@ -26,6 +20,8 @@ class Team:
             self.wormList.append(Worm(self.get_name(), self.color))
 
         self.selectedWormIndex: int = 0
+
+        self.weaponManager = WeaponManager()
 
     def set_worm_random_positions(self, world_width: int) -> None:
         for worm in self.wormList:

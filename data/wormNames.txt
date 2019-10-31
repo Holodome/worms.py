@@ -8,7 +8,7 @@ Richard
 Joseph
 Thomas
 Charles
-Christop
+Christopher
 Daniel
 Matthew
 Anthony
@@ -44,7 +44,7 @@ Gregory
 Samuel
 Raymond
 Patrick
-Alexande
+Alexander
 Jack
 Dennis
 Jerry
@@ -68,7 +68,7 @@ Gerald
 Ethan
 Arthur
 Terry
-Christia
+Christian
 Sean
 Lawrence
 Austin
