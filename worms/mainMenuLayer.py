@@ -3,6 +3,7 @@ import enum
 from engine import *
 from interface import *
 
+
 class MenuState(enum.Enum):
     MainState = 1
     StartGameState = 2
@@ -110,7 +111,7 @@ class MainMenuLayer(Layer):
     def on_event(self, dispatcher):
         self._get_selected_container().on_event(dispatcher)
 
-        dispatcher.dispatch(locals.VIDEORESIZE, lambda e: [
+        dispatcher.dispatch(plocals.VIDEORESIZE, lambda e: [
             self.mainInterfaceContainer.set_rect(Rect(0, 0, e.w, e.h))
         ])
 

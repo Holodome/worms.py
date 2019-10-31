@@ -12,7 +12,6 @@ class WeaponManager:
         self.selectedWeapon: Weapon = Weapon
 
 
-
 class Team:
     with open("data/wormNames.txt") as f:
         Names: List[str] = f.read().split("\n")

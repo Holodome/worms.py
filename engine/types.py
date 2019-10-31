@@ -1,5 +1,6 @@
+import pygame.locals as plocals
 import pygame
 
-Rect = pygame.Rect
+Rect = plocals.Rect
+Color = plocals.Color
 Vector2 = pygame.Vector2
-Color = pygame.Color

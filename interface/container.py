@@ -2,7 +2,7 @@ from typing import List
 
 import pygame
 
-from engine import Entity, Rect, Renderer2D, Color
+from engine import Color, Entity, Rect, Renderer2D
 from .element import Element
 
 

@@ -89,6 +89,9 @@ class World:
                 angle = math.atan2(pho.y - y, pho.x - x)
                 pho.vel += Vector2(math.cos(angle), math.sin(angle)) \
                            * force_coef * radius * ((radius - distance) / radius)
+
+                if isinstance(pho, Worm):
+                    pho.health -= int(damage * ((radius - distance) / radius))
         for _ in range(radius // 2):
             angle = random.random() * math.pi * 2
             debris = Debris(x, y)

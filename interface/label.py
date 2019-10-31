@@ -1,7 +1,7 @@
 import pygame
 
+from engine import Entity, Renderer2D
 from .element import Element
-from engine import Renderer2D, Entity
 
 
 class Label(Element):

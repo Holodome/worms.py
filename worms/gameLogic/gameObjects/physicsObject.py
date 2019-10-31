@@ -1,7 +1,7 @@
 import math
 from typing import Union
 
-from engine import Entity, Renderer2D, Vector2
+from engine import Entity, Renderer2D, Vector2, vec_to_itup
 
 
 class PhysicsObject(Entity):
@@ -9,41 +9,42 @@ class PhysicsObject(Entity):
 
     def __init__(self, x: float, y: float):
         Entity.__init__(self, self.IMAGE, Vector2(x, y))
-
-        self._velocity: Vector2 = Vector2(0.0)
+        self._vel: Vector2 = Vector2(0.0)
         self.stable: bool = False
 
     def simple_draw(self):
-        Renderer2D.submit((self.image, tuple(self.pos)))
-
-    def _get_velocity(self):
-        return self._velocity
-
-    def _set_velocity(self, a: Union[Vector2, float], y: float = 0):
-        if isinstance(a, Vector2):
-            self._velocity = a
-        else:
-            self._velocity = Vector2(a, y)
-
-    def _get_velocity_x(self):
-        return self._velocity.x
-
-    def _get_velocity_y(self):
-        return self._velocity.y
-
-    def _set_velocity_x(self, v: float):
-        self._velocity.x = v
-
-    def _set_velocity_y(self, v: float):
-        self._velocity.y = v
+        Renderer2D.submit((self.image, vec_to_itup(self.pos)))
 
     @property
     def angle(self):
-        return math.atan2(self._velocity.y, self._velocity.x)
+        return math.atan2(self._vel.y, self._vel.x)
 
-    vel_x = property(_get_velocity_x, _set_velocity_x)
-    vel_y = property(_get_velocity_y, _set_velocity_y)
-    vel = property(_get_velocity, _set_velocity)
+    @property
+    def vel_x(self):
+        return self._vel.x
+
+    @vel_x.setter
+    def vel_x(self, v):
+        self._vel.x = v
+
+    @property
+    def vel_y(self):
+        return self._vel.y
+
+    @vel_y.setter
+    def vel_y(self, v):
+        self._vel.y = v
+
+    @property
+    def vel(self):
+        return self._vel
+
+    @vel.setter
+    def vel(self, a: Union[Vector2, float], y: float = 0):
+        if isinstance(a, Vector2):
+            self._vel = a
+        else:
+            self._vel = Vector2(a, y)
 
 
 class PhysicsCircleObject(PhysicsObject):

@@ -13,7 +13,7 @@ class Entity:
         self._pos: Vector2 = position
 
     @property
-    def pos(self):
+    def pos(self) -> Vector2:
         return self._pos
 
     @pos.setter
