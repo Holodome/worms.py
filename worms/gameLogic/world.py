@@ -5,6 +5,7 @@ from typing import *
 import pygame
 
 from worms.gameLogic.gameObjects.debris import Debris
+from worms.gameLogic.gameObjects.worm import Worm
 from .gameObjects.physicsObject import PhysicsCircleObject, PhysicsObject
 from .terrain import Terrain
 from .wormsTeam import TeamManager
@@ -22,7 +23,7 @@ class World:
 
         self.backgroundImage: pygame.Surface = background
 
-        self.teamManager = TeamManager()
+        self.teamManager: TeamManager = TeamManager()
         self.teamManager.set_team_positions(world_width=width)
         for team in self.teamManager.teams:
             self.physicsObjects.extend(team.wormList)
@@ -71,14 +72,17 @@ class World:
                             pho.stable = True
                             pho.vel -= pho.vel
 
+                    if isinstance(pho, Worm):
+                        pho.headedRight = pho.vel_x > 0
+
             self.physicsObjects = list(filter(lambda p: p.Alive
-                                                        and 0 <= p.x <self.terrain.width
-                                                        and 0 <= p.y < self.terrain.height,  self.physicsObjects))
+                                                        and 0 <= p.x < self.terrain.width
+                                                        and 0 <= p.y < self.terrain.height, self.physicsObjects))
 
     def explosion(self, x: int, y: int, radius: int, damage: int, force_coef: float):
         self.terrain.explode_circle(x, y, radius)
         for pho in self.physicsObjects:
-            distance = pho._pos.distance_to((x, y))
+            distance = pho.pos.distance_to((x, y))
             if distance < radius:
                 pho.stable = False
                 angle = math.atan2(pho.y - y, pho.x - x)
@@ -90,3 +94,11 @@ class World:
             debris.vel_x = math.cos(angle) * radius * 1.5
             debris.vel_y = math.sin(angle) * radius * 1.5
             self.physicsObjects.append(debris)
+
+    def draw(self):
+        for obj in self.physicsObjects:
+            obj.simple_draw()
+
+    @property
+    def sel_worm(self):
+        return self.teamManager.sel_team.sel_worm

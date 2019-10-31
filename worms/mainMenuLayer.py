@@ -2,10 +2,7 @@ import enum
 
 import pygame
 
-from engine.layers import Layer
-from engine.loader import Loader
-from engine.renderer.renderer2D import Renderer2D
-from engine.window import Window
+from engine import *
 from interface import *
 
 
@@ -103,7 +100,7 @@ class MainMenuLayer(Layer):
         self._get_selected_container().on_event(dispatcher)
 
         dispatcher.dispatch(pygame.VIDEORESIZE, lambda e: [
-            self.mainInterfaceContainer.set_rect(pygame.Rect(0, 0, e.w, e.h))
+            self.mainInterfaceContainer.set_rect(Rect(0, 0, e.w, e.h))
         ])
 
     def change_state(self, state):

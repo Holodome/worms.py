@@ -3,11 +3,21 @@ import random
 from typing import *
 
 from .gameObjects.worm import Worm
+from .weapons import Weapon
+
+
+class WeaponManager:
+    def __init__(self):
+        self.weaponCounts: Dict[Weapon, int] = {}
+        self.selectedWeapon: Weapon = Weapon
+
 
 
 class Team:
     with open("data/wormNames.txt") as f:
         Names: List[str] = f.read().split("\n")
+
+    del f
 
     def __init__(self, color: Tuple[int, int, int], worms_number: int):
         self.color: Tuple[int, int, int] = color
@@ -59,7 +69,7 @@ class TeamManager:
         if team_data is None:
             self.numberOfTeams = 2
             for i in range(2):
-                team = Team((i == 0, 0, i != 0), 5)
+                team = Team(((i == 0) * 255, 0, (i != 0) * 255), 5)
                 self.teams.append(team)
         else:
             self.numberOfTeams = len(team_data)

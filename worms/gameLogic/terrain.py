@@ -17,8 +17,6 @@ class Terrain:
         self.terrainImage.set_colorkey(Terrain.IMAGE_COLORKEY)
         self.load_foreground_as_terrain(foreground_image)
 
-        print(sum(map(lambda e: e, self.cells)), width * height)
-
     def explode_circle(self, x: int, y: int, radius: int):
         self.midpoint_circle(x, y, radius)
         self.draw_terrain(x - radius, y - radius, 2 * radius + 1, 2 * radius + 1)

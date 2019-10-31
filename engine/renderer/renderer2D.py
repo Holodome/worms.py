@@ -40,17 +40,25 @@ class Renderer2D:
                                             Renderer2D.windowSurface.get_height())
 
     @staticmethod
-    def submit(entity: Entity, camera_affect: bool = True):
-        if camera_affect:
-            tp = (int(entity._pos.x + Renderer2D.cameraTranslation[0]),
-                  int(entity._pos.y + Renderer2D.cameraTranslation[1]))
-            tr = pygame.Rect(tp, entity.image.get_size())
-            if Renderer2D.windowRect.colliderect(tr):
-                Renderer2D.entities.append((entity.image, tp))
+    def submit(entity: Union[Entity, Tuple[pygame.Surface, Tuple[int, int]]], camera_affect: bool = True):
+
+        if isinstance(entity, Entity):
+            ent_pos = tuple(entity.pos)
+            ent_img = entity.image
         else:
-            tr = pygame.Rect(entity._pos, entity.image.get_size())
+            ent_pos = entity[1]
+            ent_img = entity[0]
+
+        if camera_affect:
+            tp = (int(ent_pos[0] + Renderer2D.cameraTranslation[0]),
+                  int(ent_pos[1] + Renderer2D.cameraTranslation[1]))
+            tr = pygame.Rect(tp, ent_img.get_size())
             if Renderer2D.windowRect.colliderect(tr):
-                Renderer2D.entities.append((entity.image, entity._pos))
+                Renderer2D.entities.append((ent_img, tp))
+        else:
+            tr = pygame.Rect(ent_pos, ent_img.get_size())
+            if Renderer2D.windowRect.colliderect(tr):
+                Renderer2D.entities.append((ent_img, ent_pos))
 
     @staticmethod
     def present():
