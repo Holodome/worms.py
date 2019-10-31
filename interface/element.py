@@ -1,12 +1,11 @@
 import abc
 
-import pygame
-
+from engine import Rect
 from .constraint import ConstraintManager
 
 
 class Element:
-    _rect: pygame.Rect = pygame.Rect(0, 0, 1, 1)
+    _rect: Rect = Rect(0, 0, 1, 1)
 
     def __init__(self):
         self._visible: bool = False

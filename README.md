@@ -1,16 +1,15 @@
 # worms.py
 
-My free interpretation of worms game using pygame2.
+My interpretation of worms game using pygame.
 This is a tactical physics-based game
 where teams of worms try to eliminate each other using different artillery.
 
 ## Features
 
-* Standalone engine abtraction
-* Real-time phyiscs
-* Custom level loading
-* Exploding and bullet-shooting weapons
-* Custom player number
+* Reusable 'engine'
+* Simple Real-time physics
+* Loading of levels with custom settings
+* Different types of weapons
 
 ## TODO
 

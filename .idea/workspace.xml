@@ -2,27 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/worms/gameLogic/enemyLogic/ai.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/worms/gameLogic/weapons.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/types.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/renderer/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/camera.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/renderer/entity.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/entity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/renderer/renderer2D.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/renderer2D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/renderer/scene2D.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/window.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/button.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/constraint.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/constraint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/container.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/container.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/element.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/element.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/label.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/label.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms/gameLogic/terrain.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/terrain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/mainMenuLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/worms.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -177,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571852523713</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Implemented rendering worms with names and health">
+      <created>1572523603590</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1572523603590</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,6 +207,7 @@
     <MESSAGE value="Put world in classes" />
     <MESSAGE value="Started reworking project (done main menu and level loading)" />
     <MESSAGE value="Add world loading and basic game mechanics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add world loading and basic game mechanics" />
+    <MESSAGE value="Implemented rendering worms with names and health" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented rendering worms with names and health" />
   </component>
 </project>

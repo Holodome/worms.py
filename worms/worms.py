@@ -1,10 +1,6 @@
 import enum
 
-from engine.application import Application
-from engine.events import EventDispatcher
-from engine.layers import Layer
-from engine.loader import Loader
-from engine.renderer.renderer2D import Renderer2D
+from engine import *
 from worms.gameLogic.worldLoader import WorldLoader
 from .gameLayer import GameLayer
 from .mainMenuLayer import MainMenuLayer

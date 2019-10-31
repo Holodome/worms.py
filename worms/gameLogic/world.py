@@ -4,6 +4,7 @@ from typing import *
 
 import pygame
 
+from engine import Vector2
 from worms.gameLogic.gameObjects.debris import Debris
 from worms.gameLogic.gameObjects.worm import Worm
 from .gameObjects.physicsObject import PhysicsCircleObject, PhysicsObject
@@ -41,12 +42,12 @@ class World:
                     potential_pos = pho._pos + pho.vel * float(timestep)
                     pho.stable = False
                     # Высчитывание вектора отражения
-                    response = pygame.Vector2(0)
+                    response = Vector2(0)
                     collided = False
 
                     times = 8
                     for r in map(lambda n: (n / times) * math.pi + (pho.angle - math.pi / 2.0), range(times)):
-                        test_pos = pygame.Vector2(pho.radius * math.cos(r), pho.radius * math.sin(r)) + potential_pos
+                        test_pos = Vector2(pho.radius * math.cos(r), pho.radius * math.sin(r)) + potential_pos
                         if self.terrain.valid_position(int(test_pos.x), int(test_pos.y)) \
                                 and self.terrain.get_block_data(int(test_pos.x), int(test_pos.y)):
                             response += potential_pos - test_pos
@@ -86,7 +87,7 @@ class World:
             if distance < radius:
                 pho.stable = False
                 angle = math.atan2(pho.y - y, pho.x - x)
-                pho.vel += pygame.Vector2(math.cos(angle), math.sin(angle)) \
+                pho.vel += Vector2(math.cos(angle), math.sin(angle)) \
                            * force_coef * radius * ((radius - distance) / radius)
         for _ in range(radius // 2):
             angle = random.random() * math.pi * 2

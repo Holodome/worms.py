@@ -2,15 +2,14 @@ from typing import List
 
 import pygame
 
-from engine.renderer.entity import Entity
-from engine.renderer.renderer2D import Renderer2D
+from engine import Entity, Rect, Renderer2D, Color
 from .element import Element
 
 
 class Container(Element):
     def __init__(self, rect=None):
         Element.__init__(self)
-        self._color = pygame.Color(255, 255, 255, 0)
+        self._color = Color(255, 255, 255, 0)
         if rect is not None:
             self._rect = rect
 
@@ -41,7 +40,7 @@ class Container(Element):
         element.constraintManager.update_rect(self._rect, element._rect)
         element.apply_rect()
 
-    def set_color(self, color: pygame.Color):
+    def set_color(self, color: Color):
         self._color = color
 
     def apply_rect(self):
@@ -56,7 +55,7 @@ class Container(Element):
             else:
                 element.set_visible(True)
 
-    def set_rect(self, rect: pygame.Rect):
+    def set_rect(self, rect: Rect):
         self._rect = rect
         self.apply_rect()
         for element in self._elements:

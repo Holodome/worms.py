@@ -3,50 +3,49 @@ from typing import Union
 import pygame
 
 import engine.utils as utils
-from engine.input import Input
+from ..input import Input
+from ..types import Vector2
 
 
 class Camera:
     CAMERA_SPEED = 0.5
 
     def __init__(self):
-        self.position: pygame.Vector2 = pygame.Vector2()
+        self.pos: Vector2 = Vector2()
 
-    def get_position(self) -> pygame.Vector2:
-        return self.position
-
-    def translate(self, a: Union[float, pygame.Vector2], y: float = 0) -> None:
-        if isinstance(a, pygame.Vector2):
-            self.position += a
+    def translate(self, a: Union[float, Vector2], y: float = 0) -> None:
+        if isinstance(a, Vector2):
+            self.pos += a
         else:
-            self.position.x += a
-            self.position.y += y
+            self.pos.x += a
+            self.pos.y += y
 
-    def set_translation(self, a: Union[float, pygame.Vector2], y: float = 0) -> None:
-        if isinstance(a, pygame.Vector2):
-            self.position = a
+    def set_translation(self, a: Union[float, Vector2], y: float = 0) -> None:
+        if isinstance(a, Vector2):
+            self.pos = a
         else:
-            self.position.x = a
-            self.position.y = y
+            self.pos.x = a
+            self.pos.y = y
 
-    def _set_x(self, v):
-        self.position.x = v
+    @property
+    def x(self):
+        return self.pos.x
 
-    def _set_y(self, v):
-        self.position.y = v
+    @x.setter
+    def x(self, v):
+        self.pos.x = v
 
-    def _get_x(self):
-        return self.position.x
+    @property
+    def y(self):
+        return self.pos.y
 
-    def _get_y(self):
-        return self.position.y
-
-    x = property(_get_x, _set_x)
-    y = property(_get_y, _set_y)
+    @y.setter
+    def y(self, v):
+        self.pos.y = v
 
     @property
     def negative_translation(self):
-        return tuple(map(int, -self.position))
+        return tuple(map(int, -self.pos))
 
 
 class CameraController:
@@ -55,17 +54,17 @@ class CameraController:
 
     def on_update(self, timestep):
         if Input.is_key_pressed(pygame.K_a):
-            self.camera.position.x -= Camera.CAMERA_SPEED * int(timestep)
+            self.camera.pos.x -= Camera.CAMERA_SPEED * int(timestep)
         if Input.is_key_pressed(pygame.K_d):
-            self.camera.position.x += Camera.CAMERA_SPEED * int(timestep)
+            self.camera.pos.x += Camera.CAMERA_SPEED * int(timestep)
         if Input.is_key_pressed(pygame.K_w):
-            self.camera.position.y -= Camera.CAMERA_SPEED * int(timestep)
+            self.camera.pos.y -= Camera.CAMERA_SPEED * int(timestep)
         if Input.is_key_pressed(pygame.K_s):
-            self.camera.position.y += Camera.CAMERA_SPEED * int(timestep)
+            self.camera.pos.y += Camera.CAMERA_SPEED * int(timestep)
 
     def on_event(self, event):
         pass
 
     def clamp_position(self, x0, y0, x1, y1):
-        self.camera.x = utils.clamp(self.camera.x,x0, x1, )
-        self.camera.y = utils.clamp(self.camera.y,y0, y1, )
+        self.camera.x = utils.clamp(self.camera.x, x0, x1, )
+        self.camera.y = utils.clamp(self.camera.y, y0, y1, )

@@ -9,7 +9,7 @@ class GameLayer(Layer):
 
         self.cameraController: CameraController = CameraController()
 
-        self.interfaceContainer = Container(pygame.Rect(0, 0, Window.Instance.width, Window.Instance.height))
+        self.interfaceContainer = Container(Rect(0, 0, Window.Instance.width, Window.Instance.height))
         paused_label = Label(
             Loader.get_font("ALoveOfThunder.ttf", 200).render("GAME PAUSED", False, (255, 150, 200, 245)))
         paused_label.constraintManager.add_width_constraint(RelativeMultConstraint(0.7))
@@ -40,7 +40,7 @@ class GameLayer(Layer):
                                                  self.world.terrain.height - Window.Instance.height)
 
     def on_render(self):
-        Renderer2D.begin_scene(tuple(-self.cameraController.camera.position))
+        Renderer2D.begin_scene(self.cameraController.camera.negative_translation)
         Renderer2D.submit((self.world.backgroundImage, (0, 0)))
         Renderer2D.submit((self.world.terrain.terrainImage, (0, 0)))
         self.world.draw()
@@ -53,15 +53,15 @@ class GameLayer(Layer):
     def on_event(self, dispatcher):
         self.cameraController.on_event(dispatcher)
 
-        dispatcher.dispatch(pygame.VIDEORESIZE, lambda e: self.__setattr__("paused", True))
-        dispatcher.dispatch(pygame.VIDEOEXPOSE, lambda e: self.__setattr__("paused", True))
+        dispatcher.dispatch(locals.VIDEORESIZE, lambda e: self.__setattr__("paused", True))
+        dispatcher.dispatch(locals.VIDEOEXPOSE, lambda e: self.__setattr__("paused", True))
 
-        dispatcher.dispatch(pygame.KEYUP, self.on_keyup)
+        dispatcher.dispatch(locals.KEYUP, self.on_keyup)
 
     def on_keyup(self, event):
-        if event.key == pygame.K_ESCAPE:
+        if event.key == locals.K_ESCAPE:
             self.paused = not self.paused
-        elif event.key == pygame.K_q:
+        elif event.key == locals.K_q:
             self.world.teamManager.sel_team.select_previous()
-        elif event.key == pygame.K_e:
+        elif event.key == locals.K_e:
             self.world.teamManager.sel_team.select_next()

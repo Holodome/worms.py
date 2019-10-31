@@ -2,9 +2,7 @@ from typing import Callable
 
 import pygame
 
-from engine.input import Input
-from engine.renderer.entity import Entity
-from engine.renderer.renderer2D import Renderer2D
+from engine import Entity, Input, Renderer2D
 from .element import Element
 
 

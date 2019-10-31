@@ -1,28 +1,29 @@
 import math
 from typing import Union
 
-import pygame
-
-from engine.renderer.entity import Entity
+from engine import Entity, Renderer2D, Vector2
 
 
 class PhysicsObject(Entity):
     IMAGE = None  # Инициализируется наследниками
 
     def __init__(self, x: float, y: float):
-        Entity.__init__(self, self.IMAGE, pygame.Vector2(x, y))
+        Entity.__init__(self, self.IMAGE, Vector2(x, y))
 
-        self._velocity: pygame.Vector2 = pygame.Vector2(0.0)
+        self._velocity: Vector2 = Vector2(0.0)
         self.stable: bool = False
+
+    def simple_draw(self):
+        Renderer2D.submit((self.image, tuple(self.pos)))
 
     def _get_velocity(self):
         return self._velocity
 
-    def _set_velocity(self, a: Union[pygame.Vector2, float], y: float = 0):
-        if isinstance(a, pygame.Vector2):
+    def _set_velocity(self, a: Union[Vector2, float], y: float = 0):
+        if isinstance(a, Vector2):
             self._velocity = a
         else:
-            self._velocity = pygame.Vector2(a, y)
+            self._velocity = Vector2(a, y)
 
     def _get_velocity_x(self):
         return self._velocity.x

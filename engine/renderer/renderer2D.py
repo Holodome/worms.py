@@ -2,14 +2,15 @@ from typing import List, Tuple, Union
 
 import pygame
 
-from engine.window import Window
 from .entity import Entity
+from ..types import Rect, Vector2
+from ..window import Window
 
 
 class Renderer2D:
-    entities: List[Tuple[pygame.Surface, Union[pygame.Vector2, Tuple[int, int]]]] = []
+    entities: List[Tuple[pygame.Surface, Union[Vector2, Tuple[int, int]]]] = []
     cameraTranslation: Tuple[int, int] = (0, 0)
-    windowRect: pygame.Rect = pygame.Rect(0, 0, 1, 1)
+    windowRect: Rect = Rect(0, 0, 1, 1)
     windowSurface: pygame.Surface = None
 
     class RendererCommand:
@@ -36,12 +37,11 @@ class Renderer2D:
         if camera_position is not None:
             Renderer2D.cameraTranslation = camera_position
         Renderer2D.windowSurface = Window.get_surface()
-        Renderer2D.windowRect = pygame.Rect(0, 0, Renderer2D.windowSurface.get_width(),
-                                            Renderer2D.windowSurface.get_height())
+        Renderer2D.windowRect = Rect(0, 0, Renderer2D.windowSurface.get_width(),
+                                     Renderer2D.windowSurface.get_height())
 
     @staticmethod
     def submit(entity: Union[Entity, Tuple[pygame.Surface, Tuple[int, int]]], camera_affect: bool = True):
-
         if isinstance(entity, Entity):
             ent_pos = tuple(entity.pos)
             ent_img = entity.image
@@ -52,11 +52,11 @@ class Renderer2D:
         if camera_affect:
             tp = (int(ent_pos[0] + Renderer2D.cameraTranslation[0]),
                   int(ent_pos[1] + Renderer2D.cameraTranslation[1]))
-            tr = pygame.Rect(tp, ent_img.get_size())
+            tr = Rect(tp, ent_img.get_size())
             if Renderer2D.windowRect.colliderect(tr):
                 Renderer2D.entities.append((ent_img, tp))
         else:
-            tr = pygame.Rect(ent_pos, ent_img.get_size())
+            tr = Rect(ent_pos, ent_img.get_size())
             if Renderer2D.windowRect.colliderect(tr):
                 Renderer2D.entities.append((ent_img, ent_pos))
 

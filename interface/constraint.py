@@ -1,7 +1,7 @@
 import abc
 import enum
 
-import pygame
+from engine import Rect
 
 
 class ConstraintType(enum.Enum):
@@ -21,7 +21,7 @@ class Constraint:
         return self
 
     @abc.abstractmethod
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         raise NotImplementedError
 
 
@@ -30,7 +30,7 @@ class RelativeMultConstraint(Constraint):
     def __init__(self, value: float):
         self.value: float = value
 
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         if self.constraintType == ConstraintType.ConstraintX:
             target_rect.x = source_rect.x * self.value
         if self.constraintType == ConstraintType.ConstraintY:
@@ -46,7 +46,7 @@ class RelativeAddConstraint(Constraint):
     def __init__(self, value: float):
         self.value: float = value
 
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         if self.constraintType == ConstraintType.ConstraintX:
             target_rect.x = source_rect.x + self.value * source_rect.w
         if self.constraintType == ConstraintType.ConstraintY:
@@ -57,7 +57,7 @@ class AbsoluteAddConstraint(Constraint):
     def __init__(self, value: float):
         self.value: float = value
 
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         if self.constraintType == ConstraintType.ConstraintX:
             target_rect.x = source_rect.x + self.value
         if self.constraintType == ConstraintType.ConstraintY:
@@ -65,7 +65,7 @@ class AbsoluteAddConstraint(Constraint):
 
 
 class AspectConstraint(Constraint):
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         if self.constraintType == ConstraintType.ConstraintWidth:
             target_rect.w = target_rect.h / initial_rect.h * initial_rect.w
         elif self.constraintType == ConstraintType.ConstraintHeight:
@@ -73,7 +73,7 @@ class AspectConstraint(Constraint):
 
 
 class CenterConstraint(Constraint):
-    def update_value(self, source_rect: pygame.Rect, target_rect: pygame.Rect, initial_rect: pygame.Rect):
+    def update_value(self, source_rect: Rect, target_rect: Rect, initial_rect: Rect):
         if self.constraintType == ConstraintType.ConstraintX:
             target_rect.x = (source_rect.w - target_rect.w) / 2
         if self.constraintType == ConstraintType.ConstraintY:
@@ -84,7 +84,7 @@ class ConstraintManager:
     def __init__(self):
         self.constraints = []
 
-    def update_rect(self, rect: pygame.Rect, target_rect: pygame.rect):
+    def update_rect(self, rect: Rect, target_rect: Rect):
         initial_rect = target_rect.copy()
         for constraint in self.constraints:
             constraint.update_value(rect, target_rect, initial_rect)
