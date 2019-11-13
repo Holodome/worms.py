@@ -26,7 +26,7 @@ class DebugScreenOverlay(Layer):
         if self.lastTime != 0:
             fnt = Loader.get_font("BerlinSans.TTF", 20)
             img = fnt.render("FPS: " + str(Application.Instance.fps), False, (255, 0, 0))
-            Renderer2D.submit_one((img, (0, 0)))
+            Renderer2D.submit((img, (0, 0)), False)
 
     def on_event(self, dispatcher: EventDispatcher):
         pass

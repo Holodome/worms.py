@@ -1,6 +1,7 @@
 import pygame
 
 from engine.events import EventDispatcher
+from engine.renderer.renderer2D import Renderer2D
 from .input import Input
 from .layers import Layer, LayerStack
 from .window import Window
@@ -35,7 +36,9 @@ class Application:
 
         self.running: bool = True
 
-        self.fpsQueue = [0 for _ in range(60)]
+        self.fixedTime = 60
+
+        self.fpsQueue = [0] * 60
         self.fps = 0
 
     def push_layer(self, layer: Layer):
@@ -56,17 +59,17 @@ class Application:
 
     def _update(self):
         time = pygame.time.get_ticks()
-        timestep = Timestep(int(time) - self.lastFrameTimeMillis)
+        dt = int(time) - self.lastFrameTimeMillis
         self.lastFrameTimeMillis = time
 
-        if int(timestep) != 0:
+        if dt != 0:
             self.fpsQueue.pop(0)
-            self.fpsQueue.append(1000 // int(timestep))
+            self.fpsQueue.append(1000 // dt)
             self.fps = sum(self.fpsQueue) // 60
 
         Input.update()
         for ly in reversed(self.layerStack):
-            ly.on_update(timestep)
+            ly.on_update(Timestep(dt % self.fixedTime))
 
     def on_event(self, dispatcher: EventDispatcher):
         dispatcher.dispatch(pygame.QUIT, lambda _: setattr(self, "running", False))
@@ -79,6 +82,9 @@ class Application:
 
         while self.running:
             self._update()
+
+            Renderer2D.start_frame()
             self._render()
 
+            Renderer2D.present()
             self.window.on_update()

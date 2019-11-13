@@ -1,8 +1,10 @@
 from engine import *
 from engine.application import Timestep
 from interface import *
-from .gameLogic.weapons import SelectWeaponContainer
+from .gameLogic.weapons import FireData, SelectWeaponContainer
 from .gameLogic.world import World
+
+CROSSHAIR_IMAGE = Loader.load_image("crosshair")
 
 
 class JumpingArrow:
@@ -39,19 +41,21 @@ class GameLayer(Layer):
         self.world: World = world
         self.world.on_update(Timestep(1))
 
-        self.cameraController: CameraController = CameraController()
-
+        # Элементы интерфейса
         self.pauseContainer = PauseContainer()
         self.weaponMenuContainer = SelectWeaponContainer()
-
+        # Состояния
         self.paused: bool = True
         self.inAnimation: bool = False
         self.inWeaponMenu: bool = False
-
+        # Парамаетры камеры
         self.cameraStickToEntity: bool = True
         self.cameraFollowedEntity: Entity = self.world.sel_worm
+        self.cameraController: CameraController = CameraController()
 
         self.jumpingArrow = JumpingArrow()
+
+        self.fireData = FireData()
 
     def on_attach(self):
         self.pauseContainer.set_all_visible()
@@ -62,11 +66,13 @@ class GameLayer(Layer):
         pass
 
     def on_update(self, timestep):
+        if not self.inAnimation:
+            self.jumpingArrow.update(float(timestep))
+
         if not self.paused:
             self.world.on_update(timestep)
 
-            if not self.inAnimation:
-                self.jumpingArrow.update(float(timestep))
+            self.update_fire(float(timestep))
 
             if self.cameraController.move(timestep):
                 self.cameraStickToEntity = False
@@ -81,6 +87,8 @@ class GameLayer(Layer):
         self.world.draw()
         if not self.inAnimation:
             self.jumpingArrow.draw(self.cameraFollowedEntity.pos - (0, 40))
+            Renderer2D.submit((CROSSHAIR_IMAGE, self.cameraFollowedEntity.pos +
+                               self.fireData.get_offset()))
 
         if self.inWeaponMenu:
             self.weaponMenuContainer.on_render()
@@ -88,12 +96,7 @@ class GameLayer(Layer):
         if self.paused:
             self.pauseContainer.on_render()
 
-        Renderer2D.present()
-
     def on_event(self, dispatcher):
-        dispatcher.dispatch(plocals.VIDEORESIZE, lambda e: self.__setattr__("paused", True))
-        dispatcher.dispatch(plocals.VIDEOEXPOSE, lambda e: self.__setattr__("paused", True))
-
         dispatcher.dispatch(plocals.KEYUP, self.on_keyup)
 
     def on_keyup(self, event):
@@ -113,5 +116,17 @@ class GameLayer(Layer):
                 self.cameraStickToEntity = True
             if event.key == plocals.K_TAB:
                 self.inWeaponMenu = not self.inWeaponMenu
+            if event.key == plocals.K_SPACE:
+                if self.fireData.is_active():
+                    self.fireData.fireWeapon = True
         else:
             ...
+
+    def update_fire(self, dt):
+        if Input.is_key_held(plocals.K_UP):
+            self.fireData.update_angle(False)
+        elif Input.is_key_held(plocals.K_DOWN):
+            self.fireData.update_angle(True)
+
+        if Input.is_key_held(plocals.K_SPACE) and self.fireData.is_active():
+            self.fireData.update_throw_force(dt)

@@ -1,3 +1,5 @@
+import math
+
 import pygame
 
 from engine import Color, Loader, Rect, Window
@@ -16,6 +18,44 @@ Weapons = [
     Weapon(0, Loader.get_image("grenade"), Loader.get_image("grenade")),
     Weapon(1, Loader.load_image("cluster_bomb"), Loader.load_image("cluster_bomb"))
 ]
+
+
+class FireData:
+    NO_FIRE = -1
+    FIRE = 1
+
+    ROT_SPEED = 0.002
+
+    RADIUS = 40
+
+    def __init__(self):
+        self.throwForce: float = FireData.NO_FIRE
+        self.angle: float = 0
+
+        self.fireWeapon = False
+
+    def get_offset(self):
+        return math.cos(self.angle) * FireData.RADIUS, \
+               math.sin(self.angle) * FireData.RADIUS
+
+    def update_throw_force(self, delta):
+        self.throwForce += delta
+        self.throwForce = min(self.throwForce, FireData.FIRE)
+
+    def update_angle(self, clockwise: bool):
+        if clockwise:
+            self.angle += FireData.ROT_SPEED
+        else:
+            self.angle -= FireData.ROT_SPEED
+
+    def reset_angle(self):
+        self.angle = 0
+
+    def is_fire(self):
+        return self.throwForce >= FireData.FIRE or self.fireWeapon
+
+    def is_active(self):
+        return self.throwForce != FireData.NO_FIRE
 
 
 class SelectWeaponContainer(Container):

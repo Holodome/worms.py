@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="Add camera following">
+    <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/levels/bikini_bottom.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/levels/bikini_bottom.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/levels/war.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/levels/war.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/wormNames.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/wormNames.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/application.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/application.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/input.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/input.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/renderer/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/renderer/entity.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/entity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/renderer/renderer2D.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/renderer2D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/window.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/constraint.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/constraint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/container.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/container.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/element.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/element.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/interface/label.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/label.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/enemyLogic/ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/enemyLogic/ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/debris.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/debris.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/terrain.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/terrain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/weapons.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/weapons.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/worldLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/worldLoader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/mainMenuLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/worms.py" afterDir="false" />
@@ -32,6 +55,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="KEEP" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="LeqkeDXN" />
@@ -43,7 +67,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/worms.py-7c7754b084b3594d33e639da54f33fab5a48f652" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
@@ -196,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572528819239</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Add weapon choice menu (only view) and fps counter">
+      <created>1572552276820</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1572552276820</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -226,6 +257,7 @@
     <MESSAGE value="Implemented rendering worms with names and health" />
     <MESSAGE value="Code refactoring" />
     <MESSAGE value="Add camera following" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add camera following" />
+    <MESSAGE value="Add weapon choice menu (only view) and fps counter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add weapon choice menu (only view) and fps counter" />
   </component>
 </project>

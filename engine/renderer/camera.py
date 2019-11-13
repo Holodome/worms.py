@@ -56,16 +56,16 @@ class CameraController:
 
     def move(self, timestep) -> bool:
         moved = False
-        if Input.is_key_pressed(pygame.K_a):
+        if Input.is_key_held(pygame.K_a):
             self.camera.pos.x -= Camera.CAMERA_SPEED * int(timestep)
             moved = True
-        if Input.is_key_pressed(pygame.K_d):
+        if Input.is_key_held(pygame.K_d):
             self.camera.pos.x += Camera.CAMERA_SPEED * int(timestep)
             moved = True
-        if Input.is_key_pressed(pygame.K_w):
+        if Input.is_key_held(pygame.K_w):
             self.camera.pos.y -= Camera.CAMERA_SPEED * int(timestep)
             moved = True
-        if Input.is_key_pressed(pygame.K_s):
+        if Input.is_key_held(pygame.K_s):
             self.camera.pos.y += Camera.CAMERA_SPEED * int(timestep)
             moved = True
         return moved

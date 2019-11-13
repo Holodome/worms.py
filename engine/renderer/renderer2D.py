@@ -32,8 +32,11 @@ class Renderer2D:
             Window.get_surface().blit(entity[0], entity[1])
 
     @staticmethod
-    def begin_scene(camera_position: Tuple[int, int] = None):
+    def start_frame():
         Renderer2D.entities.clear()
+
+    @staticmethod
+    def begin_scene(camera_position: Tuple[int, int] = None):
         if camera_position is not None:
             Renderer2D.cameraTranslation = camera_position
         Renderer2D.windowSurface = Window.get_surface()
@@ -57,7 +60,7 @@ class Renderer2D:
             # if Renderer2D.windowRect.colliderect(tr):
             Renderer2D.entities.append((ent_img, tp))
         else:
-            tr = Rect(ent_pos, ent_img.get_size())
+            # tr = Rect(ent_pos, ent_img.get_size())
             # if Renderer2D.windowRect.colliderect(tr):
             Renderer2D.entities.append((ent_img, ent_pos))
 

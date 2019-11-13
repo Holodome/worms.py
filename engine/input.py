@@ -15,7 +15,7 @@ class Input:
         Input._pressed_keys = pygame.key.get_pressed()
 
     @staticmethod
-    def is_key_pressed(key: int) -> bool:
+    def is_key_held(key: int) -> bool:
         return Input._pressed_keys[key]
 
     @staticmethod

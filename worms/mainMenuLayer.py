@@ -107,7 +107,6 @@ class MainMenuLayer(Layer):
         Renderer2D.begin_scene()
         Renderer2D.RendererCommand.clear_screen(255, 255, 255)
         self._get_selected_container().on_render()
-        Renderer2D.present()
 
     def on_event(self, dispatcher):
         self._get_selected_container().on_event(dispatcher)
