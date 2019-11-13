@@ -1,5 +1,5 @@
 import math
-from typing import Union
+from typing import Tuple, Union
 
 from engine import Entity, Renderer2D, Vector2, vec_to_itup
 
@@ -12,7 +12,7 @@ class PhysicsObject(Entity):
         self._vel: Vector2 = Vector2(0.0)
         self.stable: bool = False
 
-    def simple_draw(self):
+    def draw(self):
         Renderer2D.submit((self.image, vec_to_itup(self.pos)))
 
     @property
@@ -40,9 +40,11 @@ class PhysicsObject(Entity):
         return self._vel
 
     @vel.setter
-    def vel(self, a: Union[Vector2, float], y: float = 0):
+    def vel(self, a: Union[Vector2, Tuple[float, float], float], y: float = 0):
         if isinstance(a, Vector2):
             self._vel = a
+        elif isinstance(a, tuple):
+            self._vel = Vector2(a)
         else:
             self._vel = Vector2(a, y)
 
@@ -50,8 +52,8 @@ class PhysicsObject(Entity):
 class PhysicsCircleObject(PhysicsObject):
     IMAGE = None
 
-    INFINITE_BOUNCE = -1 << 30
-    INFINITE_TIME = -1 << 30
+    INFINITE_BOUNCE = 1 << 31
+    INFINITE_TIME = 1 << 31
 
     def __init__(self, x: float, y: float, radius: float,
                  friction: float,
@@ -68,3 +70,6 @@ class PhysicsCircleObject(PhysicsObject):
     def is_valid(self):
         return self.bounceTimes == PhysicsCircleObject.INFINITE_BOUNCE or self.bounceTimes > 0 and \
                self.timeToDeath == PhysicsCircleObject.INFINITE_TIME or self.timeToDeath > 0
+
+    def death_action(self, world):
+        pass

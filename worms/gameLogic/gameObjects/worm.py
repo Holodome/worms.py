@@ -43,7 +43,7 @@ class Worm(PhysicsCircleObject):
     def pos(self):
         return self._pos - Worm.IMAGE_OFFSET
 
-    def simple_draw(self):
+    def draw(self):
         if self.headedRight:
             Renderer2D.submit((self.image, self.pos))
         else:

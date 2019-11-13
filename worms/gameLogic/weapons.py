@@ -4,19 +4,24 @@ import pygame
 
 from engine import Color, Loader, Rect, Window
 from interface import *
+from .gameObjects.grenades import ClusterBomb, Grenade
+from .gameObjects.bullet import Bullet
 
 
 class Weapon:
-    def __init__(self, w_id: int, bullet, hold_image: pygame.Surface):
+    def __init__(self, w_id: int, bullet, hold_image: pygame.Surface, fire_times):
         self.w_id = w_id
 
         self.bullet = bullet
         self.holdImage: pygame.Surface = hold_image
 
+        self.fireTimes = fire_times
+
 
 Weapons = [
-    Weapon(0, Loader.get_image("grenade"), Loader.get_image("grenade")),
-    Weapon(1, Loader.load_image("cluster_bomb"), Loader.load_image("cluster_bomb"))
+    Weapon(0, Grenade, Loader.get_image("grenade"), 1),
+    Weapon(1, ClusterBomb, Loader.load_image("cluster_bomb"), 1),
+    Weapon(2, Bullet, Loader.load_image("uzi"), 10)
 ]
 
 
@@ -114,3 +119,6 @@ class WeaponManager:
         self.selectedWeapon: int = 0
 
         self.timeToExplode: int = 3
+
+    def get_weapon(self):
+        return Weapons[self.selectedWeapon]

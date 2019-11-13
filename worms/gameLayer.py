@@ -1,6 +1,9 @@
+import math
+
 from engine import *
 from engine.application import Timestep
 from interface import *
+from worms.gameLogic.gameObjects.worm import Worm
 from .gameLogic.weapons import FireData, SelectWeaponContainer, get_force_bar
 from .gameLogic.world import World
 
@@ -72,13 +75,24 @@ class GameLayer(Layer):
     def on_update(self, timestep):
         if not self.inAnimation:
             self.jumpingArrow.update(float(timestep))
+        else:
+            if not any(map(lambda e: not isinstance(e, Worm), self.world.physicsObjects)):
+                self.inAnimation = False
+                self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
 
         if not self.paused:
             self.world.on_update(timestep)
 
             self.update_fire(float(timestep))
             if self.fireData.is_fire():
-                print("Fire")
+                bullet_class = self.world.teamManager.sel_team.weaponManager.get_weapon().bullet
+                print(self.fireData.angle, self.fireData.throwForce)
+                bullet = bullet_class(self.world.teamManager.sel_team.weaponManager.timeToExplode,
+                                      *self.cameraFollowedEntity.pos)
+                bullet.vel_x = math.cos(self.fireData.angle) * self.fireData.throwForce * 50
+                bullet.vel_y = math.sin(self.fireData.angle) * self.fireData.throwForce * 50
+                self.world.physicsObjects.append(bullet)
+                self.inAnimation = True
                 self.fireData.reset()
 
             if self.cameraController.move(timestep):
@@ -92,13 +106,21 @@ class GameLayer(Layer):
     def on_render(self):
         Renderer2D.begin_scene(self.cameraController.camera.negative_translation)
         self.world.draw()
-        if not self.inAnimation:
+        if not self.inAnimation:  # Если сейчас игра находится в состоянии хода одной из комманд
+            # Стрелка - указатель
             self.jumpingArrow.draw(self.cameraFollowedEntity.pos - JUMPING_ARROW_OFFSET)
+            # Прицел
             Renderer2D.submit((CROSSHAIR_IMAGE, self.cameraFollowedEntity.pos +
                                self.fireData.get_offset()))
+            # Показатель силы при стрельбе
             if self.fireData.is_active():
                 Renderer2D.submit((get_force_bar(self.fireData.throwForce),
                                    vec_to_itup(self.cameraFollowedEntity.pos + FORCE_BAR_OFFSET)))
+            # Выбранное оружие
+            offset = (7, -2) if not self.cameraFollowedEntity.headedRight else (-13, -2)
+            Renderer2D.submit(
+                (self.world.teamManager.sel_team.weaponManager.get_weapon().holdImage,
+                 vec_to_itup(self.cameraFollowedEntity.pos - offset)))
 
         if self.inWeaponMenu:
             self.weaponMenuContainer.on_render()
@@ -116,13 +138,11 @@ class GameLayer(Layer):
 
         if not self.paused:
             if event.key == plocals.K_q:
-                self.world.teamManager.sel_team.select_previous()
-                self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
-                self.cameraStickToEntity = True
+                if not self.inAnimation:
+                    self.select_new_worm(True)
             if event.key == plocals.K_e:
-                self.world.teamManager.sel_team.select_next()
-                self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
-                self.cameraStickToEntity = True
+                if not self.inAnimation:
+                    self.select_new_worm(False)
             if event.key == plocals.K_z:
                 self.cameraStickToEntity = True
             if event.key == plocals.K_TAB:
@@ -133,6 +153,12 @@ class GameLayer(Layer):
         else:
             ...
 
+    def on_keydown(self, event):
+        if not self.paused:
+            if not self.inAnimation:
+                if event.key == plocals.K_SPACE:
+                    self.fireData.throwForce = 0
+
     def update_fire(self, dt):
         if Input.is_key_held(plocals.K_UP):
             self.fireData.update_angle(False)
@@ -142,8 +168,10 @@ class GameLayer(Layer):
         if Input.is_key_held(plocals.K_SPACE) and self.fireData.is_active():
             self.fireData.update_throw_force(dt)
 
-    def on_keydown(self, event):
-        if not self.paused:
-            if not self.inAnimation:
-                if event.key == plocals.K_SPACE:
-                    self.fireData.throwForce = 0
+    def select_new_worm(self, previous: bool):
+        if previous:
+            self.world.teamManager.sel_team.select_previous()
+        else:
+            self.world.teamManager.sel_team.select_next()
+        self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
+        self.cameraStickToEntity = True

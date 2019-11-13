@@ -68,6 +68,7 @@ class World:
                     if not pho.is_valid():
                         # remove entity
                         pho.Alive = False
+                        pho.death_action(self)
                     else:
                         if abs(pho.vel.magnitude()) < 0.001:
                             pho.stable = True
@@ -103,7 +104,7 @@ class World:
         Renderer2D.submit((self.backgroundImage, (0, 0)))
         Renderer2D.submit((self.terrain.terrainImage, (0, 0)))
         for obj in self.physicsObjects:
-            obj.simple_draw()
+            obj.draw()
 
     @property
     def sel_worm(self):

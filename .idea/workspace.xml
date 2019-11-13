@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/bullet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/grenades.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/weapons.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/weapons.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/mainMenuLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -200,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573627979660</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Add force bar">
+      <created>1573628963436</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1573628963436</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -232,6 +245,7 @@
     <MESSAGE value="Add camera following" />
     <MESSAGE value="Add weapon choice menu (only view) and fps counter" />
     <MESSAGE value="Add crosshair" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add crosshair" />
+    <MESSAGE value="Add force bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add force bar" />
   </component>
 </project>

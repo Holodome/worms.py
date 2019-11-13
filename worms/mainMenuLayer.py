@@ -91,7 +91,7 @@ class MainMenuLayer(Layer):
         self.mainInterfaceContainer.exit_button.set_click_function(self.exit_game)
 
         self.startGameContainer.first_level_button.set_click_function(
-            lambda _: self.start_game("data/levels/war.json"))
+            lambda _: self.start_game("data/levels/bikini_bottom.json"))
 
     def on_attach(self):
         self.mainInterfaceContainer.set_all_visible()
