@@ -32,6 +32,12 @@ class FireData:
         self.throwForce: float = FireData.NO_FIRE
         self.angle: float = 0
 
+        self.fireWeapon: bool = False
+
+    def reset(self):
+        self.throwForce = FireData.NO_FIRE
+        # self.angle = 0
+
         self.fireWeapon = False
 
     def get_offset(self):
@@ -58,6 +64,16 @@ class FireData:
         return self.throwForce != FireData.NO_FIRE
 
 
+FORCE_BAR = pygame.Surface((20, 2))
+
+
+def get_force_bar(force: float) -> pygame.Surface:
+    green_length = int(force * FORCE_BAR.get_width())
+    FORCE_BAR.fill((0, 255, 0), (0, 0, green_length, FORCE_BAR.get_height()))
+    FORCE_BAR.fill((255, 0, 0), (green_length, 0, 20 - green_length, FORCE_BAR.get_height()))
+    return FORCE_BAR
+
+
 class SelectWeaponContainer(Container):
     def __init__(self):
         super().__init__(Rect(0, Window.Instance.height * 2 / 3, Window.Instance.width, Window.Instance.height / 3))
@@ -78,7 +94,6 @@ class SelectWeaponContainer(Container):
         self.weaponListContainer.constraints.add_width_constraint(RelativeMultConstraint(1))
         self.weaponListContainer.constraints.add_height_constraint(RelativeMultConstraint(0.85))
         self.add_element(self.weaponListContainer)
-        # TODO: Rework to manage pictures of different sizes
         for i, weapon in enumerate(Weapons):
             weapon_img = weapon.holdImage
             weapon_btn = Button(weapon_img)

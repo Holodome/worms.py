@@ -1,13 +1,17 @@
 from engine import *
 from engine.application import Timestep
 from interface import *
-from .gameLogic.weapons import FireData, SelectWeaponContainer
+from .gameLogic.weapons import FireData, SelectWeaponContainer, get_force_bar
 from .gameLogic.world import World
 
 CROSSHAIR_IMAGE = Loader.load_image("crosshair")
 
+FORCE_BAR_OFFSET = (-4, 25)
+JUMPING_ARROW_OFFSET = (0, 40)
+
 
 class JumpingArrow:
+
     def __init__(self):
         self.image = Loader.load_image("arrow")
 
@@ -73,6 +77,9 @@ class GameLayer(Layer):
             self.world.on_update(timestep)
 
             self.update_fire(float(timestep))
+            if self.fireData.is_fire():
+                print("Fire")
+                self.fireData.reset()
 
             if self.cameraController.move(timestep):
                 self.cameraStickToEntity = False
@@ -86,9 +93,12 @@ class GameLayer(Layer):
         Renderer2D.begin_scene(self.cameraController.camera.negative_translation)
         self.world.draw()
         if not self.inAnimation:
-            self.jumpingArrow.draw(self.cameraFollowedEntity.pos - (0, 40))
+            self.jumpingArrow.draw(self.cameraFollowedEntity.pos - JUMPING_ARROW_OFFSET)
             Renderer2D.submit((CROSSHAIR_IMAGE, self.cameraFollowedEntity.pos +
                                self.fireData.get_offset()))
+            if self.fireData.is_active():
+                Renderer2D.submit((get_force_bar(self.fireData.throwForce),
+                                   vec_to_itup(self.cameraFollowedEntity.pos + FORCE_BAR_OFFSET)))
 
         if self.inWeaponMenu:
             self.weaponMenuContainer.on_render()
@@ -98,6 +108,7 @@ class GameLayer(Layer):
 
     def on_event(self, dispatcher):
         dispatcher.dispatch(plocals.KEYUP, self.on_keyup)
+        dispatcher.dispatch(plocals.KEYDOWN, self.on_keydown)
 
     def on_keyup(self, event):
         if event.key == plocals.K_ESCAPE:
@@ -130,3 +141,9 @@ class GameLayer(Layer):
 
         if Input.is_key_held(plocals.K_SPACE) and self.fireData.is_active():
             self.fireData.update_throw_force(dt)
+
+    def on_keydown(self, event):
+        if not self.paused:
+            if not self.inAnimation:
+                if event.key == plocals.K_SPACE:
+                    self.fireData.throwForce = 0
