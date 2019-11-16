@@ -1,31 +1,19 @@
+import abc
 import math
+from typing import (List, Type)
 
 import pygame
 
-from engine import Color, Loader, Rect, Window
+from engine import Color, Loader, Rect, Vector2, Window
 from interface import *
 from .gameObjects.grenades import ClusterBomb, Grenade
-from .gameObjects.bullet import Bullet
-
-
-class Weapon:
-    def __init__(self, w_id: int, bullet, hold_image: pygame.Surface, fire_times):
-        self.w_id = w_id
-
-        self.bullet = bullet
-        self.holdImage: pygame.Surface = hold_image
-
-        self.fireTimes = fire_times
-
-
-Weapons = [
-    Weapon(0, Grenade, Loader.get_image("grenade"), 1),
-    Weapon(1, ClusterBomb, Loader.load_image("cluster_bomb"), 1),
-    Weapon(2, Bullet, Loader.load_image("uzi"), 10)
-]
 
 
 class FireData:
+    """
+    Класс, хранящий все данные о логике стрельбы, чтобы не засорять основной класс
+    А также имеет несколько удобных функций
+    """
     NO_FIRE = -1
     FIRE = 1
 
@@ -36,6 +24,8 @@ class FireData:
     def __init__(self):
         self.throwForce: float = FireData.NO_FIRE
         self.angle: float = 0
+
+        self.shooter_position: Vector2 = Vector2(0)
 
         self.fireWeapon: bool = False
 
@@ -69,16 +59,85 @@ class FireData:
         return self.throwForce != FireData.NO_FIRE
 
 
-FORCE_BAR = pygame.Surface((20, 2))
+class AbstractWeapon(abc.ABC):
+    HoldImage: pygame.Surface = None
+
+    def __init__(self):
+        self.data: FireData = None
+
+    def set_data(self, fire_data: FireData):
+        """
+        Вызывается при создании обеьекта - передача информации о стрельбе
+        Поскольку она не будет изменяться в процессе стрельбы (механика)
+        """
+        self.data = fire_data
+
+    @abc.abstractmethod
+    def fire(self, world) -> None:
+        """
+        Функция, которая вызывается когда игрок стреляет
+        Передается мир, в котором можно вызвать функции и добавить новые обьекты
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_valid(self) -> bool:
+        """
+        Проверка, что оружие закончило свою деятельность
+        К примеру, гранату можно кинуть только один раз, после этого оружие удаляется
+        А из Узи можно стрелять продолжительное время, поэтому нужна проверка
+        """
+        return False
+
+    @abc.abstractmethod
+    def update(self, dt) -> None:
+        """
+        Обновлние оружия
+        В простом случае просто уменьшает время оставшейся стрельбы
+        """
+        raise NotImplementedError
 
 
-def get_force_bar(force: float) -> pygame.Surface:
-    green_length = int(force * FORCE_BAR.get_width())
-    FORCE_BAR.fill((0, 255, 0), (0, 0, green_length, FORCE_BAR.get_height()))
-    FORCE_BAR.fill((255, 0, 0), (green_length, 0, 20 - green_length, FORCE_BAR.get_height()))
-    return FORCE_BAR
+class SimpleThrowable(AbstractWeapon, abc.ABC):
+    def __init__(self, throwable: type, throw_force_coef):
+        super().__init__()
+
+        self.throwable: type = throwable
+        self.throwForceCoef = throw_force_coef
+
+    def fire(self, world) -> None:
+        bullet = self.throwable(5, *self.data.shooter_position)
+        bullet.vel_x = math.cos(self.data.angle) * self.throwForceCoef * self.data.throwForce
+        bullet.vel_y = math.sin(self.data.angle) * self.throwForceCoef * self.data.throwForce
+        world.physicsObjects.append(bullet)
+
+    def get_valid(self) -> bool:
+        return False
+
+    def update(self, dt) -> None:
+        pass
 
 
+class WGrenade(SimpleThrowable):
+    HoldImage = Loader.get_image("grenade")
+
+    def __init__(self):
+        super().__init__(Grenade, 40)
+
+
+class WClusterBomb(SimpleThrowable):
+    HoldImage = Loader.get_image("cluster_bomb")
+
+    def __init__(self):
+        super().__init__(ClusterBomb, 40)
+
+
+Weapons: List[Type[AbstractWeapon]] = [
+    WGrenade
+]
+
+
+# Элемент интерфейса, предоставляющий выбор оружия
 class SelectWeaponContainer(Container):
     def __init__(self):
         super().__init__(Rect(0, Window.Instance.height * 2 / 3, Window.Instance.width, Window.Instance.height / 3))
@@ -100,7 +159,7 @@ class SelectWeaponContainer(Container):
         self.weaponListContainer.constraints.add_height_constraint(RelativeMultConstraint(0.85))
         self.add_element(self.weaponListContainer)
         for i, weapon in enumerate(Weapons):
-            weapon_img = weapon.holdImage
+            weapon_img = weapon.HoldImage
             weapon_btn = Button(weapon_img)
 
             x = i // 2 * 0.05 + 0.05
@@ -111,14 +170,3 @@ class SelectWeaponContainer(Container):
             weapon_btn.constraints.add_width_constraint(RelativeMultConstraint(0.045))
             weapon_btn.constraints.add_height_constraint(AspectConstraint())
             self.weaponListContainer.add_element(weapon_btn)
-
-
-class WeaponManager:
-    def __init__(self):
-        self.weaponCount = [-1 for _ in Weapons]
-        self.selectedWeapon: int = 0
-
-        self.timeToExplode: int = 3
-
-    def get_weapon(self):
-        return Weapons[self.selectedWeapon]

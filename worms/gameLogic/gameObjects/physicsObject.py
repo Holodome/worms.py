@@ -7,13 +7,29 @@ from engine import Entity, Renderer2D, Vector2, vec_to_itup
 class PhysicsObject(Entity):
     IMAGE = None  # Инициализируется наследниками
 
-    def __init__(self, x: float, y: float):
+    INFINITE_BOUNCE = 1 << 31
+    INFINITE_TIME = 1 << 31
+
+    def __init__(self, x: float, y: float, radius: float,
+                 friction: float,
+                 bounce_times: int = INFINITE_BOUNCE, time_to_death_millis: int = INFINITE_TIME):
         Entity.__init__(self, self.IMAGE, Vector2(x, y))
         self._vel: Vector2 = Vector2(0.0)
         self.stable: bool = False
 
+        self.radius: float = radius
+        # Коофицент сохранения жнергии после сохранения
+        self.friction: float = friction
+        # Сколько раз обьект может сталкиваться и какое ограничение времени по жизни у него есть
+        self.bounceTimes: int = bounce_times
+        self.timeToDeath: int = time_to_death_millis
+
+    def is_valid(self):
+        return (self.bounceTimes == PhysicsObject.INFINITE_BOUNCE or self.bounceTimes > 0) and \
+               (self.timeToDeath == PhysicsObject.INFINITE_TIME or self.timeToDeath > 0)
+
     def draw(self):
-        Renderer2D.submit((self.image, vec_to_itup(self.pos)))
+        Renderer2D.submit((self.image, vec_to_itup(self.get_draw_position())))
 
     @property
     def angle(self):
@@ -48,28 +64,8 @@ class PhysicsObject(Entity):
         else:
             self._vel = Vector2(a, y)
 
-
-class PhysicsCircleObject(PhysicsObject):
-    IMAGE = None
-
-    INFINITE_BOUNCE = 1 << 31
-    INFINITE_TIME = 1 << 31
-
-    def __init__(self, x: float, y: float, radius: float,
-                 friction: float,
-                 bounce_times: int = INFINITE_BOUNCE, time_to_death_millis: int = INFINITE_TIME):
-        PhysicsObject.__init__(self, x, y)
-
-        self.radius: float = radius
-        # Коофицент сохранения жнергии после сохранения
-        self.friction: float = friction
-        # Сколько раз обьект может сталкиваться и какое ограничение времени по жизни у него есть
-        self.bounceTimes: int = bounce_times
-        self.timeToDeath: int = time_to_death_millis
-
-    def is_valid(self):
-        return self.bounceTimes == PhysicsCircleObject.INFINITE_BOUNCE or self.bounceTimes > 0 and \
-               self.timeToDeath == PhysicsCircleObject.INFINITE_TIME or self.timeToDeath > 0
+    def get_draw_position(self) -> Vector2:
+        return self.pos
 
     def death_action(self, world):
         pass

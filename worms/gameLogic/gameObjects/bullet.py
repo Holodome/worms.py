@@ -1,6 +1,6 @@
-from .physicsObject import PhysicsCircleObject
+from .physicsObject import PhysicsObject
 
 
-class Bullet(PhysicsCircleObject):
+class Bullet(PhysicsObject):
     def __init__(self):
         pass

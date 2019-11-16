@@ -4,7 +4,7 @@ from typing import *
 from engine.events import EventDispatcher
 
 
-class Layer:
+class Layer(abc.ABC):
     @abc.abstractmethod
     def on_attach(self):
         raise NotImplementedError

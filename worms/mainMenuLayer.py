@@ -62,7 +62,7 @@ class _StartGameContainer(Container):
         self.title_label.constraints.add_y_constraint(RelativeMultConstraint(0.0))
         self.add_element(self.title_label)
 
-        self.first_level_button = Button(Loader.load_image("bbpreview"))
+        self.first_level_button = Button(Loader.get_image("bbpreview"))
         self.first_level_button.constraints.add_x_constraint(RelativeAddConstraint(0.2))
         self.first_level_button.constraints.add_y_constraint(RelativeAddConstraint(0.4))
         self.first_level_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))

@@ -8,7 +8,7 @@ class Loader:
     loadedImages: Dict[str, pygame.Surface] = {}
 
     @staticmethod
-    def load_font(font_name: str, font_size: int, *args, **kwargs) -> pygame.font.FontType:
+    def __load_font(font_name: str, font_size: int, *args, **kwargs) -> pygame.font.FontType:
         if not pygame.font.get_init():
             pygame.font.init()
 
@@ -20,10 +20,10 @@ class Loader:
     @staticmethod
     def get_font(font_name: str, font_size: int) -> pygame.font.FontType:
         key = font_name.lower() + str(font_size)
-        return Loader.loadedFonts.get(key, Loader.load_font(font_name, font_size))
+        return Loader.loadedFonts.get(key, Loader.__load_font(font_name, font_size))
 
     @staticmethod
-    def load_image(name: str) -> pygame.Surface:
+    def __load_image(name: str) -> pygame.Surface:
         key = name.lower()
         item = pygame.image.load("res/images/" + key + ".png")
         Loader.loadedImages[key] = item
@@ -31,4 +31,4 @@ class Loader:
 
     @staticmethod
     def get_image(key: str) -> pygame.Surface:
-        return Loader.loadedImages.get(key, Loader.load_image(key))
+        return Loader.loadedImages.get(key, Loader.__load_image(key))

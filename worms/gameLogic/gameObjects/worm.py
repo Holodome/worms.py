@@ -3,15 +3,14 @@ from typing import Tuple
 import pygame
 
 from engine.loader import Loader
-from engine.renderer.entity import Entity
 from engine.renderer.renderer2D import Renderer2D
-from .physicsObject import PhysicsCircleObject
+from .physicsObject import PhysicsObject
 
 
-class Worm(PhysicsCircleObject):
+class Worm(PhysicsObject):
     name_font = Loader.get_font("BerlinSans.TTF", 10)
     # Изображение червяка динамическое и завсит от направления последнего движения
-    image = Loader.load_image("worm")
+    image = Loader.get_image("worm")
     image.set_colorkey((255, 0, 255))
     flipped_image = pygame.transform.flip(image, True, False)
 
@@ -20,7 +19,7 @@ class Worm(PhysicsCircleObject):
     IMAGE = image
 
     def __init__(self, name: str, team_color):
-        PhysicsCircleObject.__init__(self, 0, 0, 7, 0.4)
+        super().__init__(0, 0, 7, 0.4)
         self.name: str = name
         self.nameImage: pygame.Surface = Worm.name_font.render(name, False, team_color)
 
@@ -37,16 +36,15 @@ class Worm(PhysicsCircleObject):
         self.healthImage = Worm.name_font.render(str(self.health), False, self.color)
 
     def is_valid(self) -> bool:
-        return PhysicsCircleObject.is_valid(self) and self.health > 0
+        return PhysicsObject.is_valid(self) and self.health > 0
 
-    @Entity.pos.getter
-    def pos(self):
+    def get_draw_position(self):
         return self._pos - Worm.IMAGE_OFFSET
 
     def draw(self):
         if self.headedRight:
-            Renderer2D.submit((self.image, self.pos))
+            Renderer2D.submit((Worm.image, self.get_draw_position()))
         else:
-            Renderer2D.submit((self.flipped_image, self.pos))
-        Renderer2D.submit((self.nameImage, self.pos + self.nameImageOffset))
-        Renderer2D.submit((self.healthImage, self.pos + (0, -10)))
+            Renderer2D.submit((Worm.flipped_image, self.get_draw_position()))
+        Renderer2D.submit((self.nameImage, self.get_draw_position() + self.nameImageOffset))
+        Renderer2D.submit((self.healthImage, self.get_draw_position() + (0, -10)))

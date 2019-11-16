@@ -3,25 +3,24 @@ import random
 from typing import *
 
 from .gameObjects.worm import Worm
-from .weapons import WeaponManager
+from .weapons import Weapons
 
 
 class Team:
     with open("data/wormNames.txt") as f:
         Names: List[str] = f.read().split("\n")
 
-    del f
-
     def __init__(self, color: Tuple[int, int, int], worms_number: int):
         self.color: Tuple[int, int, int] = color
 
         self.wormList: List[Worm] = []
         for _ in range(worms_number):
-            self.wormList.append(Worm(self.get_name(), self.color))
+            self.wormList.append(Worm(self._get_name(), self.color))
 
         self.selectedWormIndex: int = 0
 
-        self.weaponManager = WeaponManager()
+        self.selectedWeaponId: int = 0
+        self.weaponTimeToExplode: int = 3
 
     def set_worm_random_positions(self, world_width: int) -> None:
         for worm in self.wormList:
@@ -45,7 +44,7 @@ class Team:
             self.selectedWormIndex -= 1
         return self.wormList[self.selectedWormIndex]
 
-    def get_name(self) -> str:
+    def _get_name(self) -> str:
         return random.choice(Team.Names)
 
     def get_worms_alive_count(self) -> int:
@@ -54,6 +53,9 @@ class Team:
     @property
     def sel_worm(self):
         return self.wormList[self.selectedWormIndex]
+
+    def get_weapon(self):
+        return Weapons[self.selectedWeaponId]
 
 
 class TeamManager:
