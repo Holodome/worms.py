@@ -51,20 +51,22 @@ class GameLayer(Layer):
     def on_update(self, timestep):
         if self.state != GameState.Shooting:
             self.jumpingArrow.update(float(timestep))
-        else:
-            if not any(map(lambda e: not isinstance(e, Worm), self.world.physicsObjects)):
+        elif self.state == GameState.Shooting:
+            if self.activeWeapon is None and \
+                    not any(map(lambda e: not isinstance(e, Worm), self.world.physicsObjects)):
                 self.state = GameState.Aiming
                 self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
 
         if self.state != GameState.Paused:
             self.world.on_update(timestep)
+            self.fireData.shooterPosition = self.cameraFollowedEntity.pos
 
             self._update_fire(float(timestep))
             self.forceBar.update_force_image(self.fireData.throwForce)
             if self.fireData.is_fire():
                 self._start_weapon()
                 self.fireData.fireWeapon = False
-
+            # Обновление текущего оружия и стрельбы
             if self.activeWeapon is not None:
                 if self.activeWeapon.get_valid():
                     self.activeWeapon.update(float(timestep))
@@ -72,7 +74,7 @@ class GameLayer(Layer):
                 else:
                     self.activeWeapon = None
                     self.fireData.reset()
-
+            # Обновление камеры
             if self.cameraController.move(timestep):
                 self.cameraStickToEntity = False
             if self.cameraStickToEntity:
@@ -93,7 +95,9 @@ class GameLayer(Layer):
             # Показатель силы при стрельбе
             if self.fireData.is_active():
                 self.forceBar.draw(self.cameraFollowedEntity.pos)
-            # Выбранное оружие
+
+        # Выбранное оружие
+        if self.state != GameState.Shooting or (self.activeWeapon is not None and self.activeWeapon.IsShooting):
             img = self.world.teamManager.sel_team.get_weapon().HoldImage
             Renderer2D.submit((pygame.transform.rotate(img, math.degrees(-self.fireData.angle) - 90),
                                self.cameraFollowedEntity.pos - (3, 3)))
@@ -137,7 +141,10 @@ class GameLayer(Layer):
         if self.state != GameState.Paused:
             if self.state != GameState.Shooting:
                 if event.key == plocals.K_SPACE:
-                    self.fireData.throwForce = 0
+                    if self.world.teamManager.sel_team.get_weapon().IsThrowable:
+                        self.fireData.throwForce = 0
+                    else:
+                        self.fireData.fireWeapon = True
 
     def _update_fire(self, dt):
         if Input.is_key_held(plocals.K_UP):
@@ -157,8 +164,6 @@ class GameLayer(Layer):
         self.cameraStickToEntity = True
 
     def _start_weapon(self):
-        self.fireData.shooterPosition = self.cameraFollowedEntity.pos
-
         weapon_class = self.world.teamManager.sel_team.get_weapon()
         self.activeWeapon = weapon_class()
         self.activeWeapon.set_data(self.fireData)

@@ -12,8 +12,9 @@ class PhysicsObject(Entity):
 
     def __init__(self, x: float, y: float, radius: float,
                  friction: float,
-                 bounce_times: int = INFINITE_BOUNCE, time_to_death_millis: int = INFINITE_TIME):
-        Entity.__init__(self, self.IMAGE, Vector2(x, y))
+                 bounce_times: int = INFINITE_BOUNCE, time_to_death_millis: int = INFINITE_TIME,
+                 affected_by_gravity: float = 1.0, collide_with_entities: bool = False):
+        super().__init__(self.IMAGE, Vector2(x, y))
         self._vel: Vector2 = Vector2(0.0)
         self.stable: bool = False
 
@@ -23,6 +24,9 @@ class PhysicsObject(Entity):
         # Сколько раз обьект может сталкиваться и какое ограничение времени по жизни у него есть
         self.bounceTimes: int = bounce_times
         self.timeToDeath: int = time_to_death_millis
+
+        self.affectedByGravity: float = affected_by_gravity
+        self.collideWithWorms: bool = collide_with_entities
 
     def is_valid(self):
         return (self.bounceTimes == PhysicsObject.INFINITE_BOUNCE or self.bounceTimes > 0) and \

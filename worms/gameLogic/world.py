@@ -36,73 +36,85 @@ class World:
 
     def on_update(self, timestep):
         for _ in range(6):
-            for pho in self.physicsObjects:
+            for ent in self.physicsObjects:
                 # Обновление времени жизни объекта
-                pho.timeToDeath -= int(timestep) / 6
+                ent.timeToDeath -= int(timestep) / 6
                 # Гравитация
-                acc = GRAVITY_ACC * float(timestep)
-                pho.vel_y += acc * float(timestep)
+                acc = GRAVITY_ACC * float(timestep) * ent.affectedByGravity
+                ent.vel_y += acc * float(timestep)
                 # Позиция после гравитации
-                potential_pos = pho.pos + pho.vel * float(timestep)
-                pho.stable = False
+                potential_pos = ent.pos + ent.vel * float(timestep)
+                ent.stable = False
                 # Высчитывание вектора отражения
                 response = Vector2(0)
                 collided = False
 
                 times = 8
-                for r in map(lambda n: (n / times) * math.pi + (pho.angle - math.pi / 2.0), range(times)):
-                    test_pos = Vector2(pho.radius * math.cos(r), pho.radius * math.sin(r)) + potential_pos
+                for r in map(lambda n: (n / times) * math.pi + (ent.angle - math.pi / 2.0), range(times)):
+                    test_pos = Vector2(ent.radius * math.cos(r), ent.radius * math.sin(r)) + potential_pos
                     if self.terrain.valid_position(int(test_pos.x), int(test_pos.y)) \
                             and self.terrain.get_block_data(int(test_pos.x), int(test_pos.y)):
                         response += potential_pos - test_pos
                         collided = True
+
+                if not collided and ent.collideWithWorms:
+                    for worm in filter(lambda p: isinstance(p, Worm), self.physicsObjects):
+                        if worm is not ent:
+                            if worm.pos.distance_to(ent.pos) < worm.radius:
+                                collided = True
+                                worm.health -= ent.damage
+                                worm.draw_health()
+                                response = potential_pos - test_pos
+                                break
+
                 # Если объект столкунлся с землей - направить скорость в обратную сторону
                 if collided:
                     resp_mag = response.magnitude()
-                    pho.stable = True
-                    reflect = pho.vel_x * (response.x / resp_mag) + pho.vel_y * (response.y / resp_mag)
-                    pho.vel = (pho.vel + (response / resp_mag * -2.0 * reflect)) * pho.friction
+                    ent.stable = True
+                    reflect = ent.vel_x * (response.x / resp_mag) + ent.vel_y * (response.y / resp_mag)
+                    ent.vel = (ent.vel + (response / resp_mag * -2.0 * reflect)) * ent.friction
                     # Уменьшение числа оставшихся столкновений
-                    if pho.bounceTimes != pho.INFINITE_BOUNCE:
-                        pho.bounceTimes -= 1
+                    if ent.bounceTimes != ent.INFINITE_BOUNCE:
+                        ent.bounceTimes -= 1
                 else:
                     # Если столкновения не произошло - продолжить движение
-                    pho.pos = potential_pos
+                    ent.pos = potential_pos
 
-                if not pho.is_valid():
+                if not ent.is_valid():
                     # remove entity
-                    pho.Alive = False
+                    ent.Alive = False
 
                     # if isinstance(pho, Debris):
                     #     self.debrisCount -= 1
                 else:
-                    if abs(pho.vel.magnitude()) < 0.001:
-                        pho.stable = True
-                        pho.vel -= pho.vel
+                    if abs(ent.vel.magnitude()) < 0.001:
+                        ent.stable = True
+                        ent.vel -= ent.vel
 
-                    if isinstance(pho, Worm):
-                        pho.headedRight = pho.vel_x > 0
+                    if isinstance(ent, Worm):
+                        ent.headedRight = ent.vel_x > 0
 
             old = self.physicsObjects.copy()
             self.physicsObjects.clear()
             for p in old:
-                if not p.Alive and 0 <= p.x < self.terrain.width and 0 <= p.y < self.terrain.height:
+                if not (p.Alive and 0 <= p.x < self.terrain.width and 0 <= p.y < self.terrain.height):
                     p.death_action(self)
                 else:
                     self.physicsObjects.add(p)
 
     def explosion(self, x: int, y: int, radius: int, damage: int, force_coef: float):
         self.terrain.explode_circle(x, y, radius)
-        for pho in self.physicsObjects:
-            distance = pho.pos.distance_to((x, y))
+        for ent in self.physicsObjects:
+            distance = ent.pos.distance_to((x, y)) - math.hypot(ent.radius, ent.radius)
             if distance < radius:
-                pho.stable = False
-                angle = math.atan2(pho.y - y, pho.x - x)
-                pho.vel += Vector2(math.cos(angle), math.sin(angle)) \
+                ent.stable = False
+                angle = math.atan2(ent.y - y, ent.x - x)
+                ent.vel += Vector2(math.cos(angle), math.sin(angle)) \
                            * force_coef * radius * ((radius - distance) / radius)
 
-                if isinstance(pho, Worm):
-                    pho.health -= int(damage * ((radius - distance) / radius))
+                if isinstance(ent, Worm):
+                    ent.health -= damage
+                    ent.draw_health()
 
         for _ in range(radius // 2):
             if self.debrisCount == MAX_DEBRIS_COUNT:

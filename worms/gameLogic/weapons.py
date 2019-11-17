@@ -7,6 +7,7 @@ import pygame
 from engine import Color, Loader, Rect, Vector2, Window
 from interface import *
 from worms.gameLogic.gameObjects.physicsObject import PhysicsObject
+from .gameObjects.bullets import UziBullet
 from .gameObjects.grenades import ClusterBomb, Grenade
 
 
@@ -64,6 +65,9 @@ class FireData:
 class AbstractWeapon(abc.ABC):
     HoldImage: pygame.Surface = None
 
+    IsThrowable = False
+    IsShooting = False
+
     def __init__(self):
         self.data: FireData = None
 
@@ -92,7 +96,7 @@ class AbstractWeapon(abc.ABC):
         return False
 
     @abc.abstractmethod
-    def update(self, dt) -> None:
+    def update(self, dt: float) -> None:
         """
         Обновлние оружия
         В простом случае просто уменьшает время оставшейся стрельбы
@@ -101,6 +105,8 @@ class AbstractWeapon(abc.ABC):
 
 
 class SimpleThrowable(AbstractWeapon, abc.ABC):
+    IsThrowable = True
+
     def __init__(self, throwable: Type[PhysicsObject], throw_force_coef: float):
         super().__init__()
 
@@ -120,8 +126,43 @@ class SimpleThrowable(AbstractWeapon, abc.ABC):
     def get_valid(self) -> bool:
         return not self._fired
 
-    def update(self, dt) -> None:
+    def update(self, dt: float) -> None:
         pass
+
+
+class SimpleShooting(AbstractWeapon, abc.ABC):
+    IsShooting = True
+
+    def __init__(self, bullet: Type[PhysicsObject], fire_times: int, time_between_fire_s: float, bullet_speed: float):
+        super().__init__()
+
+        self.bullet = bullet
+        self.fireTimes = fire_times
+        self.timeBetweenFires: float = time_between_fire_s
+
+        self.bulletSpeed: float = bullet_speed
+
+        self.currentTimeLive = 0
+        self.firedTimes = 0
+
+    def fire(self, world) -> None:
+        if not self.get_valid():
+            return
+
+        if self.currentTimeLive >= self.timeBetweenFires:
+            self.currentTimeLive -= self.timeBetweenFires
+            self.firedTimes += 1
+
+            bullet = self.bullet(*self.data.shooterPosition)
+            bullet.vel_x = math.cos(self.data.angle) * self.bulletSpeed
+            bullet.vel_y = math.sin(self.data.angle) * self.bulletSpeed
+            world.physicsObjects.add(bullet)
+
+    def update(self, dt: float) -> None:
+        self.currentTimeLive += dt
+
+    def get_valid(self) -> bool:
+        return self.firedTimes < self.fireTimes
 
 
 class WGrenade(SimpleThrowable):
@@ -138,10 +179,18 @@ class WClusterBomb(SimpleThrowable):
         super().__init__(ClusterBomb, 40)
 
 
+class WUzi(SimpleShooting):
+    HoldImage = Loader.get_image("uzi")
+
+    def __init__(self):
+        super().__init__(UziBullet, 30, 0.1, 40)
+
+
 # Weapon List - all weapon types have constructors with zero elements
 Weapons: List[Type[AbstractWeapon]] = [
     WGrenade,
-    WClusterBomb
+    WClusterBomb,
+    WUzi
 ]
 
 
