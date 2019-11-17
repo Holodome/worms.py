@@ -6,7 +6,7 @@ from interface import *
 CROSSHAIR_IMAGE = Loader.get_image("crosshair")
 
 FORCE_BAR_OFFSET = (-9, 20)
-JUMPING_ARROW_OFFSET = (0, 40)
+JUMPING_ARROW_OFFSET = (5, 40)
 
 WEAPON_FIRE_COEF = 50
 

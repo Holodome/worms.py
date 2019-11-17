@@ -6,6 +6,7 @@ import pygame
 
 from engine import Color, Loader, Rect, Vector2, Window
 from interface import *
+from worms.gameLogic.gameObjects.physicsObject import PhysicsObject
 from .gameObjects.grenades import ClusterBomb, Grenade
 
 
@@ -25,13 +26,13 @@ class FireData:
         self.throwForce: float = FireData.NO_FIRE
         self.angle: float = 0
 
-        self.shooter_position: Vector2 = Vector2(0)
+        self.shooterPosition: Vector2 = Vector2(0)
+        self.timeToExplode: int = 3
 
         self.fireWeapon: bool = False
 
     def reset(self):
         self.throwForce = FireData.NO_FIRE
-        # self.angle = 0
 
         self.fireWeapon = False
 
@@ -41,7 +42,8 @@ class FireData:
 
     def update_throw_force(self, delta):
         self.throwForce += delta
-        self.throwForce = min(self.throwForce, FireData.FIRE)
+        if self.throwForce >= FireData.FIRE:
+            self.fireWeapon = True
 
     def update_angle(self, clockwise: bool):
         if clockwise:
@@ -53,7 +55,7 @@ class FireData:
         self.angle = 0
 
     def is_fire(self):
-        return self.throwForce >= FireData.FIRE or self.fireWeapon
+        return self.fireWeapon
 
     def is_active(self):
         return self.throwForce != FireData.NO_FIRE
@@ -99,20 +101,24 @@ class AbstractWeapon(abc.ABC):
 
 
 class SimpleThrowable(AbstractWeapon, abc.ABC):
-    def __init__(self, throwable: type, throw_force_coef):
+    def __init__(self, throwable: Type[PhysicsObject], throw_force_coef: float):
         super().__init__()
 
-        self.throwable: type = throwable
-        self.throwForceCoef = throw_force_coef
+        self.throwable: Type[PhysicsObject] = throwable
+        self.throwForceCoef: float = throw_force_coef
+
+        self._fired: bool = False
 
     def fire(self, world) -> None:
-        bullet = self.throwable(5, *self.data.shooter_position)
+        bullet = self.throwable(self.data.timeToExplode, *self.data.shooterPosition)
         bullet.vel_x = math.cos(self.data.angle) * self.throwForceCoef * self.data.throwForce
         bullet.vel_y = math.sin(self.data.angle) * self.throwForceCoef * self.data.throwForce
-        world.physicsObjects.append(bullet)
+        world.physicsObjects.add(bullet)
+
+        self._fired = True
 
     def get_valid(self) -> bool:
-        return False
+        return not self._fired
 
     def update(self, dt) -> None:
         pass
@@ -132,8 +138,10 @@ class WClusterBomb(SimpleThrowable):
         super().__init__(ClusterBomb, 40)
 
 
+# Weapon List - all weapon types have constructors with zero elements
 Weapons: List[Type[AbstractWeapon]] = [
-    WGrenade
+    WGrenade,
+    WClusterBomb
 ]
 
 

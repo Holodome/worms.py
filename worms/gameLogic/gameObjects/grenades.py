@@ -38,7 +38,7 @@ class ClusterBomb(PhysicsObject):
             cluster = Cluster(*self._pos)
             cluster.vel_x = math.cos(angle) * ClusterBomb.EXPLOSION_RADIUS
             cluster.vel_y = math.sin(angle) * ClusterBomb.EXPLOSION_RADIUS
-            world.physicsObjects.append(cluster)
+            world.physicsObjects.add(cluster)
 
 
 class Cluster(PhysicsObject):
