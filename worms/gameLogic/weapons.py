@@ -1,5 +1,6 @@
 import abc
 import math
+import random
 from typing import (List, Type)
 
 import pygame
@@ -7,7 +8,7 @@ import pygame
 from engine import Color, Loader, Rect, Vector2, Window
 from interface import *
 from worms.gameLogic.gameObjects.physicsObject import PhysicsObject
-from .gameObjects.bullets import UziBullet
+from .gameObjects.bullets import Bullet
 from .gameObjects.grenades import ClusterBomb, Grenade
 
 
@@ -107,7 +108,8 @@ class AbstractWeapon(abc.ABC):
 class SimpleThrowable(AbstractWeapon, abc.ABC):
     IsThrowable = True
 
-    def __init__(self, throwable: Type[PhysicsObject], throw_force_coef: float):
+    def __init__(self, throwable: Type[PhysicsObject],
+                 throw_force_coef: float):
         super().__init__()
 
         self.throwable: Type[PhysicsObject] = throwable
@@ -133,7 +135,8 @@ class SimpleThrowable(AbstractWeapon, abc.ABC):
 class SimpleShooting(AbstractWeapon, abc.ABC):
     IsShooting = True
 
-    def __init__(self, bullet: Type[PhysicsObject], fire_times: int, time_between_fire_s: float, bullet_speed: float):
+    def __init__(self, bullet: Type[PhysicsObject],
+                 fire_times: int, time_between_fire_s: float, bullet_speed: float, max_angle_var: float):
         super().__init__()
 
         self.bullet = bullet
@@ -141,6 +144,8 @@ class SimpleShooting(AbstractWeapon, abc.ABC):
         self.timeBetweenFires: float = time_between_fire_s
 
         self.bulletSpeed: float = bullet_speed
+
+        self.maxAngleVar: float = max_angle_var
 
         self.currentTimeLive = 0
         self.firedTimes = 0
@@ -154,8 +159,9 @@ class SimpleShooting(AbstractWeapon, abc.ABC):
             self.firedTimes += 1
 
             bullet = self.bullet(*self.data.shooterPosition)
-            bullet.vel_x = math.cos(self.data.angle) * self.bulletSpeed
-            bullet.vel_y = math.sin(self.data.angle) * self.bulletSpeed
+            new_angle = self.data.angle + self.maxAngleVar * (random.random() * 2 - 1)
+            bullet.vel_x = math.cos(new_angle) * self.bulletSpeed
+            bullet.vel_y = math.sin(new_angle) * self.bulletSpeed
             world.physicsObjects.add(bullet)
 
     def update(self, dt: float) -> None:
@@ -183,7 +189,7 @@ class WUzi(SimpleShooting):
     HoldImage = Loader.get_image("uzi")
 
     def __init__(self):
-        super().__init__(UziBullet, 30, 0.1, 40)
+        super().__init__(Bullet, 30, 0.1, 40, math.pi / 6)
 
 
 # Weapon List - all weapon types have constructors with zero elements

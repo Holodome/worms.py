@@ -12,10 +12,10 @@ from .game_layer_misc import Crosshair, ForceBar, JumpingArrow, PauseContainer
 
 
 class GameState(enum.Enum):
-    Paused = 1
-    Aiming = 2
-    Shooting = 3
-    InWeaponMenu = 4
+    Paused = 1  # Игра остановлена - показывать меню паузы и не обновлять логику
+    Aiming = 2  # Показывать элементы интерфейса стрельбы (прицел)
+    InWeaponMenu = 3  # Показывать элементы интерфейса стрельбы а такаже меню выбора оружия
+    Shooting = 4  # Убрать элементы интерфейса и ждать конца стрельбы
 
 
 class GameLayer(Layer):
