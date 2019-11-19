@@ -1,7 +1,16 @@
+import enum
 import math
 from typing import Tuple, Union
 
-from engine import Entity, Renderer2D, Vector2, vec_to_itup
+from engine import Entity, Renderer, Vector2, vec_to_itup
+
+
+class PhysicsObjectType(enum.Enum):
+    Null = 0
+
+    Normal = 1  # Обьект без особого поведения
+    Worm = 2
+    Bullet = 3  # Обьект, сталкивающийся с другими существами
 
 
 class PhysicsObject(Entity):
@@ -10,10 +19,20 @@ class PhysicsObject(Entity):
     INFINITE_BOUNCE = 1 << 31
     INFINITE_TIME = 1 << 31
 
+    Type: PhysicsObjectType = PhysicsObjectType.Null  # Инициализируется наследниками
+
+    @classmethod
+    def is_worm(cls):
+        return cls.Type == PhysicsObjectType.Worm
+
+    @classmethod
+    def is_bullet(cls):
+        return cls.Type == PhysicsObjectType.Bullet
+
     def __init__(self, x: float, y: float, radius: float,
                  friction: float,
                  bounce_times: int = INFINITE_BOUNCE, time_to_death_millis: int = INFINITE_TIME,
-                 affected_by_gravity: float = 1.0, collide_with_entities: bool = False):
+                 affected_by_gravity: float = 1.0):
         super().__init__(self.IMAGE, Vector2(x, y))
         self._vel: Vector2 = Vector2(0.0)
         self.stable: bool = False
@@ -26,14 +45,13 @@ class PhysicsObject(Entity):
         self.timeToDeath: int = time_to_death_millis
 
         self.affectedByGravity: float = affected_by_gravity
-        self.collideWithWorms: bool = collide_with_entities
 
     def is_valid(self):
         return (self.bounceTimes == PhysicsObject.INFINITE_BOUNCE or self.bounceTimes > 0) and \
                (self.timeToDeath == PhysicsObject.INFINITE_TIME or self.timeToDeath > 0)
 
     def draw(self):
-        Renderer2D.submit((self.image, vec_to_itup(self.get_draw_position())))
+        Renderer.submit((self.image, vec_to_itup(self.get_draw_position())))
 
     @property
     def angle(self):

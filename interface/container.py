@@ -2,7 +2,7 @@ from typing import List
 
 import pygame
 
-from engine import Color, Entity, Rect, Renderer2D
+from engine import Color, Entity, Rect, Renderer
 from .element import Element
 
 
@@ -27,7 +27,7 @@ class Container(Element):
         if not self._visible:
             return
 
-        Renderer2D.submit((self._image, self._rect.topleft), False)
+        Renderer.submit((self._image, self._rect.topleft), False)
         for element in self._elements:
             element.on_render()
 

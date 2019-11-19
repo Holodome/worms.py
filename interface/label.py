@@ -1,6 +1,6 @@
 import pygame
 
-from engine import Renderer2D
+from engine import Renderer
 from .element import Element
 
 
@@ -15,7 +15,7 @@ class Label(Element):
         pass
 
     def on_render(self):
-        Renderer2D.submit((self._image, self._rect.topleft), False)
+        Renderer.submit((self._image, self._rect.topleft), False)
 
     def on_event(self, event):
         pass

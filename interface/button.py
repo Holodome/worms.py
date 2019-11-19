@@ -2,7 +2,7 @@ from typing import Callable
 
 import pygame
 
-from engine import Input, Renderer2D
+from engine import Input, Renderer
 from .element import Element
 
 
@@ -27,9 +27,9 @@ class Button(Element):
 
     def on_render(self):
         if self._hovered:
-            Renderer2D.submit((self._hoveredImage, self._rect.topleft), False)
+            Renderer.submit((self._hoveredImage, self._rect.topleft), False)
         else:
-            Renderer2D.submit((self._staticImage, self._rect.topleft), False)
+            Renderer.submit((self._staticImage, self._rect.topleft), False)
 
     def on_event(self, dispatcher):
         if self._hovered:

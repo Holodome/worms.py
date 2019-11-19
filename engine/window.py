@@ -5,7 +5,7 @@ import pygame
 
 from engine.events import EventDispatcher
 
-_MODE = pygame.HWSURFACE | pygame.DOUBLEBUF  # | pygame.RESIZABLE  # !!! Not Working Properly
+_MODE = pygame.HWSURFACE | pygame.DOUBLEBUF # | pygame.RESIZABLE  # !!! Not Working Properly
 # if pygame.vernum[0] >= 2:
 #     _MODE |= pygame.SCALED
 

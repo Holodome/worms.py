@@ -4,7 +4,7 @@ from typing import *
 
 import pygame
 
-from engine import Renderer2D, Vector2
+from engine import Renderer, Vector2
 from .gameObjects.debris import Debris
 from .gameObjects.physicsObject import PhysicsObject
 from .gameObjects.worm import Worm
@@ -12,8 +12,6 @@ from .terrain import Terrain
 from .wormsTeam import TeamManager
 
 GRAVITY_ACC = 1000
-MAX_DEBRIS_COUNT = 100
-
 
 class World:
 
@@ -31,8 +29,6 @@ class World:
         for team in self.teamManager.teams:
             for worm in team.wormList:
                 self.physicsObjects.add(worm)
-
-        self.debrisCount: int = 0
 
     def on_update(self, timestep):
         for _ in range(6):
@@ -57,9 +53,9 @@ class World:
                         response += potential_pos - test_pos
                         collided = True
 
-                if not collided and ent.collideWithWorms:
-                    for worm in filter(lambda p: isinstance(p, Worm), self.physicsObjects):
-                        if worm is not ent:
+                if not collided and ent.is_bullet():
+                    for worm in filter(lambda p: p.is_worm(), self.physicsObjects):
+                        if worm not in ent.excludedEntities:
                             if worm.pos.distance_to(ent.pos) < worm.radius:
                                 collided = True
                                 worm.health -= ent.damage
@@ -83,15 +79,12 @@ class World:
                 if not ent.is_valid():
                     # remove entity
                     ent.Alive = False
-
-                    # if isinstance(pho, Debris):
-                    #     self.debrisCount -= 1
                 else:
                     if abs(ent.vel.magnitude()) < 0.001:
                         ent.stable = True
                         ent.vel -= ent.vel
 
-                    if isinstance(ent, Worm):
+                    if ent.is_worm():
                         ent.headedRight = ent.vel_x > 0
 
             old = self.physicsObjects.copy()
@@ -112,23 +105,20 @@ class World:
                 ent.vel += Vector2(math.cos(angle), math.sin(angle)) \
                            * force_coef * radius * ((radius - distance) / radius)
 
-                if isinstance(ent, Worm):
+                if ent.is_worm():
                     ent.health -= damage
                     ent.draw_health()
 
         for _ in range(radius // 2):
-            if self.debrisCount == MAX_DEBRIS_COUNT:
-                break
             angle = random.random() * math.pi * 2
             debris = Debris(x, y)
             debris.vel_x = math.cos(angle) * radius * 1.5
             debris.vel_y = math.sin(angle) * radius * 1.5
             self.physicsObjects.add(debris)
-            self.debrisCount += 1
 
     def draw(self):
-        Renderer2D.submit((self.backgroundImage, (0, 0)))
-        Renderer2D.submit((self.terrain.terrainImage, (0, 0)))
+        Renderer.submit((self.backgroundImage, (0, 0)))
+        Renderer.submit((self.terrain.terrainImage, (0, 0)))
         for obj in self.physicsObjects:
             obj.draw()
 

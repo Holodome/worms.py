@@ -3,8 +3,8 @@ from typing import Tuple
 import pygame
 
 from engine.loader import Loader
-from engine.renderer.renderer2D import Renderer2D
-from .physicsObject import PhysicsObject
+from engine.renderer.renderer import Renderer
+from .physicsObject import PhysicsObject, PhysicsObjectType
 
 
 class Worm(PhysicsObject):
@@ -17,6 +17,8 @@ class Worm(PhysicsObject):
     IMAGE_OFFSET = image.get_width() / 2, image.get_height() / 2
 
     IMAGE = image
+
+    Type = PhysicsObjectType.Worm
 
     def __init__(self, name: str, team_color):
         super().__init__(0, 0, 7, 0.4)
@@ -43,8 +45,8 @@ class Worm(PhysicsObject):
 
     def draw(self):
         if self.headedRight:
-            Renderer2D.submit((Worm.image, self.get_draw_position()))
+            Renderer.submit((Worm.image, self.get_draw_position()))
         else:
-            Renderer2D.submit((Worm.flipped_image, self.get_draw_position()))
-        Renderer2D.submit((self.nameImage, self.get_draw_position() + self.nameImageOffset))
-        Renderer2D.submit((self.healthImage, self.get_draw_position() + (0, -10)))
+            Renderer.submit((Worm.flipped_image, self.get_draw_position()))
+        Renderer.submit((self.nameImage, self.get_draw_position() + self.nameImageOffset))
+        Renderer.submit((self.healthImage, self.get_draw_position() + (0, -10)))

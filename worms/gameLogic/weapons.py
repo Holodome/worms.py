@@ -32,6 +32,7 @@ class FireData:
         self.timeToExplode: int = 3
 
         self.fireWeapon: bool = False
+        self.excludedEntities = []
 
     def reset(self):
         self.throwForce = FireData.NO_FIRE
@@ -135,7 +136,7 @@ class SimpleThrowable(AbstractWeapon, abc.ABC):
 class SimpleShooting(AbstractWeapon, abc.ABC):
     IsShooting = True
 
-    def __init__(self, bullet: Type[PhysicsObject],
+    def __init__(self, bullet: Type[Bullet],
                  fire_times: int, time_between_fire_s: float, bullet_speed: float, max_angle_var: float):
         super().__init__()
 
@@ -159,6 +160,7 @@ class SimpleShooting(AbstractWeapon, abc.ABC):
             self.firedTimes += 1
 
             bullet = self.bullet(*self.data.shooterPosition)
+            bullet.set_excluded_entities(self.data.excludedEntities)
             new_angle = self.data.angle + self.maxAngleVar * (random.random() * 2 - 1)
             bullet.vel_x = math.cos(new_angle) * self.bulletSpeed
             bullet.vel_y = math.sin(new_angle) * self.bulletSpeed

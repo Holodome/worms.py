@@ -5,10 +5,9 @@ import pygame
 
 from engine import *
 from engine.application import Timestep
-from worms.gameLogic.gameObjects.worm import Worm
+from .gameLayerMisc import Crosshair, ForceBar, JumpingArrow, PauseContainer
 from .gameLogic.weapons import AbstractWeapon, FireData, SelectWeaponContainer
 from .gameLogic.world import World
-from .game_layer_misc import Crosshair, ForceBar, JumpingArrow, PauseContainer
 
 
 class GameState(enum.Enum):
@@ -53,9 +52,9 @@ class GameLayer(Layer):
             self.jumpingArrow.update(float(timestep))
         elif self.state == GameState.Shooting:
             if self.activeWeapon is None and \
-                    not any(map(lambda e: not isinstance(e, Worm), self.world.physicsObjects)):
+                    not any(map(lambda e: not e.is_worm(), self.world.physicsObjects)):
                 self.state = GameState.Aiming
-                self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
+                self.cameraFollowedEntity = self.world.sel_worm
 
         if self.state != GameState.Paused:
             self.world.on_update(timestep)
@@ -84,7 +83,7 @@ class GameLayer(Layer):
                                                  self.world.terrain.height - Window.Instance.height)
 
     def on_render(self):
-        Renderer2D.begin_scene(self.cameraController.camera.negative_translation)
+        Renderer.begin_scene(self.cameraController.camera.negative_translation)
 
         self.world.draw()
         if self.state != GameState.Shooting:  # Если сейчас игра находится в состоянии хода одной из комманд
@@ -99,8 +98,8 @@ class GameLayer(Layer):
         # Выбранное оружие
         if self.state != GameState.Shooting or (self.activeWeapon is not None and self.activeWeapon.IsShooting):
             img = self.world.teamManager.sel_team.get_weapon().HoldImage
-            Renderer2D.submit((pygame.transform.rotate(img, math.degrees(-self.fireData.angle) - 90),
-                               self.cameraFollowedEntity.pos - (3, 3)))
+            Renderer.submit((pygame.transform.rotate(img, math.degrees(-self.fireData.angle) - 90),
+                             self.cameraFollowedEntity.pos - (3, 3)))
 
         if self.state == GameState.InWeaponMenu:
             self.weaponMenuContainer.on_render()
@@ -160,10 +159,11 @@ class GameLayer(Layer):
             self.world.teamManager.sel_team.select_previous()
         else:
             self.world.teamManager.sel_team.select_next()
-        self.cameraFollowedEntity = self.world.teamManager.sel_team.sel_worm
+        self.cameraFollowedEntity = self.world.sel_worm
         self.cameraStickToEntity = True
 
     def _start_weapon(self):
+        self.fireData.excludedEntities = [self.world.sel_worm]
         weapon_class = self.world.teamManager.sel_team.get_weapon()
         self.activeWeapon = weapon_class()
         self.activeWeapon.set_data(self.fireData)

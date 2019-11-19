@@ -21,6 +21,7 @@ class _MainInterfaceContainer(Container):
         self.title_label.constraints.add_height_constraint(AspectConstraint())
         self.title_label.constraints.add_x_constraint(CenterConstraint())
         self.title_label.constraints.add_y_constraint(RelativeMultConstraint(0.0))
+        
         self.add_element(self.title_label)
 
         self.start_game_button = Button(font.render("Start Game", True, (255, 0, 0)),
@@ -104,9 +105,10 @@ class MainMenuLayer(Layer):
         self._get_selected_container().on_update()
 
     def on_render(self):
-        Renderer2D.begin_scene()
-        Renderer2D.RendererCommand.clear_screen(255, 255, 255)
+        Renderer.begin_scene()
+        Renderer.Command.clear_screen(255, 255, 255)
         self._get_selected_container().on_render()
+        Renderer.present()
 
     def on_event(self, dispatcher):
         self._get_selected_container().on_event(dispatcher)

@@ -1,7 +1,7 @@
 import pygame
 
 from engine.events import EventDispatcher
-from engine.renderer.renderer2D import Renderer2D
+from engine.renderer.renderer import Renderer
 from .input import Input
 from .layers import Layer, LayerStack
 from .window import Window
@@ -9,13 +9,14 @@ from .window import Window
 
 class Timestep:
     def __init__(self, time: int = 0):
-        self.time: int = time
+        self.millis: int = time
+        self.secs: float = time / 1000
 
     def get_seconds(self) -> float:
-        return self.time / 1000
+        return self.secs
 
     def get_milliseconds(self) -> int:
-        return self.time
+        return self.millis
 
     __float__ = get_seconds
     __int__ = get_milliseconds
@@ -83,8 +84,8 @@ class Application:
         while self.running:
             self._update()
 
-            Renderer2D.start_frame()
+            Renderer.start_frame()
             self._render()
 
-            Renderer2D.present()
+            Renderer.present()
             self.window.on_update()

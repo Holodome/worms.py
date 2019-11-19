@@ -2,10 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/scripts/profile.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/application.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/application.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/renderer/renderer2D.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/renderer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/window.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/container.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/container.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/label.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/label.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/bullets.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/bullets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/weapons.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/weapons.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLogic/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/game_layer_misc.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayerMisc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/mainMenuLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/worms.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -236,8 +250,18 @@
       <option name="project" value="LOCAL" />
       <updated>1573991754830</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Add shooting angle variance">
+      <created>1574090678552</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1574090678552</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -273,6 +297,7 @@
     <MESSAGE value="Start reworking weapon fire" />
     <MESSAGE value="Fix weapon fire" />
     <MESSAGE value="Add continuous fire (needs fixing)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add continuous fire (needs fixing)" />
+    <MESSAGE value="Add shooting angle variance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add shooting angle variance" />
   </component>
 </project>

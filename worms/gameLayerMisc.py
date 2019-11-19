@@ -21,7 +21,7 @@ class ForceBar:
         self.image.fill((255, 0, 0), (green_length, 0, 20 - green_length, self.image.get_height()))
 
     def draw(self, position):
-        Renderer2D.submit((self.image, position + FORCE_BAR_OFFSET))
+        Renderer.submit((self.image, position + FORCE_BAR_OFFSET))
 
 
 class JumpingArrow:
@@ -37,7 +37,7 @@ class JumpingArrow:
             self.goingUp = not self.goingUp
 
     def draw(self, position):
-        Renderer2D.submit((self.image, vec_to_itup(position + (0, int(self.vertPos ** 2) - 25) - JUMPING_ARROW_OFFSET)))
+        Renderer.submit((self.image, vec_to_itup(position + (0, int(self.vertPos ** 2) - 25) - JUMPING_ARROW_OFFSET)))
 
 
 class Crosshair(Entity):
@@ -46,7 +46,7 @@ class Crosshair(Entity):
 
     def draw(self, pos):
         self.pos = pos
-        Renderer2D.submit(self)
+        Renderer.submit(self)
 
 
 class PauseContainer(Container):
