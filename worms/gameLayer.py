@@ -1,7 +1,4 @@
 import enum
-import math
-
-import pygame
 
 from engine import *
 from engine.application import Timestep
@@ -97,9 +94,7 @@ class GameLayer(Layer):
 
         # Выбранное оружие
         if self.state != GameState.Shooting or (self.activeWeapon is not None and self.activeWeapon.IsShooting):
-            img = self.world.teamManager.sel_team.get_weapon().HoldImage
-            Renderer.submit((pygame.transform.rotate(img, math.degrees(-self.fireData.angle) - 90),
-                             self.cameraFollowedEntity.pos - (3, 3)))
+            self.world.teamManager.sel_team.get_weapon().draw_hold()
 
         if self.state == GameState.InWeaponMenu:
             self.weaponMenuContainer.on_render()

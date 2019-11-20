@@ -21,7 +21,7 @@ class _MainInterfaceContainer(Container):
         self.title_label.constraints.add_height_constraint(AspectConstraint())
         self.title_label.constraints.add_x_constraint(CenterConstraint())
         self.title_label.constraints.add_y_constraint(RelativeMultConstraint(0.0))
-        
+
         self.add_element(self.title_label)
 
         self.start_game_button = Button(font.render("Start Game", True, (255, 0, 0)),

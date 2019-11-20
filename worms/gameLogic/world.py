@@ -7,11 +7,12 @@ import pygame
 from engine import Renderer, Vector2
 from .gameObjects.debris import Debris
 from .gameObjects.physicsObject import PhysicsObject
-from .gameObjects.worm import Worm
 from .terrain import Terrain
 from .wormsTeam import TeamManager
 
 GRAVITY_ACC = 1000
+SAMPLE_TIMES = 8
+
 
 class World:
 
@@ -42,11 +43,10 @@ class World:
                 potential_pos = ent.pos + ent.vel * float(timestep)
                 ent.stable = False
                 # Высчитывание вектора отражения
-                response = Vector2(0)
+                response = Vector2(0, 0)
                 collided = False
 
-                times = 8
-                for r in map(lambda n: (n / times) * math.pi + (ent.angle - math.pi / 2.0), range(times)):
+                for r in map(lambda n: (n / SAMPLE_TIMES) * math.pi + (ent.angle - math.pi / 2.0), range(SAMPLE_TIMES)):
                     test_pos = Vector2(ent.radius * math.cos(r), ent.radius * math.sin(r)) + potential_pos
                     if self.terrain.valid_position(int(test_pos.x), int(test_pos.y)) \
                             and self.terrain.get_block_data(int(test_pos.x), int(test_pos.y)):
@@ -54,38 +54,20 @@ class World:
                         collided = True
 
                 if not collided and ent.is_bullet():
-                    for worm in filter(lambda p: p.is_worm(), self.physicsObjects):
-                        if worm not in ent.excludedEntities:
-                            if worm.pos.distance_to(ent.pos) < worm.radius:
-                                collided = True
-                                worm.health -= ent.damage
-                                worm.draw_health()
-                                response = potential_pos - test_pos
-                                break
+                    collided = ent.check_collisions(self.physicsObjects)
+                    if collided:
+                        response = potential_pos - ent.pos
 
-                # Если объект столкунлся с землей - направить скорость в обратную сторону
-                if collided:
-                    resp_mag = response.magnitude()
-                    ent.stable = True
-                    reflect = ent.vel_x * (response.x / resp_mag) + ent.vel_y * (response.y / resp_mag)
-                    ent.vel = (ent.vel + (response / resp_mag * -2.0 * reflect)) * ent.friction
-                    # Уменьшение числа оставшихся столкновений
-                    if ent.bounceTimes != ent.INFINITE_BOUNCE:
-                        ent.bounceTimes -= 1
-                else:
-                    # Если столкновения не произошло - продолжить движение
+                # Результат проверки столкновений
+                if collided:  # Если объект столкунлся с землей - направить скорость в обратную сторону
+                    ent.set_response(response)
+                else:  # Если столкновения не произошло - продолжить движение
                     ent.pos = potential_pos
 
                 if not ent.is_valid():
-                    # remove entity
                     ent.Alive = False
                 else:
-                    if abs(ent.vel.magnitude()) < 0.001:
-                        ent.stable = True
-                        ent.vel -= ent.vel
-
-                    if ent.is_worm():
-                        ent.headedRight = ent.vel_x > 0
+                    ent.finish_update()
 
             old = self.physicsObjects.copy()
             self.physicsObjects.clear()

@@ -11,6 +11,26 @@ class GameState(enum.Enum):
     GAME = 2
 
 
+class DebugScreenOverlay(Layer):
+
+    def on_attach(self):
+        pass
+
+    def on_detach(self):
+        pass
+
+    def on_update(self, timestep):
+        pass
+
+    def on_render(self):
+        fnt = Loader.get_font("BerlinSans.TTF", 20)
+        img = fnt.render("FPS: " + str(Application.Instance.fps), False, (255, 0, 0))
+        Renderer.submit((img, (0, 0)), False)
+
+    def on_event(self, dispatcher: EventDispatcher):
+        pass
+
+
 class Worms(Application):
 
     def __init__(self):
@@ -18,6 +38,7 @@ class Worms(Application):
 
         self.currentMainLayer = MainMenuLayer()
         self.push_layer(self.currentMainLayer)
+        self.push_overlay(DebugScreenOverlay())
 
         self.gameState: GameState = GameState.MAIN_MENU
 

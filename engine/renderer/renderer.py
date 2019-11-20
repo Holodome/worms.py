@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 import pygame
 
 from .entity import Entity
-from ..types import Rect, Vector2
+from ..types import Rect
 from ..window import Window
 
 

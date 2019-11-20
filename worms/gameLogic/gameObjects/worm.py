@@ -50,3 +50,7 @@ class Worm(PhysicsObject):
             Renderer.submit((Worm.flipped_image, self.get_draw_position()))
         Renderer.submit((self.nameImage, self.get_draw_position() + self.nameImageOffset))
         Renderer.submit((self.healthImage, self.get_draw_position() + (0, -10)))
+
+    def finish_update(self):
+        super().finish_update()
+        self.headedRight = self.vel_x > 0

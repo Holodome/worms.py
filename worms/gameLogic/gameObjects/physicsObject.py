@@ -91,3 +91,19 @@ class PhysicsObject(Entity):
 
     def death_action(self, world):
         pass
+
+    def decrease_bounce(self):
+        if self.bounceTimes != PhysicsObject.INFINITE_BOUNCE:
+            self.bounceTimes -= 1
+
+    def set_response(self, response):
+        resp_mag = response.magnitude()
+        self.stable = True
+        reflect = self.vel_x * (response.x / resp_mag) + self.vel_y * (response.y / resp_mag)
+        self.vel = (self.vel + (response / resp_mag * -2.0 * reflect)) * self.friction
+        self.decrease_bounce()
+
+    def finish_update(self):
+        if abs(self.vel.magnitude()) < 0.001:
+            self.stable = True
+            self.vel = Vector2(0, 0)

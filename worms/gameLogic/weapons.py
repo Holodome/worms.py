@@ -6,9 +6,10 @@ from typing import (List, Type)
 import pygame
 
 from engine import Color, Loader, Rect, Vector2, Window
+from engine.renderer.renderer import Renderer
 from interface import *
 from worms.gameLogic.gameObjects.physicsObject import PhysicsObject
-from .gameObjects.bullets import Bullet
+from .gameObjects.bullets import Bullet, MinigunBullet, UziBullet
 from .gameObjects.grenades import ClusterBomb, Grenade
 
 
@@ -17,11 +18,12 @@ class FireData:
     Класс, хранящий все данные о логике стрельбы, чтобы не засорять основной класс
     А также имеет несколько удобных функций
     """
+    # Параметры силы стрельбы
     NO_FIRE = -1
     FIRE = 1
-
+    # Скорость вращения прицела
     ROT_SPEED = 0.002
-
+    # Радиус прицела
     RADIUS = 40
 
     def __init__(self):
@@ -32,7 +34,8 @@ class FireData:
         self.timeToExplode: int = 3
 
         self.fireWeapon: bool = False
-        self.excludedEntities = []
+        # ОбЪекты, которые должны быть проигнорированные при проверке столкновений
+        self.excludedEntities: List[PhysicsObject] = []
 
     def reset(self):
         self.throwForce = FireData.NO_FIRE
@@ -53,6 +56,7 @@ class FireData:
             self.angle += FireData.ROT_SPEED
         else:
             self.angle -= FireData.ROT_SPEED
+        self.angle %= math.pi * 2
 
     def reset_angle(self):
         self.angle = 0
@@ -66,19 +70,28 @@ class FireData:
 
 class AbstractWeapon(abc.ABC):
     HoldImage: pygame.Surface = None
-
+    # Определение типа оружия
     IsThrowable = False
     IsShooting = False
 
-    def __init__(self):
-        self.data: FireData = None
+    data: FireData = FireData()
 
-    def set_data(self, fire_data: FireData):
+    @classmethod
+    def draw_hold(cls):
+        """
+        Отрисовка оружия в руках червяка
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def set_data(cls, fire_data: FireData):
         """
         Вызывается при создании обеьекта - передача информации о стрельбе
         Поскольку она не будет изменяться в процессе стрельбы (механика)
+
+        Метод статический, поскольку одновременно может существовать только одна FireData
         """
-        self.data = fire_data
+        cls.data = fire_data
 
     @abc.abstractmethod
     def fire(self, world) -> None:
@@ -109,6 +122,11 @@ class AbstractWeapon(abc.ABC):
 class SimpleThrowable(AbstractWeapon, abc.ABC):
     IsThrowable = True
 
+    @classmethod
+    def draw_hold(cls):
+        Renderer.submit((pygame.transform.rotate(cls.HoldImage, math.degrees(-cls.data.angle) - 90),
+                         cls.data.shooterPosition - (3, 3)))
+
     def __init__(self, throwable: Type[PhysicsObject],
                  throw_force_coef: float):
         super().__init__()
@@ -135,6 +153,15 @@ class SimpleThrowable(AbstractWeapon, abc.ABC):
 
 class SimpleShooting(AbstractWeapon, abc.ABC):
     IsShooting = True
+
+    @classmethod
+    def draw_hold(cls):
+        image = cls.HoldImage
+        # Переворот изображения при стрельбе в другую сторону
+        if not (0 < cls.data.angle < math.pi / 2 or 1.5 * math.pi < cls.data.angle < math.pi * 2):
+            image = pygame.transform.flip(image, False, True)
+        Renderer.submit((pygame.transform.rotate(image, math.degrees(-cls.data.angle)),
+                         cls.data.shooterPosition - (3, 3)))
 
     def __init__(self, bullet: Type[Bullet],
                  fire_times: int, time_between_fire_s: float, bullet_speed: float, max_angle_var: float):
@@ -191,14 +218,22 @@ class WUzi(SimpleShooting):
     HoldImage = Loader.get_image("uzi")
 
     def __init__(self):
-        super().__init__(Bullet, 30, 0.1, 40, math.pi / 6)
+        super().__init__(UziBullet, 15, 0.1, 40, math.pi / 6)
+
+
+class WMinigun(SimpleShooting):
+    HoldImage = Loader.get_image("minigun")
+
+    def __init__(self):
+        super().__init__(MinigunBullet, 50, 0.03, 30, math.pi / 5)
 
 
 # Weapon List - all weapon types have constructors with zero elements
 Weapons: List[Type[AbstractWeapon]] = [
     WGrenade,
     WClusterBomb,
-    WUzi
+    WUzi,
+    WMinigun
 ]
 
 

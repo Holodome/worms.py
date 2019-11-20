@@ -1,1 +1,0 @@
-python -m cProfile main.py > profile.log

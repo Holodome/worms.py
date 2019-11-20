@@ -19,7 +19,7 @@ class Team:
 
         self.selectedWormIndex: int = 0
 
-        self.selectedWeaponId: int = 2
+        self.selectedWeaponId: int = 3
         self.weaponTimeToExplode: int = 3
 
     def set_worm_random_positions(self, world_width: int) -> None:
