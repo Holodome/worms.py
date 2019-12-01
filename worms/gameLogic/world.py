@@ -5,7 +5,7 @@ from typing import *
 import pygame
 
 from engine import Renderer, Vector2
-from .gameObjects.debris import Debris
+from .gameObjects.particles import Debris, Blood
 from .gameObjects.physicsObject import PhysicsObject
 from .terrain import Terrain
 from .wormsTeam import TeamManager
@@ -21,7 +21,7 @@ class World:
         self.name: str = name
         self.terrain: Terrain = Terrain(width, height, foreground)
 
-        self.physicsObjects: Set[PhysicsObject] = set()
+        self.physicsObjects: List[PhysicsObject] = []
 
         self.backgroundImage: pygame.Surface = background
 
@@ -29,10 +29,10 @@ class World:
         self.teamManager.set_team_positions(world_width=width)
         for team in self.teamManager.teams:
             for worm in team.wormList:
-                self.physicsObjects.add(worm)
+                self.physicsObjects.append(worm)
 
     def on_update(self, timestep):
-        for _ in range(6):
+        for _ in range(4):
             for ent in self.physicsObjects:
                 # Обновление времени жизни объекта
                 ent.timeToDeath -= int(timestep) / 6
@@ -75,7 +75,7 @@ class World:
                 if not (p.Alive and 0 <= p.x < self.terrain.width and 0 <= p.y < self.terrain.height):
                     p.death_action(self)
                 else:
-                    self.physicsObjects.add(p)
+                    self.physicsObjects.append(p)
 
     def explosion(self, x: int, y: int, radius: int, damage: int, force_coef: float):
         self.terrain.explode_circle(x, y, radius)
@@ -96,7 +96,7 @@ class World:
             debris = Debris(x, y)
             debris.vel_x = math.cos(angle) * radius * 1.5
             debris.vel_y = math.sin(angle) * radius * 1.5
-            self.physicsObjects.add(debris)
+            self.physicsObjects.append(debris)
 
     def draw(self):
         Renderer.submit((self.backgroundImage, (0, 0)))

@@ -1,5 +1,6 @@
 import pygame
 
+from engine import Loader
 from .physicsObject import PhysicsObject
 
 
@@ -11,3 +12,8 @@ class Debris(PhysicsObject):
         PhysicsObject.__init__(self, x, y, 1,
                                0.8,
                                5, 5000)
+
+
+class Blood(Debris):
+    IMAGE = Loader.get_image("blood")
+

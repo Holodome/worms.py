@@ -52,7 +52,6 @@ class _MainInterfaceContainer(Container):
 class _StartGameContainer(Container):
     def __init__(self):
         super().__init__(Rect(0, 0, Window.Instance.width, Window.Instance.height))
-        self.set_color(Color(255, 255, 255))
 
         font = Loader.get_font("ALoveOfThunder.ttf", 200)
 
@@ -70,13 +69,26 @@ class _StartGameContainer(Container):
         self.first_level_button.constraints.add_height_constraint(AspectConstraint())
         self.add_element(self.first_level_button)
 
+        self.second_level_button = Button(Loader.get_image("wpreview"))
+        self.second_level_button.constraints.add_x_constraint(RelativeAddConstraint(0.5))
+        self.second_level_button.constraints.add_y_constraint(RelativeAddConstraint(0.4))
+        self.second_level_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.second_level_button.constraints.add_height_constraint(AspectConstraint())
+        self.add_element(self.second_level_button)
+
         self.bb_label = Label(font.render("Bikini Bottom", True, (50, 30, 20)))
         self.bb_label.constraints.add_x_constraint(RelativeAddConstraint(0.2))
         self.bb_label.constraints.add_y_constraint(RelativeAddConstraint(0.6))
         self.bb_label.constraints.add_width_constraint(RelativeMultConstraint(0.2))
         self.bb_label.constraints.add_height_constraint(AspectConstraint())
         self.add_element(self.bb_label)
-        self.add_element(self.title_label)
+
+        self.w_label = Label(font.render("\t\tWar\t\t", True, (50, 30, 20)))
+        self.w_label.constraints.add_x_constraint(RelativeAddConstraint(0.5))
+        self.w_label.constraints.add_y_constraint(RelativeAddConstraint(0.6))
+        self.w_label.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.w_label.constraints.add_height_constraint(AspectConstraint())
+        self.add_element(self.w_label)
 
 
 class MainMenuLayer(Layer):
@@ -93,6 +105,13 @@ class MainMenuLayer(Layer):
 
         self.startGameContainer.first_level_button.set_click_function(
             lambda _: self.start_game("data/levels/bikini_bottom.json"))
+        self.startGameContainer.second_level_button.set_click_function(
+            lambda _: self.start_game("data/levels/war.json"))
+
+        img = Loader.get_image("mmbg")
+        background = pygame.transform.smoothscale(img, (
+            img.get_width() * Window.Instance.width // img.get_height(), Window.Instance.height))
+        self.background = (background, (0, 0))
 
     def on_attach(self):
         self.mainInterfaceContainer.set_all_visible()
@@ -107,6 +126,7 @@ class MainMenuLayer(Layer):
     def on_render(self):
         Renderer.begin_scene()
         Renderer.Command.clear_screen(255, 255, 255)
+        Renderer.submit(self.background, False)
         self._get_selected_container().on_render()
         Renderer.present()
 

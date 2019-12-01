@@ -104,6 +104,9 @@ class PhysicsObject(Entity):
         self.decrease_bounce()
 
     def finish_update(self):
-        if abs(self.vel.magnitude()) < 0.001:
+        if abs(self.vel.magnitude()) < 0.1:
             self.stable = True
             self.vel = Vector2(0, 0)
+
+    def set_sample_times(self):
+        return

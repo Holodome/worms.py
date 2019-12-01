@@ -11,6 +11,10 @@ class Label(Element):
         self._image = image
         self._rect = image.get_rect()
 
+    def set_image(self, img):
+        self._image = img
+        self.apply_rect()
+
     def on_update(self):
         pass
 

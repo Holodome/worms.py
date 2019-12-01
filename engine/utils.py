@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from .types import Vector2
+import pygame
 
 
 def clamp(v, mi, ma):

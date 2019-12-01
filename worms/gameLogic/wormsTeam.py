@@ -19,8 +19,11 @@ class Team:
 
         self.selectedWormIndex: int = 0
 
-        self.selectedWeaponId: int = 3
+        self.selectedWeaponId: int = 0
         self.weaponTimeToExplode: int = 3
+
+    def is_alive(self) -> bool:
+        return any(lambda w: w.health > 0, self.wormList)
 
     def set_worm_random_positions(self, world_width: int) -> None:
         for worm in self.wormList:

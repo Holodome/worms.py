@@ -37,10 +37,11 @@ class Application:
 
         self.running: bool = True
 
-        self.fixedTime = 60
+        self.fixedFPS = 100
 
         self.fpsQueue = [0] * 60
         self.fps = 0
+        self.clock = pygame.time.Clock()
 
     def push_layer(self, layer: Layer):
         self.layerStack.push_layer(layer)
@@ -59,9 +60,7 @@ class Application:
             ly.on_render()
 
     def _update(self):
-        time = pygame.time.get_ticks()
-        dt = int(time) - self.lastFrameTimeMillis
-        self.lastFrameTimeMillis = time
+        dt = self.clock.tick(self.fixedFPS)
 
         if dt != 0:
             self.fpsQueue.pop(0)
@@ -70,7 +69,7 @@ class Application:
 
         Input.update()
         for ly in reversed(self.layerStack):
-            ly.on_update(Timestep(dt % self.fixedTime))
+            ly.on_update(Timestep(dt % (50)))
 
     def on_event(self, dispatcher: EventDispatcher):
         dispatcher.dispatch(pygame.QUIT, lambda _: setattr(self, "running", False))
@@ -79,8 +78,6 @@ class Application:
             layer.on_event(dispatcher)
 
     def run(self):
-        pygame.font.init()
-
         while self.running:
             self._update()
 

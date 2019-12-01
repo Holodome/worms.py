@@ -6,7 +6,7 @@ import pygame
 class Input:
     mouse_position = (0, 0)
     _pressed_buttons: Tuple[bool, bool, bool] = (0, 0, 0)
-    _pressed_keys: pygame.key.ScancodeWrapper = None
+    _pressed_keys = None
 
     @staticmethod
     def update() -> None:
