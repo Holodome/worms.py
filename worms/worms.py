@@ -50,3 +50,8 @@ class Worms(Application):
         world = WorldLoader.load_world_from_json(filepath)
         self.currentMainLayer = GameLayer(world)
         self.push_layer(self.currentMainLayer)
+
+    def main_menu(self):
+        self.pop_layer(self.currentMainLayer)
+        self.currentMainLayer = MainMenuLayer()
+        self.push_layer(self.currentMainLayer)

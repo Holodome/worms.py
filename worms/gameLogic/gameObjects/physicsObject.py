@@ -21,6 +21,8 @@ class PhysicsObject(Entity):
 
     Type: PhysicsObjectType = PhysicsObjectType.Null  # Инициализируется наследниками
 
+    __slots__ = ["_vel", "stable", "radius", "friction", "bounceTimes", "timeToDeath", "affectedByGravity"]
+
     @classmethod
     def is_worm(cls):
         return cls.Type == PhysicsObjectType.Worm

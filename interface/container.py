@@ -23,7 +23,6 @@ class Container(Element):
             element.on_update()
 
     def on_render(self):
-        assert self._image is not None, "Image not initialized"
         if not self._visible:
             return
 

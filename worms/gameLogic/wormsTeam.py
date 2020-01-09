@@ -23,7 +23,7 @@ class Team:
         self.weaponTimeToExplode: int = 3
 
     def is_alive(self) -> bool:
-        return any(lambda w: w.health > 0, self.wormList)
+        return any(map(lambda w: w.health > 0, self.wormList))
 
     def set_worm_random_positions(self, world_width: int) -> None:
         for worm in self.wormList:
@@ -38,6 +38,8 @@ class Team:
 
     def select_next(self) -> Worm:
         self.selectedWormIndex = (self.selectedWormIndex + 1) % self.get_worms_alive_count()
+        if not self.wormList[self.selectedWormIndex].Alive:
+            return self.select_next()
         return self.wormList[self.selectedWormIndex]
 
     def select_previous(self) -> Worm:
@@ -45,6 +47,8 @@ class Team:
             self.selectedWormIndex = self.get_worms_alive_count() - 1
         else:
             self.selectedWormIndex -= 1
+        if not self.wormList[self.selectedWormIndex].Alive:
+            self.select_previous()
         return self.wormList[self.selectedWormIndex]
 
     def _get_name(self) -> str:
@@ -69,7 +73,7 @@ class TeamManager:
         if team_data is None:
             self.numberOfTeams = 2
             for i in range(2):
-                team = Team(((i == 0) * 255, 0, (i != 0) * 255), 5)
+                team = Team(((i == 0) * 255, 0, (i != 0) * 255), 1)
                 self.teams.append(team)
         else:
             self.numberOfTeams = len(team_data)
@@ -87,6 +91,21 @@ class TeamManager:
             for team in self.teams:
                 team.set_worm_random_positions(world_width)
 
+    def get_no_enemies_left(self) -> bool:
+        return sum(map(lambda t: t.is_alive(), self.teams)) <= 1
+
+    def pass_turn(self):
+        self.selectedTeamIndex = (self.selectedTeamIndex + 1) % len(self.teams)
+
     @property
     def sel_team(self):
         return self.teams[self.selectedTeamIndex]
+
+
+class TeamController:
+    def __init__(self):
+        pass
+
+
+class PlayerTeamController(TeamManager):
+    pass

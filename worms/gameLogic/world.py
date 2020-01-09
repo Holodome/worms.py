@@ -5,7 +5,7 @@ from typing import *
 import pygame
 
 from engine import Renderer, Vector2
-from .gameObjects.particles import Debris, Blood
+from .gameObjects.particles import Debris
 from .gameObjects.physicsObject import PhysicsObject
 from .terrain import Terrain
 from .wormsTeam import TeamManager
@@ -15,7 +15,6 @@ SAMPLE_TIMES = 8
 
 
 class World:
-
     def __init__(self, name: str, width: int, height: int,
                  background: pygame.Surface, foreground: pygame.Surface):
         self.name: str = name
@@ -45,19 +44,16 @@ class World:
                 # Высчитывание вектора отражения
                 response = Vector2(0, 0)
                 collided = False
-
                 for r in map(lambda n: (n / SAMPLE_TIMES) * math.pi + (ent.angle - math.pi / 2.0), range(SAMPLE_TIMES)):
                     test_pos = Vector2(ent.radius * math.cos(r), ent.radius * math.sin(r)) + potential_pos
                     if self.terrain.valid_position(int(test_pos.x), int(test_pos.y)) \
                             and self.terrain.get_block_data(int(test_pos.x), int(test_pos.y)):
                         response += potential_pos - test_pos
                         collided = True
-
                 if not collided and ent.is_bullet():
                     collided = ent.check_collisions(self.physicsObjects)
                     if collided:
                         response = potential_pos - ent.pos
-
                 # Результат проверки столкновений
                 if collided:  # Если объект столкунлся с землей - направить скорость в обратную сторону
                     ent.set_response(response)
@@ -72,7 +68,8 @@ class World:
             old = self.physicsObjects.copy()
             self.physicsObjects.clear()
             for p in old:
-                if not (p.Alive and 0 <= p.x < self.terrain.width and 0 <= p.y < self.terrain.height):
+                p.Alive = (0 <= p.x < self.terrain.width and 0 <= p.y < self.terrain.height) if p.Alive else False
+                if not p.Alive:
                     p.death_action(self)
                 else:
                     self.physicsObjects.append(p)

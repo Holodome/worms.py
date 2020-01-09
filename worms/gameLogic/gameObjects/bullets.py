@@ -26,6 +26,9 @@ class Bullet(PhysicsObject):
     def check_collisions(self, entities) -> bool:
         for worm in filter(lambda p: p.is_worm(), entities):
             if worm not in self.excludedEntities:
+                if worm.health <= 0:
+                    continue
+
                 if worm.pos.distance_to(self.pos) < worm.radius:
                     worm.health -= self.damage
                     worm.draw_health()

@@ -32,13 +32,13 @@ class _MainInterfaceContainer(Container):
         self.start_game_button.constraints.add_y_constraint(RelativeAddConstraint(0.3))
         self.add_element(self.start_game_button)
 
-        self.load_game_button = Button(font.render("Load Game", True, (255, 0, 0)),
-                                       font.render("Load Game", True, (255, 127, 0)))
-        self.load_game_button.constraints.add_width_constraint(RelativeMultConstraint(0.5))
-        self.load_game_button.constraints.add_height_constraint(AspectConstraint())
-        self.load_game_button.constraints.add_x_constraint(CenterConstraint())
-        self.load_game_button.constraints.add_y_constraint(RelativeAddConstraint(0.5))
-        self.add_element(self.load_game_button)
+        # self.load_game_button = Button(font.render("Load Game", True, (255, 0, 0)),
+        #                                font.render("Load Game", True, (255, 127, 0)))
+        # self.load_game_button.constraints.add_width_constraint(RelativeMultConstraint(0.5))
+        # self.load_game_button.constraints.add_height_constraint(AspectConstraint())
+        # self.load_game_button.constraints.add_x_constraint(CenterConstraint())
+        # self.load_game_button.constraints.add_y_constraint(RelativeAddConstraint(0.5))
+        # self.add_element(self.load_game_button)
 
         self.exit_button = Button(font.render("Exit", True, (0, 255, 0)),
                                   font.render("Exit", True, (0, 255, 127)))
@@ -100,7 +100,7 @@ class MainMenuLayer(Layer):
         # Привязка кнопок к функциям
         self.mainInterfaceContainer.start_game_button.set_click_function(
             lambda _: self.change_state(MenuState.StartGameState))
-        self.mainInterfaceContainer.load_game_button.set_click_function(self.load_game)
+        # self.mainInterfaceContainer.load_game_button.set_click_function(self.load_game)
         self.mainInterfaceContainer.exit_button.set_click_function(self.exit_game)
 
         self.startGameContainer.first_level_button.set_click_function(

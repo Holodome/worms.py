@@ -1,5 +1,3 @@
-import pygame
-
 from engine import *
 from interface import *
 
@@ -60,3 +58,39 @@ class PauseContainer(Container):
         self.paused_label.constraints.add_x_constraint(CenterConstraint())
         self.paused_label.constraints.add_y_constraint(RelativeAddConstraint(0.25))
         self.add_element(self.paused_label)
+
+        self.exit_button = Button(Loader.get_font("ALoveOfThunder.ttf", 200).render("Main Menu", True, (0, 255, 0)),
+                                  Loader.get_font("ALoveOfThunder.ttf", 200).render("Main Menu", True, (0, 255, 127)))
+        self.exit_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.exit_button.constraints.add_height_constraint(AspectConstraint())
+        self.constraint = self.exit_button.constraints.add_x_constraint(CenterConstraint())
+        self.exit_button.constraints.add_y_constraint(RelativeAddConstraint(0.7))
+        self.exit_button.set_click_function(self.back_to_main_menu)
+        self.add_element(self.exit_button)
+
+    @staticmethod
+    def back_to_main_menu(_):
+        from engine.application import Application
+        Application.Instance.main_menu()
+
+
+class EndGameContainer(Container):
+    def __init__(self):
+        super().__init__(Rect(0, 0, Window.Instance.width, Window.Instance.height))
+        self.set_color(Color(50, 50, 50, 230))
+        self.paused_label = Label(Loader.get_font("ALoveOfThunder.ttf", 200)
+                                  .render("GAME ENDED", False, (255, 150, 200, 245)))
+        self.paused_label.constraints.add_width_constraint(RelativeMultConstraint(0.7))
+        self.paused_label.constraints.add_height_constraint(AspectConstraint())
+        self.paused_label.constraints.add_x_constraint(CenterConstraint())
+        self.paused_label.constraints.add_y_constraint(RelativeAddConstraint(0.25))
+        self.add_element(self.paused_label)
+
+        self.exit_button = Button(Loader.get_font("ALoveOfThunder.ttf", 200).render("Main Menu", True, (0, 255, 0)),
+                                  Loader.get_font("ALoveOfThunder.ttf", 200).render("Main Menu", True, (0, 255, 127)))
+        self.exit_button.constraints.add_width_constraint(RelativeMultConstraint(0.2))
+        self.exit_button.constraints.add_height_constraint(AspectConstraint())
+        self.constraint = self.exit_button.constraints.add_x_constraint(CenterConstraint())
+        self.exit_button.constraints.add_y_constraint(RelativeAddConstraint(0.7))
+        self.exit_button.set_click_function(PauseContainer.back_to_main_menu)
+        self.add_element(self.exit_button)

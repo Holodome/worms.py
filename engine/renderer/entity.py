@@ -8,6 +8,8 @@ from ..types import Vector2
 class Entity:
     Alive: bool = True
 
+    __slots__ = ["image", "_pos"]
+
     def __init__(self, image: pygame.Surface, position: Vector2):
         self.image: pygame.Surface = image
         self._pos: Vector2 = position

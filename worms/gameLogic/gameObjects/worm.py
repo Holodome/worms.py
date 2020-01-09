@@ -18,6 +18,8 @@ class Worm(PhysicsObject):
 
     IMAGE = image
 
+    tombstone = Loader.get_image("tombstone")
+
     Type = PhysicsObjectType.Worm
 
     def __init__(self, name: str, team_color):
@@ -38,7 +40,7 @@ class Worm(PhysicsObject):
         self.healthImage = Worm.name_font.render(str(self.health), False, self.color)
 
     def is_valid(self) -> bool:
-        return PhysicsObject.is_valid(self) and self.health > 0
+        return PhysicsObject.is_valid(self)
 
     def get_draw_position(self):
         return self._pos - Worm.IMAGE_OFFSET
@@ -52,7 +54,7 @@ class Worm(PhysicsObject):
             Renderer.submit((self.nameImage, self.get_draw_position() + self.nameImageOffset))
             Renderer.submit((self.healthImage, self.get_draw_position() + (0, -10)))
         else:  # Если мертв - рисовать надгробие
-            pass
+            Renderer.submit((self.tombstone, self.get_draw_position()))
 
     def finish_update(self):
         super().finish_update()

@@ -2,29 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a80bf703-2cfe-4950-80e9-336f79c9006f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/res/images/blood.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/mmbg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/sniper.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/sniper_bullet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/wpreview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/slider.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/res/images/tombstone.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/application.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/application.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/input.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/input.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/window.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/label.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/label.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/uzi.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/uzi.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/uzi_bullet.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/images/uzi_bullet.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/worms.py.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/worms.py.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/renderer/entity.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/renderer/entity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interface/container.py" beforeDir="false" afterPath="$PROJECT_DIR$/interface/container.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/gameLayerMisc.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLayerMisc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/bullets.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/bullets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/debris.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/particles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/grenades.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/grenades.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/physicsObject.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/gameObjects/worm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/weapons.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/weapons.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/world.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/world.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/gameLogic/wormsTeam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worms/mainMenuLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/mainMenuLayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worms/worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/worms/worms.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,9 +81,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Program Files\Python37\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />

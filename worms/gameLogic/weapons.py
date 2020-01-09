@@ -22,9 +22,18 @@ class FireData:
     NO_FIRE = -1
     FIRE = 1
     # Скорость вращения прицела
-    ROT_SPEED = 0.004
+    ROT_SPEED = 0.01
     # Радиус прицела
     RADIUS = 40
+
+    def __str__(self):
+        return f""" FireData
+    throwForce: {self.throwForce}
+    angle: {self.angle}
+    shooterPos: {self.shooterPosition}
+    timeToExplode: {self.timeToExplode}
+    fireWeapon: {self.fireWeapon}
+    """
 
     def __init__(self):
         self.throwForce: float = FireData.NO_FIRE
@@ -61,8 +70,11 @@ class FireData:
     def reset_angle(self):
         self.angle = 0
 
-    def is_fire(self):
+    def is_fire(self) -> bool:
         return self.fireWeapon
+
+    def end_fire(self):
+        self.fireWeapon = False
 
     def is_active(self):
         return self.throwForce != FireData.NO_FIRE
@@ -143,7 +155,7 @@ class SimpleThrowable(AbstractWeapon, abc.ABC):
         bullet = self.throwable(self.data.timeToExplode, *self.data.shooterPosition)
         bullet.vel_x = math.cos(self.data.angle) * self.throwForceCoef * self.data.throwForce
         bullet.vel_y = math.sin(self.data.angle) * self.throwForceCoef * self.data.throwForce
-        world.physicsObjects.add(bullet)
+        world.physicsObjects.append(bullet)
 
         self._fired = True
 
@@ -285,7 +297,7 @@ class SelectWeaponContainer(Container):
             self.weaponListContainer.add_element(weapon_btn)
 
         self.explodeTimeLabel = Label(Loader.get_font("ALoveOfThunder.ttf", 200)
-                                      .render("5", False, (180, 10, 0)))
+                                      .render("3", False, (180, 10, 0)))
         self.explodeTimeLabel.constraints.add_x_constraint(RelativeAddConstraint(0.05))
         self.explodeTimeLabel.constraints.add_y_constraint(RelativeAddConstraint(0.1))
         self.explodeTimeLabel.constraints.add_width_constraint(RelativeMultConstraint(0.035))
