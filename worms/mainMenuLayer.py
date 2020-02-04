@@ -2,6 +2,7 @@ import enum
 
 from engine import *
 from interface import *
+import pygame
 
 
 class MenuState(enum.Enum):

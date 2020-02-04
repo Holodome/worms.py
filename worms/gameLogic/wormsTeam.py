@@ -73,7 +73,7 @@ class TeamManager:
         if team_data is None:
             self.numberOfTeams = 2
             for i in range(2):
-                team = Team(((i == 0) * 255, 0, (i != 0) * 255), 1)
+                team = Team(((i == 0) * 255, 0, (i != 0) * 255), 5)
                 self.teams.append(team)
         else:
             self.numberOfTeams = len(team_data)

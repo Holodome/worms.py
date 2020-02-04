@@ -16,4 +16,3 @@ class Debris(PhysicsObject):
 
 class Blood(Debris):
     IMAGE = Loader.get_image("blood")
-

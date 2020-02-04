@@ -53,7 +53,6 @@ class GameLayer(Layer):
         pass
 
     def on_update(self, timestep):
-        print(self.state)
         if self.state == GameState.GameEnded:
             self.endGameContainer.on_update()
             return
@@ -110,7 +109,6 @@ class GameLayer(Layer):
                                                  self.world.terrain.height - Window.Instance.height)
         else:
             self.pauseContainer.on_update()
-
 
     def on_render(self):
         Renderer.begin_scene(self.cameraController.camera.negative_translation)

@@ -46,4 +46,3 @@ class Slider(Element):
 
     def apply_rect(self):
         self._change_button_rect()
-
