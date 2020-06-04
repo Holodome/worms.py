@@ -110,6 +110,7 @@ class GameLayer(Layer):
         else:
             self.pauseContainer.on_update()
 
+
     def on_render(self):
         Renderer.begin_scene(self.cameraController.camera.negative_translation)
 

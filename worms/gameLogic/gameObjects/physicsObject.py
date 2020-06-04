@@ -53,7 +53,7 @@ class PhysicsObject(Entity):
                (self.timeToDeath == PhysicsObject.INFINITE_TIME or self.timeToDeath > 0)
 
     def draw(self):
-        Renderer.submit((self.image, self.get_draw_position()))
+        Renderer.submit((self.image, vec_to_itup(self.get_draw_position())))
 
     @property
     def angle(self):

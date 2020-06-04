@@ -1,5 +1,3 @@
-import pygame
-
 from engine import *
 from interface import *
 
